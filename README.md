@@ -41,4 +41,4 @@ _위 이미지는 판다마켓의 대표 이미지입니다. 프로젝트가 진
 
 본 프로젝트는 [코드잇](https://www.codeit.kr)의 소유이며, 교육 목적으로만 사용됩니다. © 2024 Codeit. All rights reserved.
 
-Test
+Test2
