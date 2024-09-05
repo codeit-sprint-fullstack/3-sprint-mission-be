@@ -1,0 +1,31 @@
+name: PR 자동 라벨링 및 담당자 할당
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  add-labels-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Add labels and assign PR creator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          PR_CREATOR=${{ github.event.pull_request.user.login }}
+
+          # Add labels
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/labels \
+          -d '{"labels":["매운맛🔥", "진행 중 🏃"]}'
+
+          # Assign PR creator
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/assignees \
+          -d "{\"assignees\":[\"$PR_CREATOR\"]}"
