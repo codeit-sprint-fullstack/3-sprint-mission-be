@@ -10,7 +10,21 @@ import ProductService from './ProductService.js'
 // await ArticleService.deleteArticle()
 
 // // Product Service
-// await ProductService.getProductList()
+
+// 상품 목록 조회.
+try {
+  const getSurveyData = await ProductService.getProductList()
+  console.log(getSurveyData)
+  
+} catch (err) {
+  if (err.response) {
+    console.log(err.response.status);
+    console.log(err.response.data);
+  } else {
+    console.log('리퀘스트가 실패했습니다.');
+  }
+}
+
 // await ProductService.getProduct()
 // await ProductService.createProduct()
 // await ProductService.patchProduct()
