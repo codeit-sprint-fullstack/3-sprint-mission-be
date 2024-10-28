@@ -1,4 +1,5 @@
 // Sprint Mission API - Product Service
+import axios from 'axios';
 
 const BASE_URL = new URL('https://sprint-mission-api.vercel.app/products');
 
