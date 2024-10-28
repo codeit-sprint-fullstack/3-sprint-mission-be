@@ -6,23 +6,14 @@ const BASE_URL = new URL('https://sprint-mission-api.vercel.app/products');
 // GET Method
 async function getProductList(page = 1, pageSize = 100, keyword) {
   const url = `${BASE_URL}?page=${page}&pageSize=${pageSize}&keyword=${keyword}`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data, console.log(data)
-  } catch (error) {
-    console.error('에러가 났습니다.', error)
-  } finally { console.log('GET FINISH') }
+  const res = await axios.get(url);
+  return res.data;
 }
 
-async function getProduct() {
-  try {
-    const response = await fetch(BASE_URL);
-    const data = await response.json();
-    return data, console.log(data)
-  } catch (error) {
-    console.error('에러가 났습니다.', error)
-  } finally { console.log('GET FINISH') }
+async function getProduct(id) {
+  const url = `${BASE_URL}/${id}`;
+  const res = await axios.get(url);
+  return res.data;
 }
 
 // POST Method
