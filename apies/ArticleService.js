@@ -14,8 +14,9 @@ async function getArticleList(page = 1, pageSize = 100, keyword) {
     .finally(() => console.log('GET FINISH') );
 }
 
-async function getArticle() {
-  return fetch(BASE_URL)
+async function getArticle(id) {
+  const url = `${BASE_URL}/${id}`;
+  return fetch(url)
     .then(response => response.json())
     .then( data => {
       data,
