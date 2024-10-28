@@ -4,9 +4,10 @@ import axios from 'axios';
 const BASE_URL = new URL('https://sprint-mission-api.vercel.app/products');
 
 // GET Method
-async function getProductList(page = 1, pageSize = 100, keyword) {
-  const url = `${BASE_URL}?page=${page}&pageSize=${pageSize}&keyword=${keyword}`;
-  const res = await axios.get(url);
+async function getProductList(params = {}) {
+  const res = await axios.get(BASE_URL, {
+    params,
+  }); 
   return res.data;
 }
 
