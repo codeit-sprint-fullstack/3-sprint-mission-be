@@ -1,4 +1,4 @@
-// Import
+// Article, Product Service 실행
 import ArticleService from './ArticleService.js'
 import ProductService from './ProductService.js'
 

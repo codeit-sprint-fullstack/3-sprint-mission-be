@@ -1,4 +1,4 @@
-// Sprint Mission API
+// Sprint Mission API - Product Service
 
 const BASE_URL = new URL('https://sprint-mission-api.vercel.app/products');
 
