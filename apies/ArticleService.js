@@ -2,7 +2,7 @@
 
 const BASE_URL = new URL('https://sprint-mission-api.vercel.app/articles');
 
-// GET Method
+// GET Method - 모든 상품 목록 조회
 async function getArticleList(page = 1, pageSize = 100, keyword) {
   const url = `${BASE_URL}?page=${page}&pageSize=${pageSize}&keyword=${keyword}`;
   return fetch(url)
@@ -25,7 +25,7 @@ async function getArticle(id) {
     .finally(() => console.log('GET FINISH') );
   }
 
-// POST Method
+// POST Method - 상품 등록
 async function createArticle(title, content, image) {
   const surveyData = {
     "title": title,
@@ -46,7 +46,7 @@ async function createArticle(title, content, image) {
     .finally(() => console.log('POST FINISH') );
 }
 
-// PATCH Method(동작 확인)
+// PATCH Method - 상품 수정
 async function patchArticle(id, title, content, image) {
   const url = `${BASE_URL}/${id}`;
   const surveyData = {
@@ -71,7 +71,7 @@ async function patchArticle(id, title, content, image) {
 }
 
 
-// DELETE Method(동작확인)
+// DELETE Method - 상품 삭제
 async function deleteArticle(id) {
   const url = `${BASE_URL}/${id}`;
 
