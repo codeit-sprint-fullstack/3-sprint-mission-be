@@ -3,13 +3,24 @@ import ArticleService from './ArticleService.js'
 import ProductService from './ProductService.js'
 
 // Article Service
-// await ArticleService.getArticleList(1, 100, '웃음')
-// await ArticleService.getArticle()
-// await ArticleService.createArticle()
-// await ArticleService.patchArticle()
-// await ArticleService.deleteArticle()
 
-// // Product Service
+// 상품 목록 조회.
+// await ArticleService.getArticleList(1, 100, '웃음') // 아규먼트로 page, pageSize, keyword 를 입력해야 합니다.
+
+// 상품 상세 조회.
+// await ArticleService.getArticle() // 아규먼트로 id 값인 숫자를 입력해야 합니다.
+
+// 상품 등록.
+// await ArticleService.createArticle() // 아규먼트로 title, content, image를 String 타입으로 입력해야 합니다.
+
+// 상품 수정.
+// await ArticleService.patchArticle() // 아규먼트로 id, title, content, image를 입력해야 합니다.
+
+// 상품 삭제.
+// await ArticleService.deleteArticle() // 아규먼트로 id 값인 숫자를 입력해야 합니다.
+
+
+// Product Service
 
 // 상품 목록 조회.
 try {
