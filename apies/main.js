@@ -78,7 +78,7 @@ const surveyDataPatch = {
 }
 
 try {
-  const patchSurveyDawait = await ProductService.patchProduct(568, surveyDataPatch) // 아규먼트로 id와 surveyDataPatch를 넣어야 합니다.
+  // const patchSurveyDawait = await ProductService.patchProduct(568, surveyDataPatch) // 아규먼트로 id와 surveyDataPatch를 넣어야 합니다.
   console.log(patchSurveyDawait)
 } catch (err) {
   if (err.response) {
@@ -89,4 +89,15 @@ try {
   }
 };
 
-// await ProductService.deleteProduct()
+// 상품 삭제.
+try {
+  const deleteSurveyData = await ProductService.deleteProduct(568) // 아규먼트로 id를 Number 타입으로 넣어야 합니다.
+  console.log(deleteSurveyData)
+} catch (err) {
+  if (err.response) {
+    console.log(err.response.status);
+    console.log(err.response.data);
+  } else {
+    console.log('리퀘스트가 실패했습니다.');
+  }
+}
