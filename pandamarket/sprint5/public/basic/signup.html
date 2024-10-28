@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <link rel="stylesheet" href="user.css">
+</head>
+<body>
+  <section id="sec_signup">
+    <div class="logo">
+      <a href="/">
+        <img src="img/logo.png" width="396px" height=auto>
+      </a>
+    </div>
+    
+    <form class="signup_box"> 
+      <label for="ID">이메일</label>
+      <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요"/>
+      <div id="emailError"></div>
+
+      <label for="nickname">닉네임</label>
+      <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요"/>
+      
+      <div class="password-div">
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요"/>
+        <img src="/pandamarket/img/btn_visibility_off_24px.png" class="eyes"/>
+        <div id="passwordError"></div>
+      </div>
+      
+      <div class="password-div">
+        <label for="confirmPassword">비밀번호 확인</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 한 번 입력해주세요"/>
+        <img src="/pandamarket/img/btn_visibility_off_24px.png" class="eyes"/>
+        <div id="confirmError"></div>
+      </div>
+      
+      <input class="btn" id="signUpButton" type="button" value="회원가입" disabled>
+      
+      <div class="simple_login">
+        <p>간편 로그인하기</p>
+        <div class="sns_box">
+          <a href="https://www.google.com/"><img src="img/google.png" alt="google"></a>
+          <a href="https://www.kakaocorp.com/page/"><img src="img/katalk.png" alt="kakaotalk"></a>
+        </div>
+      </div>
+      <div class="move_box">
+        <div class="move_box_title">이미 회원이신가요?</div>
+        <a href="/pandamarket/login.html">로그인</a>
+      </div>
+    </form>
+  </section>
+
+  <div class="modal">
+    <div class="modal_popup">
+      <div>사용 중인 이메일입니다.</div>
+      <button type="button" class="ok_btn">확인</button>
+    </div>
+  </div>
+
+  <script src="user.js"></script>
+</body>
+</html>
