@@ -49,18 +49,8 @@ async function patchProduct(id, surveyData) {
 
 // DELETE Method
 async function deleteProduct(id) {
-  const url = `${BASE_URL}/${id}`;
-
-  try {
-    const response = await fetch(BASE_URL, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" }
-    });
-    const data = await response.json();
-    return data, console.log(data)
-  } catch (error) {
-    console.error('에러가 났습니다.', error)
-  } finally { console.log('DELETE FINISH') }
+  const url = await axios.delete(`${BASE_URL}/${id}`);
+  return url.data;
 }
 
 // Export
