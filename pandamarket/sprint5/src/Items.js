@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import ProductList from "./components/ProductList";
 
 import { useEffect, useState } from "react";
-import getProduct from './Api';
+import getProduct, { getProductList } from './Api';
 import './style/main.css';
 import './style/app.css'
 import Footer from "./components/Footer";
@@ -40,8 +40,8 @@ function Items() {
 
     setSortedPageSize(pageSize);
 
-    const response = await getProduct(1, sortedPageSize, sort, searchItem);
-    setSortedItems(response.list);
+    const response = await getProductList(1, sortedPageSize, sort, searchItem);
+    setSortedItems(response);
   }
 
   const handleSearch = (e) => {
@@ -63,7 +63,7 @@ function Items() {
     <div className="app__container">
       <Header/>
       <main className="main__container">
-        <ProductList items={favoriteItems} label='베스트 상품' />
+        {/* <ProductList items={favoriteItems} label='베스트 상품' /> */}
         <ProductList items={sortedItems} label='판매 중인 상품' setSort={setSort} onSearch={handleSearch} />
       </main>
       <Footer/>

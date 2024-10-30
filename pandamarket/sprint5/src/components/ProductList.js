@@ -11,7 +11,8 @@ function ProductItem({ item , label }) {
   return (
     <div key={id} className={label === '베스트 상품' ? 'favoriteProductItem' : 'sortedProductItem'} >
       <img src={label === '베스트 상품' ? images : defaultImg} alt={name} />
-      <div className='productItem__description'>{description}</div>
+      {/* 아래 Name자리는 원래 description자리. 임시로 Name넣음 */}
+      <div className='productItem__description'>{name}</div>    
       <div>{price}원</div>
       <div>
         <img alt="좋아요 버튼" src={likeIcon} width='13.4'/>

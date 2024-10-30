@@ -59,3 +59,10 @@ form input, .form__description {
   padding-top: 20px;
 }
 
+.form__head > button:enabled {
+  background-color: var(--color-blue);
+}
+
+.form__head > button:disabled {
+  background-color: #9CA3AF;
+}

@@ -3,10 +3,10 @@ POST http://localhost:8000/products
 Content-Type: application/json
 
 {
-  "name": "tmp6",
+  "name": "tmp10",
   "description":"설명입니다",
-  "price": 6000,
-  "tags":"태그6"
+  "price": 10000,
+  "tags":"태그10"
 }
 
 ###
