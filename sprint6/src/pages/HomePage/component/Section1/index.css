@@ -1,0 +1,75 @@
+ /* section1 */
+ .whiteColorSection .content2 {
+  height: 44.4rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #FCFCFC;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 98.8rem;
+  min-width: 50.8rem;
+}
+
+.whiteColorSection .textBox {
+  width: 27.4rem;
+  height: 100%;
+  padding-top: 10.3rem;
+  padding-bottom: 10.3rem;
+  min-width: 27.4rem;
+  margin-left: 6.4rem;
+}
+
+.content2 .imgBox {
+  max-width: 58.8rem;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 15%));
+}
+
+.content2 .imgBox img {
+  width: 100%;
+  height: auto;
+}
+
+.content2 .textBox .hotItem {
+  width: 7.2rem;
+  height: 2.6rem;
+  color: #3692FF;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.content2 .textBox .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content2 .textBox .text .bigtext {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 5.6rem;
+  text-align: left;
+  color: #374151;
+  margin-bottom: 2.4rem;
+  flex-wrap: wrap;
+}
+
+.content2 .textBox .text .bigtext .text1 {
+  color: #374151;
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.content2 .textBox .text .smalltext {
+  flex-wrap: wrap;
+}
+
+.content2 .textBox .smalltext .text1 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 3.2rem;
+  text-align: left;
+  color: #374151;
+}
