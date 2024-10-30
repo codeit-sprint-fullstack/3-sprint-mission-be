@@ -4,7 +4,7 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/app.ts",
+    "dev": "nodemon --exec \"node --loader ts-node/esm\" src/app.ts",
     "prestart": "tsc",
     "start": "node /dist/app.js",
     "push": "git push origin express-함헌규-sprint6"
