@@ -1,51 +1,48 @@
-/* header/ */
-#gnb {
-  height: 7rem;
-  width: 100%;
+/* section1 */
+.skyColorContent .textBox {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 0.1rem solid #DFDFDF;
-  background-color: rgba(255, 255, 255, 0.8);
-  position: sticky;
-  top: 0;
-  padding-left: 20rem;
-  padding-right: 20rem;
-  z-index: 1;
+  flex-direction: column;
+  padding-bottom: 100px;
 }
 
-header .content {
-  height: 5.1rem;
-  width: 152rem;
-  display: flex;
-  justify-content: space-between;
+.skyColorContent .textBox .text {
+  width: 36.5rem;
+  height: 11.2rem;
+  color: #374151;
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 3.2rem;
+  flex-wrap: wrap;
 }
 
-header .logo img {
-  width: 15.3rem;
-  height: 5.1rem;
+.skyColorContent .textBox .text .text1 {
+  color: #374151;
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: left;
 }
 
-header .loginButn {
-  width: 12.8rem;
-  height: 4.8rem;
-  border-radius: 0.8rem;
+.skyColorContent .textBox .button {
   background-color: #3692FF;
+  border-radius: 4rem;
+  width: 35.7rem;
+  height: 5.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 15%));
 }
 
-header .loginButn a {
+.skyColorContent .textBox .button a {
+  display: block;
+  color: #F9FAFB;
+  font-size: 2rem;
+  text-decoration: none;
+  font-weight: 600;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  color: #F3F4F6;
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 600;
-  text-decoration: none;
 }
