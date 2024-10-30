@@ -1,16 +1,17 @@
 import React from "react";
-import "./HomePage.css";
+import "./index.css";
+import Header from "./component/Header/index.jsx";
 
 function HomePage() {
   return (
     <body>
       <Header />
-      <Heoro />
+      {/* <Hero />
       <Section1 />
       <Section2 />
       <Section3 />
       <UnderBanner />
-      <Footer />
+      <Footer /> */}
     </body>
   );
 }
