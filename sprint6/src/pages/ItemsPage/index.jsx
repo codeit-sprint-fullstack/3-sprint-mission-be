@@ -5,12 +5,12 @@ import arrowImg from "../../img/icons/menu.png";
 import leftArrow from "../../img/icons/left.png";
 import rightArrow from "../../img/icons/right.png";
 // 
-import Header from '../../components/Header/index.js';
-import Footer from '../../components/Footer';
+import Header from '../../components/Header/index.jsx';
+import Footer from '../../components/Footer/index.jsx';
 import getProducts from "../../api/api.js";
-import BestProds from "./BestProds/index.js";
-import Prods from "./Prods/index.js";
-import EmptyBox from "./EmptyBox/index.js";
+import BestProds from "./BestProds/index.jsx";
+import Prods from "./Prods/index.jsx";
+import EmptyBox from "./EmptyBox/index.jsx";
 
 const BEST_PRODS_LIST = 'page=1&pageSize=4&orderBy=favorite';
 const LIKE_PRODS_LIST = 'page=1&pageSize=10&orderBy=favorite';

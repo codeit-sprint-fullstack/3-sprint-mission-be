@@ -1,0 +1,17 @@
+#emptyPrdsBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyContentBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 50rem;
+  height: 30rem;
+  font-size: 2rem;
+  color: #9CA3AF;
+}

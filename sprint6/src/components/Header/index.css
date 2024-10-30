@@ -7,7 +7,7 @@ html {
 }
 
 .nav {
-  position: sticky;
+  position: fixed;
   height: 7rem;
   width: 100%;
   display: flex;

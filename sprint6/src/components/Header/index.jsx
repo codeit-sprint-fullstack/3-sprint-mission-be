@@ -1,5 +1,5 @@
 import './index.css';
-import pandaLogoImg from '../../img/panda-market-logo.png';
+import pandaLogoImg from '../../img/logo/panda-market-logo.png';
 
 function Header() {
   return (

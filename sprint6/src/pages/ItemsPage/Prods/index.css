@@ -1,20 +1,5 @@
-/* global */
-* {
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px;
-  font-family: 'Pretendard';
-}
-
-html {
-  font-size: 10px;
-}
-
-:root {
-  --mainColor: #3692FF;
-}
-
 /* Common css */
+
 .prodName {
   color: #1F2937;
   font-size: 14px;
