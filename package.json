@@ -1,0 +1,18 @@
+{
+  "name": "3-sprint-mission-be",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "push": "git push origin express-함헌규-sprint6"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
