@@ -6,7 +6,7 @@
 }
 
 .skyColorContent .textBox .text {
-  width: 36.5rem;
+  width: 37.5rem;
   height: 11.2rem;
   color: #374151;
   font-size: 4rem;
@@ -45,4 +45,56 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* 태블릿 스타일 */
+@media (max-width: 750px) {
+  .skyColorContent .textBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100px;
+  }
+
+  .skyColorContent .textBox .text {
+    width: 45.5rem;
+    display: flex;
+    margin-right: 0 !important;
+    margin-bottom: 0;
+  }
+
+  .skyColorContent .textBox .text .text1 {
+    color: #374151;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: left;
+  }
+}
+
+/* 모바일 스타일 */
+@media (max-width: 474px) {
+  .skyColorContent .textBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100px;
+  }
+
+  .skyColorContent .textBox .text {
+    width: 26.5rem !important;
+    display: flex;
+    margin-right: 0 !important;
+    margin-bottom: 0;
+  }
+
+  .skyColorContent .textBox .text .text1 {
+    color: #374151;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: left;
+  } 
+
+  #textCenter{
+    margin-left: 39px;
+  }
 }
