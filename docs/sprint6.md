@@ -11,8 +11,8 @@
 
 - [x] 상품 등록 API를 만들어 주세요.
   - [x] name, description, price, tags를 입력하여 상품을 등록합니다.
-- [ ] 상품 상세 조회 API를 만들어 주세요.
-  - [ ] id, name, description, price, tags, createdAt를 조회합니다.
+- [x] 상품 상세 조회 API를 만들어 주세요.
+  - [x] id, name, description, price, tags, createdAt를 조회합니다.
 - [ ] 상품 수정 API를 만들어 주세요.
   - [ ] PATCH 메서드를 사용해 주세요.
 - [ ] 상품 삭제 API를 만들어 주세요.
