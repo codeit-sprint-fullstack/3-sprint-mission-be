@@ -6,7 +6,7 @@ import section1Img from "../../../../img/home/feature1-image.png";
 const Section1 = () => {
   return (
     <section class="whiteColorSection">
-      <div class="content2">
+      <div class="content1">
         <div class="imgBox">
           <img src={section1Img} alt="section1Img" />
         </div>
