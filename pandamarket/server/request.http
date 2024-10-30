@@ -1,0 +1,30 @@
+###
+POST http://localhost:8000/products
+Content-Type: application/json
+
+{
+  "name": "tmp6",
+  "description":"설명입니다",
+  "price": 6000,
+  "tags":"태그6"
+}
+
+###
+GET http://localhost:8000/products/2
+
+###
+PATCH http://localhost:8000/products/4
+Content-Type: application/json
+
+{
+  "name":"패치에요2345",
+  "description":"패치설명1",
+  "price":"2222",
+  "tags":"패치1"
+}
+
+###
+DELETE http://localhost:8000/products/4
+
+### 
+GET http://localhost:8000/products?search=설명입니다&page=1

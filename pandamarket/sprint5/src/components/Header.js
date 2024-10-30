@@ -1,17 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../style/header.css";
 import logo from '../img/logo.png';
 
 function Header() {
+  const location = useLocation();
+
   return (
     <header className="header__box">
       <div className="header__box__left">
-        <Link to="/"><a href="/basic/index.html">
+        <Link to="/">
           <img alt="로고 이미지" src={logo} width='150'/>
-        </a>
         </Link>
         <a className="word">자유게시판</a>
-        <a className="word" href="/">중고마켓</a>
+        <Link to='/items'>
+        <p className="word" style={{ color: location.pathname === '/items' ? '#3692FF' : '#4B5563' }}>
+        중고마켓</p>
+        </Link>
       </div>
 
       <button className="header__box__right" onClick={()=>{

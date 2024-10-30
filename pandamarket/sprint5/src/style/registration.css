@@ -1,0 +1,61 @@
+@import url('./header.css');
+
+.registration__container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 94px;
+  padding: 0 20% 0;
+  gap: 16px;
+}
+
+form > h2 {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-pretendard);
+}
+
+.form__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form__head > button {
+  background-color: #9CA3Af;
+  width: 74px;
+  border-radius: 8px;
+  border: 0;
+  color: #F3F4F6;
+  height: 42px;
+  cursor: pointer;
+}
+
+form label {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+form input, .form__description {
+  background-color: #F3F4F6;
+  border: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #9CA3AF;
+  border-radius: 12px;
+  height: 56px;
+  padding-left: 20px;
+}
+
+.form__description {
+  height: 282px;
+  padding-top: 20px;
+}
+

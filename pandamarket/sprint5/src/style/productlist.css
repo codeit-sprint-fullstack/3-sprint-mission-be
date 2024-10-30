@@ -126,13 +126,17 @@
   height: 25px;
 }
 
-.sortedProductList__label__box > div > button {
+.registration__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--color-blue);
   font-family: var(--font-pretendard);
   color: #F3F4F6;
   border-radius: 8px;
   font-size: 12px;
+  font-weight: 600;
   border: 0;
-  width: 120px;
+  width: 100px;
 }
 

@@ -6,6 +6,7 @@ import getProduct from './Api';
 import './style/main.css';
 import './style/app.css'
 import Footer from "./components/Footer";
+import { useLocation } from "react-router-dom";
 
 function Items() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -15,6 +16,7 @@ function Items() {
   const [sortedPageSize, setSortedPageSize] = useState(10);
   const [favoritePageSize, setFavoritePageSize] = useState(4);
   const [searchItem, setSearchItem] = useState('');
+
 
   const loadFavorite = async () => {
     let pageSize;

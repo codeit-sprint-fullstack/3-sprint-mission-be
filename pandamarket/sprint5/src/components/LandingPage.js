@@ -40,7 +40,7 @@ const LandingPage = () => {
               </div>
               <div className="show-btn">
                 {/* <a href="/items.html" className="btn-font">구경하러 가기</a> */}
-                <Link to='/Items' className='btn-font'>구경하러 가기</Link>
+                <Link to='/items' className='btn-font'>구경하러 가기</Link>
               </div>
             </div>
             <div> 

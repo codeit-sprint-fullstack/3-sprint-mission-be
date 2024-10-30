@@ -31,7 +31,7 @@
   padding-right: 50px;
 }
 
-.header__box__left .word {
+.word {
   font-family: var(--font-pretendard);
   font-weight: 700;
   font-size: 18px;
