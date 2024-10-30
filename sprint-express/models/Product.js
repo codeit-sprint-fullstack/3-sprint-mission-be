@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Product 스키마 정의
 const ProductSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
