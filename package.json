@@ -4,8 +4,9 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js",
+    "dev": "nodemon ./dist/app.js",
+    "predev": "tsc",
+    "start": "node ./dist/app.js",
     "push": "git push origin express-함헌규-sprint6"
   },
   "license": "ISC",
