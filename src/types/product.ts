@@ -8,4 +8,5 @@ export interface IProduct extends Document {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
+  images: string[];
 }

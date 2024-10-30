@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IProduct } from '../types/product';
+import { IProduct } from '../types/product.ts';
 
 const ProductSchema = new mongoose.Schema<IProduct>(
   {
@@ -22,11 +22,14 @@ const ProductSchema = new mongoose.Schema<IProduct>(
     tags: {
       type: [String],
     },
+    images: {
+      type: [String],
+    },
   },
   {
     timestamps: true,
   },
 );
-const Products = mongoose.model<IProduct>('Products', ProductSchema);
+const Product = mongoose.model<IProduct>('Products', ProductSchema);
 
-export default Products;
+export default Product;
