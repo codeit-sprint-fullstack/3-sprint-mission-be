@@ -1,0 +1,59 @@
+/* global */
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Pretendard';
+}
+
+html {
+  font-size: 10px;
+}
+
+:root {
+  --mainColor: #3692FF;
+}
+
+/* Common css */
+.prodName {
+  color: #1F2937;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 1.6rem;
+}
+
+.prodPrice {
+  color: #1F2937;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 0.6rem;
+}
+
+.heart {
+  color: #4B5563;
+  width: 13.4px;
+  height: 11.65px;
+  margin-top: 0.6rem;
+  margin-right: 0.3rem;
+}
+
+.heartNum {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4B5563;
+}
+
+/* Products List */
+.products {
+  background-color: #FCFCFC;
+  width: 22.1rem;
+  height: 31.7rem;
+  margin-bottom: 2rem;
+}
+
+.productsImg {
+  width: 22.1rem;
+  height: 22.1rem;
+  border-radius: 1.6rem;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 15%));
+}
