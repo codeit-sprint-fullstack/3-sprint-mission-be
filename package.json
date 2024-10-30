@@ -1,0 +1,23 @@
+{
+  "name": "3-sprint-mission-be",
+  "version": "1.0.0",
+  "description": "> _이 저장소는 판다마켓 프로젝트의 백엔드 코드를 관리하는 곳입니다. 프로젝트를 클론하여 개발 환경을 설정하고, 각 브랜치에서 해당 스프린트 미션을 수행해 주세요!_ 🛠️",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch src src/app.ts",
+    "build": "tsc"
+  },
+  "author": "KDW",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongoose": "^8.7.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
