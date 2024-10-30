@@ -37,12 +37,11 @@ export const editProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
+  const product = await Product.findByIdAndDelete(id);
 
   if (!product) {
     return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
   }
 
-  await product.deleteOne();
   return res.status(200).json({ message: '상품이 삭제되었습니다.' });
 };
