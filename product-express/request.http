@@ -1,0 +1,31 @@
+###
+POST http://localhost:8000/product
+Content-Type: application/json
+
+{
+    "name": "아이패드",
+    "description" : "급처!",
+    "price" : "300000",
+    "tags" : ["애플", "2020형"]
+}
+
+###
+DELETE http://localhost:8000/product/671f5fb3b747bc0a343a07e2
+
+###
+GET http://localhost:8000/product/67203ca3fe4dabf30b29bb5c
+
+###
+PATCH http://localhost:8000/product/67203ca3fe4dabf30b29bb5c
+Content-Type: application/json
+
+{
+    "name": "가방",
+    "description" : "미개봉",
+    "price" : "50000",
+    "tags" : ["가방", "미개봉"]
+}
+
+###
+GET http://localhost:8000/product
+

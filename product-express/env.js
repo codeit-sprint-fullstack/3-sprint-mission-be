@@ -1,0 +1,1 @@
+export const DATABASE_URL = "mongodb+srv://lyj69641:FyQaUkqJgtMUmhOZ@cluster0.gjq0n.mongodb.net/Products?retryWrites=true&w=majority&appName=Cluster0";
