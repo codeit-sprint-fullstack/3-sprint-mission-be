@@ -3,6 +3,7 @@ import "./index.css";
 import Header from "./component/Header/index.jsx";
 import Hero from "./component/Hero/index.jsx";
 import Section1 from "./component/Section1/index.jsx";
+import Section2 from "./component/Section2/index.jsx";
 
 function HomePage() {
   return (
@@ -11,8 +12,8 @@ function HomePage() {
       <main>
         <Hero />
         <Section1 />
-        {/*<Section2 />
-      <Section3 />
+        <Section2 />
+      {/*<Section3 />
       <UnderBanner /> */}
       </main>
       {/*<Footer /> */}

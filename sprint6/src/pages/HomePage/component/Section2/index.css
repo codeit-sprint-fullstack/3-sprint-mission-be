@@ -1,0 +1,73 @@
+/* section3 */
+.content2 {
+  width: 98.8rem;
+  height: 72rem;
+  display: flex;
+  padding-left: 0.95rem;
+  padding-right: 0.95rem;
+  padding-top: 13.8rem;
+  padding-bottom: 13.8rem;
+  background-color: #FCFCFC;
+}
+
+.content2 .imgBox {
+  height: 44.4rem;
+  margin-left: 6.4rem;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 15%));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content2 .imgBox img {
+  width: 100%;
+}
+
+.search {
+  width: 6rem;
+  height: 2.6rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 2.6rem;
+  text-align: left;
+  color: #3692FF;
+}
+
+.content2 .textBox {
+  width: 31.7rem;
+  height: 23.8rem;
+  gap: 1.2rem;
+  margin-top: 10.3rem;
+  margin-bottom: 10.3rem;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 31.7rem;
+}
+
+.content2 .text .bigtext {
+  margin-bottom: 2.4rem;
+  flex-wrap: wrap;
+}
+
+.content2 .textBox .text .bigtext .text1 {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 5.6rem;
+  text-align: right;
+  color: #374151;
+}
+
+.content2 .text .smalltext {
+  flex-wrap: wrap;
+}
+
+.content2 .smalltext .text1 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 3.2rem;
+  text-align: right;
+  color: #374151;
+  flex-wrap: wrap;
+}
