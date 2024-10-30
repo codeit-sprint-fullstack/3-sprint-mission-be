@@ -1,6 +1,7 @@
 import '../../../../styles/global.css';
 import './index.css';
 import '../common/common.css';
+import heroImg from '../../../../img/home/hero-image.png';
 
 const Hero = () => {
   return (
@@ -16,7 +17,7 @@ const Hero = () => {
           </div>
         </div>
         <div class="imgBox">
-          <img src="/img/home/hero-image.png" />
+          <img src={heroImg} />
         </div>
       </div>
     </section>
