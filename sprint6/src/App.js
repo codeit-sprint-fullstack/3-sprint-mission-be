@@ -1,17 +1,14 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Header from './components/Header/index.js';
 import ItemsPage from './pages/ItemsPage/index.js';
-import Footer from './components/Footer';
 
 function App() {
   return (
-    <>
-
-      <Header />
-      <ItemsPage />
-      <Footer />
-
-    </>
+    <BrowserRouter >
+    <Routes>
+      <Route path='/items' element={<ItemsPage />} />
+    </Routes>
+  </BrowserRouter>
   );
 }
 

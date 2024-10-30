@@ -5,6 +5,8 @@ import arrowImg from "../../img/icons/menu.png";
 import leftArrow from "../../img/icons/left.png";
 import rightArrow from "../../img/icons/right.png";
 // 
+import Header from '../../components/Header/index.js';
+import Footer from '../../components/Footer';
 import getProducts from "../../api/api.js";
 import BestProds from "./BestProds/index.js";
 import Prods from "./Prods/index.js";
@@ -146,48 +148,52 @@ function Main() {
   }
 
   return (
-    <main>
-      <div id='mainContent'>
-        <h1>베스트 상품</h1>
-        <section id='bestProdsList'>
-          {
-            bestProds.map((prod) => {
-              return <BestProds key={prod.id} price={prod.price} images={prod.images} name={prod.name} favoriteCount={prod.favoriteCount} />
-            })
-          }
-        </section>
+    <>
+      <Header />
+      <main>
+        <div id='mainContent'>
+          <h1>베스트 상품</h1>
+          <section id='bestProdsList'>
+            {
+              bestProds.map((prod) => {
+                return <BestProds key={prod.id} price={prod.price} images={prod.images} name={prod.name} favoriteCount={prod.favoriteCount} />
+              })
+            }
+          </section>
 
-        <section id='prodsList'>
-          <div id='prodsListHead'>
-            <h1 id='title'>판매 중인 상품</h1>
-            <div id='filterMenuBox' className={filter ? '' : 'none'}>
-              <button onClick={recentFilterHandle} id='filterMenuRecent' className='filterMenu'>최신순</button>
-              <button onClick={likeFilterHandle} id='filterMenuLike' className='filterMenu'>좋아요순</button>
+          <section id='prodsList'>
+            <div id='prodsListHead'>
+              <h1 id='title'>판매 중인 상품</h1>
+              <div id='filterMenuBox' className={filter ? '' : 'none'}>
+                <button onClick={recentFilterHandle} id='filterMenuRecent' className='filterMenu'>최신순</button>
+                <button onClick={likeFilterHandle} id='filterMenuLike' className='filterMenu'>좋아요순</button>
+              </div>
+              <div id='formContain'>
+                <input id='serchInput' type='text' placeholder='검색할 상품을 입력해주세요' onKeyDown={searchprodInput}></input>
+                <button id='addProdButton'>상품 등록하기</button>
+                <button onClick={filterHideHandle} className='filterMenu'>{filterSort}
+                  <img src={arrowImg} id='arrowImg' alt="arrow" />
+                </button>
+              </div>
             </div>
-            <div id='formContain'>
-              <input id='serchInput' type='text' placeholder='검색할 상품을 입력해주세요' onKeyDown={searchprodInput}></input>
-              <button id='addProdButton'>상품 등록하기</button>
-              <button onClick={filterHideHandle} className='filterMenu'>{filterSort}
-                <img src={arrowImg} id='arrowImg' alt="arrow" />
+            <div id='componentBox'>
+              <ProductSort sort={prodsList} />
+              <EmptyBox run={emptyBox} />
+            </div>
+            <div id='pageNumBox'>
+              <button>
+                <img src={leftArrow} alt="left arrow" />
+              </button>
+              <PageButtonRenderHandle />
+              <button style={{ marginRight: '0' }}>
+                <img src={rightArrow} style={{ left: '0.1rem' }} alt="right arrow" />
               </button>
             </div>
-          </div>
-          <div id='componentBox'>
-            <ProductSort sort={prodsList} />
-            <EmptyBox run={emptyBox} />
-          </div>
-          <div id='pageNumBox'>
-            <button>
-              <img src={leftArrow} alt="left arrow" />
-            </button>
-            <PageButtonRenderHandle />
-            <button style={{ marginRight: '0' }}>
-              <img src={rightArrow} style={{ left: '0.1rem' }} alt="right arrow" />
-            </button>
-          </div>
-        </section>
-      </div>
-    </main>
+          </section>
+        </div>
+      </main>
+      <Footer />
+    </>
   )
 }
 
