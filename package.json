@@ -4,15 +4,17 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "dev": "nodemon ./dist/app.js",
-    "predev": "tsc",
-    "start": "node ./dist/app.js",
+    "dev": "node --loader ts-node/esm src/app.ts",
+    "prestart": "tsc",
+    "start": "node /dist/app.js",
     "push": "git push origin express-함헌규-sprint6"
   },
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "mongoose": "^8.7.3"
+    "mongoose": "^8.7.3",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
