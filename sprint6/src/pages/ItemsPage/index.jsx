@@ -8,9 +8,9 @@ import rightArrow from "../../img/icons/right.png";
 import Header from '../../components/Header/index.jsx';
 import Footer from '../../components/Footer/index.jsx';
 import getProducts from "../../api/api.js";
-import BestProds from "./BestProds/index.jsx";
-import Prods from "./Prods/index.jsx";
-import EmptyBox from "./EmptyBox/index.jsx";
+import BestProds from "./component/BestProds/index.jsx";
+import Prods from "./component/Prods/index.jsx";
+import EmptyBox from "./component/EmptyBox/index.jsx";
 
 const BEST_PRODS_LIST = 'page=1&pageSize=4&orderBy=favorite';
 const LIKE_PRODS_LIST = 'page=1&pageSize=10&orderBy=favorite';
