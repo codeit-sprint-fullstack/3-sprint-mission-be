@@ -18,9 +18,10 @@ h1 {
   font-size: 18px;
   font-weight: 700;
   text-align: left;
+  margin-bottom: 16px;
 }
 
-#registerBox>h1 {
+#registerBox > h1 {
   font-size: 20px;
   font-weight: 700;
   padding-top: 11px;
@@ -199,10 +200,11 @@ input:focus {
 
 /* 데스크탑 스타일 */
 
-@media (min-width:192rem) {
+@media (min-width:1920px) {
   #mainContent {
     width: 100%;
     min-width: 120rem;
+    height: 97.6rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
