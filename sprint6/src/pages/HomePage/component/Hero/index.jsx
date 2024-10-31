@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../../../../styles/global.css';
 import './index.css';
 import '../common/common.css';
@@ -13,7 +14,7 @@ const Hero = () => {
             <span className="text1" id='textCenter'>거래해 보세요</span>
           </div>
           <div className="button">
-            <a href="/items">구경하러 가기</a>
+            <Link to="/items">구경하러 가기</Link>
           </div>
         </div>
         <div className="imgBox">

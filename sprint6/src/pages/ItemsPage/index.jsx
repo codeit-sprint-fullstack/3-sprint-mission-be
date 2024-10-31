@@ -16,7 +16,7 @@ const BEST_PRODS_LIST = 'page=1&pageSize=4&orderBy=favorite';
 const LIKE_PRODS_LIST = 'page=1&pageSize=10&orderBy=favorite';
 const PRODS_LIST = 'page=1&pageSize=10&orderBy=recent';
 
-function Main() {
+function ItemsPage() {
   // Use State
   const [bestProds, setBestProds] = useState([]); // 베스트 상품
   const [prodsList, setProdsList] = useState([]); // 판매 중인 상품
@@ -197,4 +197,4 @@ function Main() {
   )
 }
 
-export default Main;
+export default ItemsPage;

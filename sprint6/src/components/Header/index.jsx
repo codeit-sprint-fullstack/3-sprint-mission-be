@@ -1,25 +1,34 @@
-import './index.css';
-import pandaLogoImg from '../../img/logo/panda-market-logo.png';
+import { Link, NavLink} from "react-router-dom";
+import "./index.css";
+import pandaLogoImg from "../../img/logo/panda-market-logo.png";
+
+const getLinkStyle = (isActive) => ({
+  color: isActive ? "3692FF" : "#4B5563",
+});
 
 function Header() {
   return (
     <header>
-      <nav className='nav'>
-        <div id='navContent'>
-          <a id='logoImg' href='./'>
-            <img src={pandaLogoImg} alt='pandaMarketLogo' />
-          </a>
+      <nav className="nav">
+        <div id="navContent">
+          <Link to="/">
+            <img src={pandaLogoImg} alt="pandaMarketLogo" />
+          </Link>
 
-          <div id='textBox'>
-            <div className='text'><a href="/">자유게시판</a></div>
-            <div className='text'><a href="/">중고마켓</a></div>
+          <div id="textBox">
+            <div className="text">
+              <NavLink to='/CommunityFeedPage' style={getLinkStyle}>자유게시판</NavLink>
+            </div>
+            <div className="text">
+              <NavLink to='/items' style={getLinkStyle}>중고마켓</NavLink>
+            </div>
           </div>
 
-          <a href="/로그인" id='loginButtn'>로그인</a>
+          <button id='loginButtn'><Link to="/login">로그인</Link></button>
         </div>
       </nav>
     </header>
-  )
+  );
 }
 
 export default Header;
