@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "nodemon --exec \"node --loader ts-node/esm\" src/app.ts",
     "prestart": "tsc",
-    "start": "node /dist/app.js",
+    "start": "node ./dist/app.js",
     "push": "git push origin express-함헌규-sprint6",
-    "build": "tsc && npm install"
+    "build": "npm install && tsc"
   },
   "license": "ISC",
   "dependencies": {
