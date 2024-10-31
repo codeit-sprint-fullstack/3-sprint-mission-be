@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import Product from '../../models/product.ts';
+import { PRODUCT_RESPONSE_MESSAGE } from '../../constants/messages.ts';
+import { QUERY_OPTIONS } from '../../constants/queryOptions.ts';
 
 export const postProduct = async (req: Request, res: Response) => {
   const { name, description, price, tags, images } = req.body;
@@ -32,7 +34,7 @@ export const editProduct = async (req: Request, res: Response) => {
     await product?.save();
     return res.status(201).json(product);
   }
-  return res.status(404);
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGE.cannotFindProduct });
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
@@ -40,10 +42,10 @@ export const deleteProduct = async (req: Request, res: Response) => {
   const product = await Product.findByIdAndDelete(id);
 
   if (!product) {
-    return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
+    return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGE.cannotFindProduct });
   }
 
-  return res.status(200).json({ message: '상품이 삭제되었습니다.' });
+  return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGE.productDeleted });
 };
 
 export const getProductList = async (req: Request, res: Response) => {
@@ -55,8 +57,8 @@ export const getProductList = async (req: Request, res: Response) => {
     createdAt,
     page = 1,
     pageSize = 100,
-    sort = 'createdAt',
-    order = 'desc',
+    sort = QUERY_OPTIONS.defaultSort,
+    order = QUERY_OPTIONS.order.desc,
   } = req.query;
   const skip = (Number(page) - 1) * Number(pageSize);
 
@@ -67,7 +69,7 @@ export const getProductList = async (req: Request, res: Response) => {
     ...(description && { description: { $regex: description, $options: 'i' } }),
     ...(createdAt && { createdAt }),
   })
-    .sort({ [sort as string]: order === 'asc' ? 1 : -1 })
+    .sort({ [sort as string]: order === QUERY_OPTIONS.order.asc ? 1 : -1 })
     .skip(skip)
     .limit(Number(pageSize));
 
