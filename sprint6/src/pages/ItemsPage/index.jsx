@@ -158,7 +158,7 @@ function ItemsPage() {
               <div id='formContain'>
                 <input id='serchInput' type='text' placeholder='검색할 상품을 입력해주세요' onKeyDown={searchprodInput}></input>
                 <Link to='/register'><button id='addProdButton'>상품 등록하기</button></Link>
-                <button onClick={filterHideHandle} className='filterMenu'>{filterSort}
+                <button onClick={filterHideHandle} className='filterMenu' id='filterMenuList'>{filterSort}
                   <img src={arrowImg} id='arrowImg' alt="arrow" />
                 </button>
               </div>

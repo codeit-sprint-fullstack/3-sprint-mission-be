@@ -1,12 +1,14 @@
 /* main */
 main {
   display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   justify-content: center !important;
 }
 
 #mainContent {
   max-width: 120rem;
-  height: 74.6rem;
+  height: 84.6rem;
   margin-top: 8.6rem;
   margin-bottom: 14rem;
 }
@@ -15,13 +17,6 @@ h1 {
   font-size: 20px;
   font-weight: 700;
   text-align: left;
-}
-
-/* Best Products List */
-#bestProdsList {
-  width: 120rem;
-  display: flex;
-  justify-content: space-between;
 }
 
 /* Products List */
@@ -36,7 +31,7 @@ h1 {
 #prodsListHead {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2.5rem;
 }
 
 #title {
@@ -49,12 +44,14 @@ h1 {
 
 #formContain {
   width: 62.2rem;
+  display: flex;
 }
 
 input {
   width: 32.5rem;
   height: 4.2rem;
   padding: 0.9rem 2rem 0.9rem 3.3rem;
+  margin-top: 0 !important;
   border-radius: 1.2rem;
   border: none;
   background-color: #F3F4F6 !important;
@@ -114,6 +111,10 @@ input::placeholder {
   background-color: rgba(255, 255, 255, 0.975);
 }
 
+#filterMenuList{
+width: 210px;
+}
+
 #filterMenuLike {
   border-radius: 0 0 1.2rem 1.2rem;
   padding-right: 0;
@@ -126,7 +127,7 @@ input::placeholder {
 
 #filterMenuBox {
   position: relative;
-  right: -84.39999999999999999999rem;
+  right: -84.9566666rem;
   bottom: -5rem;
   z-index: 1;
 }
