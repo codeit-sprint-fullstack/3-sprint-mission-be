@@ -94,7 +94,7 @@
 @media (max-width: 1300px) {
   .nav {
     padding-left: 2rem;
-    padding-right: 2rem;
+    padding-right: 5rem;
   }
 
   #textBox {
@@ -107,7 +107,7 @@
 @media (max-width: 750px) {
   .nav {
     padding-left: 1rem;
-    padding-right: 1rem;
+    padding-right: 3rem;
   }
 
   #navContent {
@@ -144,6 +144,11 @@
 }
 
 @media (max-width: 474px) {
+  .nav {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   #navContent {
     height: 5.1rem;
     width: 100%;
