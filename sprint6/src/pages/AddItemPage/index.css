@@ -21,7 +21,7 @@ h1 {
   margin-bottom: 16px;
 }
 
-#registerBox > h1 {
+#registerBox>h1 {
   font-size: 20px;
   font-weight: 700;
   padding-top: 11px;
@@ -102,11 +102,11 @@ input:focus {
   margin-left: 1.2rem;
 }
 
-.tag > span {
+.tag>span {
   grid-column: 1 / 3;
 }
 
-.tag > img {
+.tag>img {
   width: 2.2rem;
   height: 2.4rem;
   grid-column: 3 / 4;
@@ -114,20 +114,21 @@ input:focus {
 
 /* 모바일 스타일 */
 
-#mainContent {
+#addItePageMainContent {
   width: 100%;
   min-width: 33.4rem;
+  height: 96.6rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 2.4rem 1.6rem 0 1.6rem;
   padding: 0px 20px 0;
-
+  /* 
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  height: 994px;
+  height: 994px; */
 }
 
 #registerBox {
@@ -164,7 +165,11 @@ input:focus {
 /* 태블릿 스타일 */
 
 @media (min-width:74.4rem) {
-  #mainContent {
+  #textBox {
+    left: 12rem !important;
+  }
+
+  #addItePageMainContent {
     width: 100%;
     min-width: 69.6rem;
     display: flex;
@@ -207,7 +212,7 @@ input:focus {
 /* 데스크탑 스타일 */
 
 @media (min-width:1920px) {
-  #mainContent {
+  #addItePageMainContent {
     width: 100%;
     min-width: 120rem;
     height: 99.6rem;

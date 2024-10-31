@@ -146,7 +146,6 @@ function ItemsPage() {
   return (
     <>
       <Header />
-      <main>
         <div id='mainContent'>
           <section id='prodsList'>
             <div id='prodsListHead'>
@@ -178,7 +177,6 @@ function ItemsPage() {
             </div>
           </section>
         </div>
-      </main>
       <Footer />
     </>
   )
