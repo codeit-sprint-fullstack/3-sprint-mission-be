@@ -112,23 +112,22 @@ input:focus {
   grid-column: 3 / 4;
 }
 
-/* 모바일 스타일 */
+/* 데스크톱 버전 */
 
-#addItePageMainContent {
+#addItemPageMainContent {
   width: 100%;
-  min-width: 33.4rem;
-  height: 96.6rem;
+  height: 102.6rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 2.4rem 1.6rem 0 1.6rem;
-  padding: 0px 20px 0;
-  /* 
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: 994px; */
+  padding: 0px 200px 0;
+}
+
+#addItemBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 }
 
 #registerBox {
@@ -162,104 +161,35 @@ input:focus {
   height: 14.8rem;
 }
 
-/* 태블릿 스타일 */
-
-@media (min-width:744px) {
-  #textBox {
-    left: 12rem !important;
-  }
-
-  #addItePageMainContent {
+@media (max-width: 1300px) {
+  #addItemPageMainContent {
     width: 100%;
-    min-width: 69.6rem;
+    height: 102.6rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-
-  #registerBox {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    height: 4.2rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodNmaeBox {
-    width: 100%;
-    height: 9.8rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodIntroBox {
-    width: 100%;
-    height: 32.4rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodPriceBox {
-    width: 100%;
-    height: 9.8rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodTagsBox {
-    width: 100%;
-    height: 14.8rem;
+    padding: 0px 100px 0;
   }
 }
 
-/* 데스크탑 스타일 */
-
-@media (min-width:1920px) {
-  #addItePageMainContent {
+@media (max-width: 750px) {
+  #addItemPageMainContent {
     width: 100%;
-    min-width: 120rem;
-    height: 97.6rem;
+    height: 102.6rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-
-  #registerBox {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    height: 4.2rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodNmaeBox {
-    width: 100%;
-    height: 9.8rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodIntroBox {
-    width: 100%;
-    height: 32.4rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodPriceBox {
-    width: 100%;
-    height: 9.8rem;
-    margin-bottom: 2.4rem;
-  }
-
-  #prodTagsBox {
-    width: 100%;
-    height: 14.8rem;
+    padding: 0px 50px 0;
   }
 }
 
-@media (max-width:1920px) {
-  #addItePageMainContent {
+@media (max-width: 600px) {
+  #addItemPageMainContent {
     width: 100%;
-    min-width: 120rem;
-    height: 99.6rem;
+    height: 102.6rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 0px 25px 0;
   }
 }

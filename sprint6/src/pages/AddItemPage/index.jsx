@@ -9,7 +9,8 @@ function AddItemPage() {
   return (
     <>
       <Header />
-        <div id="addItePageMainContent">
+      <div id="addItemPageMainContent">
+        <div id="addItemBox">
           <div id="registerBox" className="mainWidth">
             <h1>상품 등록하기</h1>
             <button>등록</button>
@@ -45,7 +46,8 @@ function AddItemPage() {
             </div>
           </div>
         </div>
-        <Footer />
+      </div>
+      <Footer />
     </>
   );
 }
