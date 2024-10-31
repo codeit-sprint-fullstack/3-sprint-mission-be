@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Product from '../../models/product.ts';
-import { PRODUCT_RESPONSE_MESSAGE } from '../../constants/messages.ts';
+import { PRODUCT_RESPONSE_MESSAGES } from '../../constants/messages.ts';
 import { QUERY_OPTIONS } from '../../constants/queryOptions.ts';
 
 export const postProduct = async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ export const editProduct = async (req: Request, res: Response) => {
     await product.save();
     return res.status(201).json(product);
   }
-  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGE.cannotFindProduct });
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
@@ -42,10 +42,10 @@ export const deleteProduct = async (req: Request, res: Response) => {
   const product = await Product.findByIdAndDelete(id);
 
   if (!product) {
-    return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGE.cannotFindProduct });
+    return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
   }
 
-  return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGE.productDeleted });
+  return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGES.productDeleted });
 };
 
 export const getProductList = async (req: Request, res: Response) => {
