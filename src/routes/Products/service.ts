@@ -45,3 +45,31 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
   return res.status(200).json({ message: '상품이 삭제되었습니다.' });
 };
+
+export const getProductList = async (req: Request, res: Response) => {
+  const {
+    id,
+    name,
+    price,
+    description,
+    createdAt,
+    page = 1,
+    pageSize = 100,
+    sort = 'createdAt',
+    order = 'desc',
+  } = req.query;
+  const skip = (Number(page) - 1) * Number(pageSize);
+
+  const products = await Product.find({
+    ...(id && { id }),
+    ...(name && { name: { $regex: name, $options: 'i' } }),
+    ...(price && { price }),
+    ...(description && { description: { $regex: description, $options: 'i' } }),
+    ...(createdAt && { createdAt }),
+  })
+    .sort({ [sort as string]: order === 'asc' ? 1 : -1 })
+    .skip(skip)
+    .limit(Number(pageSize));
+
+  if (products) return res.status(200).json(products);
+};
