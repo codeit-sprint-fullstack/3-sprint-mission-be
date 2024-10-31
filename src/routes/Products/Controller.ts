@@ -1,11 +1,12 @@
 import express from 'express';
-import asyncHandler from '../../utils/asyncHandler.ts';
-import { editProduct, getProduct, postProduct } from './service.ts';
+import asyncRequestHandler from '../../utils/asyncRequestHandler.ts';
+import { editProduct, getProduct, getProductList, postProduct } from './service.ts';
 
 const router = express.Router();
 
-router.post('/', asyncHandler(postProduct));
-router.get('/:id', asyncHandler(getProduct));
-router.post('/:id', asyncHandler(editProduct));
+router.post('/', asyncRequestHandler(postProduct));
+router.get('/:id', asyncRequestHandler(getProduct));
+router.post('/:id', asyncRequestHandler(editProduct));
+router.get('/', asyncRequestHandler(getProductList));
 
 export default router;

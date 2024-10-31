@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AsyncRequestHandler } from '../types/asyncRequestHandler.ts';
 
-const asyncHandler = (handler: AsyncRequestHandler) => {
+const asyncRequestHandler = (handler: AsyncRequestHandler) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
@@ -17,4 +17,4 @@ const asyncHandler = (handler: AsyncRequestHandler) => {
   };
 };
 
-export default asyncHandler;
+export default asyncRequestHandler;
