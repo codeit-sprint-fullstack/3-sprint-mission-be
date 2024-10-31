@@ -60,3 +60,22 @@ footer {
   margin-right: 1.2rem;
   filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 15%));
 }
+
+@media (max-width: 474px) {
+
+  #copyright {
+    position: relative;
+    bottom: -40px;
+  }
+
+  #footerContent {
+    margin-left: 21px;
+    margin-right: 0rem;
+  }
+
+  #info {
+    width: 156.9px;
+    position: relative;
+    left: -127px;
+  }
+}

@@ -12,7 +12,7 @@ function Footer() {
 
         <div id="info">
           <div><a href="/privacy">Privacy Policy</a></div>
-          <div><a href="/faq">FAQ</a></div>
+          <div id='faq'><a href="/faq">FAQ</a></div>
         </div>
 
         <div id="socialIcons">

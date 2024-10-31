@@ -1,3 +1,20 @@
+:root {
+  /* Gray scale */
+  --gray-900: #1b1d1f;
+  --gray-800: #26282b;
+  --gray-600: #454c53;
+  --gray-500: #72787f;
+  --gray-400: #9ea4a8;
+  --gray-200: #e5e7eb;
+  --gray-100: #e8ebed;
+  --gray-50: #f7f7f8;
+
+  /* Primary color */
+  --mainColor: #3692ff;
+
+  --header-height: 70px;
+}
+
 .nav {
   position: fixed;
   height: 7rem;
@@ -8,31 +25,35 @@
   border-bottom: 0.1rem solid #DFDFDF;
   background-color: rgba(255, 255, 255, 0.8);
   top: 0;
-  padding-left: 20rem;
-  padding-right: 20rem;
+  padding-left: 18rem;
+  padding-right: 18rem;
   z-index: 1;
 }
 
 #navContent {
   height: 5.1rem;
   width: 100%;
-  min-width: 74.4rem;
+  /* min-width: 74.4rem; */
   display: flex;
   justify-content: space-between;
 }
 
-Img {
+#pandaLogoImg {
   width: 15.3rem;
   height: 5.1rem;
 }
 
+#pandaLogoText {
+  display: none;
+}
+
 #textBox {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   position: absolute;
-  left: 37rem;
-  min-width: 20.1rem;
+  left: 34rem;
+  min-width: 27.1rem;
 }
 
 .text {
@@ -68,4 +89,89 @@ Img {
 
 #loginButtn:hover {
   background-color: #3ee4d7;
+}
+
+@media (max-width: 1300px) {
+  .nav {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  #textBox {
+    position: absolute;
+      left: 18rem;
+  }
+}
+
+/* 태블릿 스타일 */
+@media (max-width: 750px) {
+  .nav {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #navContent {
+    height: 5.1rem;
+    width: 100%;
+    min-width: 39.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #textBox {
+    position: absolute;
+    left: 15rem;
+    bottom: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .text {
+    font-weight: 680;
+    font-size: 18px;
+  }
+
+  #textBox {
+    position: absolute;
+    left: 16rem;
+    bottom: 22px;
+    min-width: 20.1rem;
+}
+
+#loginButtn {
+  min-width: 9.8rem;
+}
+}
+
+@media (max-width: 474px) {
+  #navContent {
+    height: 5.1rem;
+    width: 100%;
+    min-width: 37.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #textBox {
+    position: absolute;
+    left: 12rem;
+  }
+
+  #loginButtn {
+    min-width: 9rem;
+    position: relative;
+    left: -8px;
+  }
+
+  #pandaLogoImg {
+    display: none;
+  }
+
+  #pandaLogoText {
+    display: block !important;
+    position: relative;
+    bottom: -7px;
+    width: 11.3rem;
+    height: 4.1rem;
+  }
 }
