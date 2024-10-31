@@ -1,0 +1,12 @@
+.skyColorSection .skyColorContent .textBox5 {
+  display: flex;
+  width: 29.5rem;
+  min-width: 29.5rem;
+  margin-bottom: 11.25rem;
+
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 5.6rem;
+  text-align: left;
+  flex-wrap: wrap;
+}
