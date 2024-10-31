@@ -31,7 +31,7 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
+/* 
 button,
 input,
 textarea,
@@ -43,13 +43,13 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-}
+} */
 
 button {
   background: none;
-  border: none;
+  border: none; 
   outline: none;
-  box-shadow: none;
+  box-shadow: none; 
   cursor: pointer;
 }
 

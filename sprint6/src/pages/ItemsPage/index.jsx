@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import './index.css';
 // images
 import arrowImg from "../../img/icons/menu.png";
@@ -8,17 +9,14 @@ import rightArrow from "../../img/icons/right.png";
 import Header from '../../components/Header/index.jsx';
 import Footer from '../../components/Footer/index.jsx';
 import getProducts from "../../api/api.js";
-import BestProds from "./component/BestProds/index.jsx";
 import Prods from "./component/Prods/index.jsx";
 import EmptyBox from "./component/EmptyBox/index.jsx";
 
-const BEST_PRODS_LIST = 'page=1&pageSize=4&orderBy=favorite';
 const LIKE_PRODS_LIST = 'page=1&pageSize=10&orderBy=favorite';
 const PRODS_LIST = 'page=1&pageSize=10&orderBy=recent';
 
 function ItemsPage() {
   // Use State
-  const [bestProds, setBestProds] = useState([]); // 베스트 상품
   const [prodsList, setProdsList] = useState([]); // 판매 중인 상품
   const [filter, setFilter] = useState(false); // 필터 메뉴 Hide
   const [prodsListState, setProdsListState] = useState(false); // 필터 종류에 따라 버튼의 기능이 변함
@@ -28,9 +26,7 @@ function ItemsPage() {
 
   // 화면이 켜지자마자 렌더링
   const loadHandle = async () => {
-    const bestProducts = await getProducts(BEST_PRODS_LIST);
     const products = await getProducts(PRODS_LIST);
-    setBestProds(bestProducts.list);
     setProdsList(products.list);
   }
 
@@ -152,15 +148,6 @@ function ItemsPage() {
       <Header />
       <main>
         <div id='mainContent'>
-          <h1>베스트 상품</h1>
-          <section id='bestProdsList'>
-            {
-              bestProds.map((prod) => {
-                return <BestProds key={prod.id} price={prod.price} images={prod.images} name={prod.name} favoriteCount={prod.favoriteCount} />
-              })
-            }
-          </section>
-
           <section id='prodsList'>
             <div id='prodsListHead'>
               <h1 id='title'>판매 중인 상품</h1>
@@ -170,7 +157,7 @@ function ItemsPage() {
               </div>
               <div id='formContain'>
                 <input id='serchInput' type='text' placeholder='검색할 상품을 입력해주세요' onKeyDown={searchprodInput}></input>
-                <button id='addProdButton'>상품 등록하기</button>
+                <Link to='/register'><button id='addProdButton'>상품 등록하기</button></Link>
                 <button onClick={filterHideHandle} className='filterMenu'>{filterSort}
                   <img src={arrowImg} id='arrowImg' alt="arrow" />
                 </button>
