@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import productRouter from './routes/Products/Controller.ts';
 
 dotenv.config();
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
 app.use('/products', productRouter);
+app.use(cors({ origin: [process.env.DEPLOYED_URL as string, process.env.LOCALHOST as string] }));
 
 const connectDB = async () => {
   try {
