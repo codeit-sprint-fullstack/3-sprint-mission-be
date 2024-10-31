@@ -23,7 +23,7 @@ const Section2 = () => {
         </div>
       </div>
       <div class="imgBox">
-        <img src={section2Img} />
+        <img src={section2Img} alt="section2Img"/>
       </div>
     </div>
   </section>
