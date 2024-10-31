@@ -18,7 +18,8 @@ export const postProduct = async (req: Request, res: Response) => {
 export const getProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   const product = await Product.findById(id);
-  return res.status(200).json(product);
+  if (product) return res.status(200).json(product);
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
 };
 
 export const editProduct = async (req: Request, res: Response) => {
@@ -41,11 +42,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   const product = await Product.findByIdAndDelete(id);
 
-  if (!product) {
-    return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
-  }
+  if (product) return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGES.productDeleted });
 
-  return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGES.productDeleted });
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
 };
 
 export const getProductList = async (req: Request, res: Response) => {
