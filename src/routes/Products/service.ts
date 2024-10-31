@@ -31,7 +31,7 @@ export const editProduct = async (req: Request, res: Response) => {
     product.price = price;
     product.tags = tags;
     product.images = images;
-    await product?.save();
+    await product.save();
     return res.status(201).json(product);
   }
   return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGE.cannotFindProduct });
