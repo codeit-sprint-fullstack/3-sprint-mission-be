@@ -1,5 +1,5 @@
 import React from "react";
-import './AddItemPage.css';
+import './index.css';
 import Header from '../../components/Header/index.jsx';
 import Footer from '../../components/Footer/index.jsx';
 import Ximg from '../../img/icons/ic_X.png';
