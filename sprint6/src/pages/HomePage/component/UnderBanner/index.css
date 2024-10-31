@@ -10,3 +10,13 @@
   text-align: left;
   flex-wrap: wrap;
 }
+
+/* 태블릿 스타일 */
+@media (max-width: 750px) {
+  .skyColorSection .skyColorContent .textBox5 {
+    display: flex;
+    justify-content: center;
+    width: 35.5rem;
+    min-width: 29.5rem;
+  }
+}

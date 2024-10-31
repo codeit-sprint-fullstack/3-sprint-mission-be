@@ -64,3 +64,18 @@
   text-align: left;
   color: #374151;
 }
+
+@media (max-width: 750px) {
+  .whiteColorSection .content3 {
+      height: 76.4rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-direction: column;
+      background-color: #FCFCFC;
+  }
+
+  .content3 .textBox {
+    margin-left: 0rem;
+}
+}

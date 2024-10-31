@@ -72,15 +72,6 @@
 
   /* 태블릿 스타일 */
   @media (max-width: 750px) {
-    .whiteColorSection {
-      width: 100%;
-      height: 71rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      /* align-items: center; */
-  }
-
     .whiteColorSection .content1 {
       height: 65.4rem;
       display: flex;
@@ -89,12 +80,12 @@
       flex-direction: column;
       background-color: #FCFCFC;
     }
-  
+
     .content1 .imgBox {
       height: 444px;
       filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 15%));
     }
-  
+
     .content1 .imgBox img {
       width: 100%;
       height: 100%;
@@ -121,10 +112,15 @@
     }
 
     .content1 .textBox .text .bigtext .text1 {
-        font-size: 29px;
+      font-size: 4rem;
+      margin-right: 16px;
+    }
+
+    .content1 .textBox .smalltext .text1 {
+      font-size: 27px;
     }
   }
-  
+
 
   /* 모바일 스타일 */
   @media (max-width: 474px) {

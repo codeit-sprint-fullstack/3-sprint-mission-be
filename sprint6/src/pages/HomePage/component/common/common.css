@@ -50,16 +50,25 @@
   }
 
   .skyColorContent {
-    height: 649px;
+    height: 557px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
   .skyColorContent .imgBox {
-    max-width: 74.6rem;
+    max-width: 61.6rem;
     max-height: 39.7rem;
     margin-left: 0 !important;
     margin-bottom: 0;
   }
+
+  .whiteColorSection {
+    width: 100%;
+    height: 85rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
 }
