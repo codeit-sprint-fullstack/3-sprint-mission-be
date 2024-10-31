@@ -2,8 +2,13 @@ import express, { application } from "express";
 import mongoose from "mongoose";
 import { DATABASE_URL } from "./env.js";
 import Product from "./models/product.js";
+import cors from 'cors';
 
 const app = express();
+
+const corsOptions = {
+  origin: ['http://127.0.0.1:3000', 'https://panda-product.com'],
+};
 
 app.use(cors());
 app.use(express.json());
