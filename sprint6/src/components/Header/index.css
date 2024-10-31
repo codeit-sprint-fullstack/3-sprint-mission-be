@@ -28,6 +28,7 @@ Img {
 
 #textBox {
   display: flex;
+  justify-content: space-around;
   align-items: center;
   position: absolute;
   left: 37rem;
