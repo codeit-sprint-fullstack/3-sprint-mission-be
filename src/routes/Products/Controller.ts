@@ -1,6 +1,6 @@
 import express from 'express';
-import asyncRequestHandler from '../../utils/asyncRequestHandler.ts';
-import { editProduct, getProduct, getProductList, postProduct } from './service.ts';
+import asyncRequestHandler from '../../utils/asyncRequestHandler';
+import { editProduct, getProduct, getProductList, postProduct } from './service';
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import productRouter from './routes/Products/Controller.ts';
+import productRouter from './routes/Products/Controller';
 
 dotenv.config();
 const MONGODB_URI = process.env.DATABASE_URI as string;

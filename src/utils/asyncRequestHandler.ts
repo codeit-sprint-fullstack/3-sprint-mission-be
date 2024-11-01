@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AsyncRequestHandler } from '../types/asyncRequestHandler.ts';
+import { AsyncRequestHandler } from '../types/asyncRequestHandler';
 
 const asyncRequestHandler = (handler: AsyncRequestHandler) => {
   return async (req: Request, res: Response, next: NextFunction) => {

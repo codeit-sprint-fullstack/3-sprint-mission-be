@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import Product from '../../models/product.ts';
-import { PRODUCT_RESPONSE_MESSAGES } from '../../constants/messages.ts';
-import { QUERY_OPTIONS } from '../../constants/queryOptions.ts';
+import Product from '../../models/product';
+import { PRODUCT_RESPONSE_MESSAGES } from '../../constants/messages';
+import { QUERY_OPTIONS } from '../../constants/queryOptions';
 
 export const postProduct = async (req: Request, res: Response) => {
   const { name, description, price, tags, images } = req.body;
