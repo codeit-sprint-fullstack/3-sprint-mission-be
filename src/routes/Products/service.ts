@@ -2,8 +2,11 @@ import { Request, Response } from 'express';
 import Product from '../../models/product';
 import { PRODUCT_RESPONSE_MESSAGES } from '../../constants/messages';
 import { QUERY_OPTIONS } from '../../constants/queryOptions';
+import { assert } from 'superstruct';
+import { CreateProduct, GetProductList, validateId } from '../../utils/struct';
 
 export const postProduct = async (req: Request, res: Response) => {
+  assert(req.body, CreateProduct);
   const { name, description, price, tags, images } = req.body;
   const newProduct = await Product.create({
     name,
@@ -17,6 +20,7 @@ export const postProduct = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
+  assert(id, validateId);
   const product = await Product.findById(id);
   if (product) return res.status(200).json(product);
   return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
@@ -24,6 +28,7 @@ export const getProduct = async (req: Request, res: Response) => {
 
 export const editProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
+  assert(id, validateId);
   const { name, description, price, tags, images } = req.body;
   const product = await Product.findById(id);
   if (product) {
@@ -40,6 +45,7 @@ export const editProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
+  assert(id, validateId);
   const product = await Product.findByIdAndDelete(id);
 
   if (product) return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGES.productDeleted });
@@ -48,12 +54,11 @@ export const deleteProduct = async (req: Request, res: Response) => {
 };
 
 export const getProductList = async (req: Request, res: Response) => {
+  assert(req.body, GetProductList);
   const {
-    id,
     name,
     price,
     description,
-    createdAt,
     page = 1,
     pageSize = 100,
     sort = QUERY_OPTIONS.defaultSort,
@@ -62,11 +67,9 @@ export const getProductList = async (req: Request, res: Response) => {
   const skip = (Number(page) - 1) * Number(pageSize);
 
   const products = await Product.find({
-    ...(id && { id }),
     ...(name && { name: { $regex: name, $options: 'i' } }),
     ...(price && { price }),
     ...(description && { description: { $regex: description, $options: 'i' } }),
-    ...(createdAt && { createdAt }),
   })
     .sort({ [sort as string]: order === QUERY_OPTIONS.order.asc ? 1 : -1 })
     .skip(skip)
