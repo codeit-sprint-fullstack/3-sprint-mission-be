@@ -3,7 +3,7 @@ const getPageSize = () => {
   if (width < 768) {
     // Mobile viewport
     return 4;
-  } else if (width < 1280) {
+  } else if (width < 1300) {
     // Tablet viewport
     return 6;
   } else {
