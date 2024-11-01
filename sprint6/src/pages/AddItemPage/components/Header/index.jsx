@@ -1,34 +1,28 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./index.css";
 import pandaLogoImg from "../../../../img/logo/panda-market-logo.png";
-import pandaLogoTextImg from '../../../../img/logo/panda-text-log.png';
-
-const getLinkStyle = (isActive) => {
-  return {
-    color: isActive ? "#3692FF" : undefined,
-  };
-};
+import pandaLogoTextImg from "../../../../img/logo/panda-text-log.png";
 
 function Header() {
   return (
     <header>
       <nav className="nav">
         <div id="navContent">
-          <Link to="/" id='logoImg'>
-            <img id='pandaLogoImg' src={pandaLogoImg} alt='pandaMarketLogo' />
-            <img id='pandaLogoText' src={pandaLogoTextImg} alt='pandaMarketLogo' />
+          <Link to="/" id="logoImg">
+            <img id="pandaLogoImg" src={pandaLogoImg} alt="pandaMarketLogo" />
+            <img
+              id="pandaLogoText"
+              src={pandaLogoTextImg}
+              alt="pandaMarketLogo"
+            />
           </Link>
 
           <div id="textBox">
             <div className="text">
-              <NavLink to="/CommunityFeedPage">
-                자유게시판
-              </NavLink>
+              <Link to="/CommunityFeedPage">자유게시판</Link>
             </div>
             <div className="text">
-              <NavLink to="/items" style={getLinkStyle}>
-                중고마켓
-              </NavLink>
+              <Link to="/items">중고마켓</Link>
             </div>
           </div>
 

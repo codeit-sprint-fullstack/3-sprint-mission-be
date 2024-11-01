@@ -6,7 +6,7 @@ import arrowImg from "../../img/icons/menu.png";
 import leftArrow from "../../img/icons/left.png";
 import rightArrow from "../../img/icons/right.png";
 // 
-import Header from '../../components/Header/index.jsx';
+import Header from './component/Header/index.jsx';
 import Footer from '../../components/Footer/index.jsx';
 import getProducts from "../../api/api.js";
 import Prods from "./component/Prods/index.jsx";
@@ -146,7 +146,7 @@ function ItemsPage() {
   return (
     <>
       <Header />
-        <div id='mainContent'>
+        <div id='ItesPagemainContent'>
           <section id='prodsList'>
             <div id='prodsListHead'>
               <h1 id='title'>판매 중인 상품</h1>
@@ -155,7 +155,7 @@ function ItemsPage() {
                 <button onClick={likeFilterHandle} id='filterMenuLike' className='filterMenu'>좋아요순</button>
               </div>
               <div id='formContain'>
-                <input id='serchInput' type='text' placeholder='검색할 상품을 입력해주세요' onKeyDown={searchprodInput}></input>
+                <input className='searchInput' type='text' placeholder='검색할 상품을 입력해주세요' onKeyDown={searchprodInput}></input>
                 <Link to='/register'><button id='addProdButton'>상품 등록하기</button></Link>
                 <button onClick={filterHideHandle} className='filterMenu' id='filterMenuList'>{filterSort}
                   <img src={arrowImg} id='arrowImg' alt="arrow" />

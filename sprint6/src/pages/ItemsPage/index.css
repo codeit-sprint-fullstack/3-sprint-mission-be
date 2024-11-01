@@ -1,8 +1,11 @@
-#mainContent {
-  max-width: 120rem;
+#ItesPagemainContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 84.6rem;
   margin-top: 8.6rem;
   margin-bottom: 14rem;
+  width: 100%;
 }
 
 h1 {
@@ -15,6 +18,7 @@ h1 {
 
 /* Products List Head */
 #prodsList {
+
   width: 120rem;
   height: 74rem;
   margin-top: 4rem;
@@ -39,8 +43,8 @@ h1 {
   display: flex;
 }
 
-input {
-  width: 32.5rem;
+.searchInput {
+  width: 59.5rem;
   height: 4.2rem;
   padding: 0.9rem 2rem 0.9rem 3.3rem;
   margin-top: 0 !important;

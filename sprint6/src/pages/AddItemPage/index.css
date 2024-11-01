@@ -27,19 +27,18 @@ h1 {
   padding-top: 11px;
 }
 
-input {
+.inputBox {
   background-color: #F3F4F6;
   width: 100%;
   margin-top: 1.6rem;
   border-radius: 1.2rem;
   -webkit-appearance: none;
   appearance: none;
-}
-
-input[type="text"]::-webkit-search-cancel-button,
-input[type="text"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-  appearance: none;
+  height: 4.2rem;
+  padding: 0.9rem 2rem 0.9rem 2rem;
+  margin-top: 0 !important;
+  border-radius: 1.2rem;
+  border: none;
 }
 
 input:focus {

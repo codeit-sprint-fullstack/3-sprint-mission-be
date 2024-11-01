@@ -18,22 +18,22 @@ function AddItemPage() {
 
           <div id="prodNmaeBox" className="mainWidth">
             <h1>상품명</h1>
-            <input type="text" placeholder="상품명을 입력해주세요" />
+            <input className='inputBox' type="text" placeholder="상품명을 입력해주세요" />
           </div>
 
           <div id="prodIntroBox" className="mainWidth">
             <h1>상품 소개</h1>
-            <input type="text" placeholder="상품 소개를 입력해주세요" />
+            <input className='inputBox' type="text" placeholder="상품 소개를 입력해주세요" />
           </div>
 
           <div id="prodPriceBox" className="mainWidth">
             <h1>판매가격</h1>
-            <input type="text" placeholder="판매 가격을 입력해주세요" />
+            <input className='inputBox' placeholder="판매 가격을 입력해주세요" />
           </div>
 
           <div id="prodTagsBox" className="mainWidth">
             <h1>태그</h1>
-            <input type="text" placeholder="태그를 입력해주세요" />
+            <input className='inputBox' type="text" placeholder="태그를 입력해주세요" />
             <div id="tagBox">
               <div className="tag" style={{ marginLeft: "0" }}>
                 <span>#태그</span>
