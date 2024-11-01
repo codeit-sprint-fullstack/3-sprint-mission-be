@@ -21,7 +21,7 @@ function Header() {
 
           <div id="textBox">
             <div className="text">
-              <NavLink to="/CommunityFeedPage" style={getLinkStyle}>
+              <NavLink to="/CommunityFeedPage">
                 자유게시판
               </NavLink>
             </div>
