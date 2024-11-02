@@ -8,10 +8,14 @@ dotenv.config();
 const MONGODB_URI = process.env.DATABASE_URI as string;
 const PORT = process.env.PORT || 8000;
 
+const allowedOrigins = [process.env.DEPLOYED_URL, process.env.LOCALHOST].filter(
+  Boolean,
+) as string[];
+
 const app = express();
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 app.use('/products', productRouter);
-app.use(cors({ origin: [process.env.DEPLOYED_URL as string, process.env.LOCALHOST as string] }));
 
 const connectDB = async () => {
   try {
