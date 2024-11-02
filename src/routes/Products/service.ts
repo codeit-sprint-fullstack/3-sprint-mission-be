@@ -75,5 +75,5 @@ export const getProductList = async (req: Request, res: Response) => {
     .skip(skip)
     .limit(Number(pageSize));
 
-  if (products) return res.status(200).json(products);
+  if (products) return res.status(200).json({ list: products, totalCount: products.length });
 };
