@@ -13,6 +13,22 @@ const TaskSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
+    tags: {
+      type: String,
+      maxLength: 5,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
     isComplete: {
       type: Boolean,
       default: false,
