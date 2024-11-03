@@ -16,7 +16,10 @@ const ProductSchema = new mongoose.Schema(
     },
     tags: {
       type: Array,
-    }
+    },
+    category: {
+      type: String,
+    },
   },
   {
     timestamps: true,
