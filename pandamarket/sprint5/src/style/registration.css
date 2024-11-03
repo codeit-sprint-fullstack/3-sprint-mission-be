@@ -15,7 +15,7 @@ form {
   gap: 16px;
 }
 
-form > h2 {
+.form__head > h2 {
   font-size: 20px;
   font-weight: 700;
   font-family: var(--font-pretendard);
@@ -65,4 +65,24 @@ form input, .form__description {
 
 .form__head > button:disabled {
   background-color: #9CA3AF;
+}
+
+.chip {
+  display: flex;
+  background-color: #F3F4F6;
+  gap: 8px;
+  border-radius: 26px;
+  width: 110px;
+  height: 36px;
+  padding: 6px 12px 6px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  
+}
+
+.iconX {
+  width: 22px;
+  height: 24px;
+  cursor: pointer;
 }

@@ -45,8 +45,8 @@ function ProductList({ items, label, setSort, onSearch }) {
           </div>) 
       }
       <div className={label === '베스트 상품' ? 'favoriteProductList' : 'sortedProductList'}>
-        {items.map((item) => (
-          <ProductItem item={item}  label={label}/>
+        {items.map((item, idx) => (
+          <ProductItem item={item}  label={label} key={idx}/>
         ))}
       </div>
     </div>
