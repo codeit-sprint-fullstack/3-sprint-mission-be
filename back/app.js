@@ -24,7 +24,7 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
-async function asyncHandler(handler) {
+function asyncHandler(handler) {
   return async function (req, res) {
     try {
       await handler(req, res);
