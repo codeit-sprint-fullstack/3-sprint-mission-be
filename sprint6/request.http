@@ -1,0 +1,49 @@
+###
+
+GET http://localhost:8000/hello?keyword=panda
+
+###
+
+GET http://localhost:8000/tasks
+
+###
+
+GET http://localhost:8000/tasks/abc
+
+###
+
+GET http://localhost:8000/task/5
+
+###
+POST http://localhost:8000/tasks
+Content-Type: application/json
+
+{
+    "title" : "죽음",
+    "description" : "파괴 하라"
+}
+
+###
+GET http://localhost:8000/db/tasks?sort=desc&count=5
+
+###
+GET http://localhost:8000/db/task/671a0a8641e43069d8ac9e68
+
+###
+
+POST http://localhost:8000/db/tasks
+Content-Type: application/json
+
+{
+    "title" : "죽음",
+    "description" : "파괴 하라"
+}
+
+###
+PATCH http://localhost:8000/db/task/671aea1fb0cb874338428538
+Content-Type: application/json
+
+{
+    "title" : "행복사랑우정기쁨",
+    "description" : "파괴 하라123123123"
+}
