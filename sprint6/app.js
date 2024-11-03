@@ -40,7 +40,7 @@ app.get("/good", (req, res) => {
 
 app.get("/hello", (req, res) => {
   const keywordQuery = req.query.keyword;
-  res.send("안녕하세요 3기 님들^^");
+  res.send("");
 });
 
 app.get("/tasks", (req, res) => {
@@ -55,7 +55,7 @@ app.get("/tasks/abc", (req, res) => {
   res.send(result);
 });
 
-// :id에 동적 url을 받아올 수 있다^^
+// :id에 동적 url을 받아올 수 있다
 app.get("/task/:id", (req, res) => {
   const id = Number(req.params.id);
   const task = MockData.find((task) => task.id === id);
