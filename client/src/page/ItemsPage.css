@@ -1,0 +1,48 @@
+
+.wrap {
+    height: 100vh;
+}
+
+    
+.contentsBody{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 26px;
+}
+.bestProducts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+.textBold{
+    font-size: 20px;
+    font-weight: 700;
+    margin:26px 0px 16px 0px;
+}
+.onSaleProducts{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-width: 1200px;
+   
+}
+.onSaleCon{
+    display:flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.rightBanner{
+    display:flex;
+    align-items: center;
+}
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 16px;
+    max-width: 1200px; 
+    
+}

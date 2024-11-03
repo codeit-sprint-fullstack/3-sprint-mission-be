@@ -1,0 +1,31 @@
+
+
+
+.footerBanner {
+    background-color: #111827;
+    width: 100%;
+    height: 160px;
+    padding: 32px 200px 32px 200px;
+    width: auto;
+}
+
+.footerBannerContent {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+}
+.footerBannerMiddleContent {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footerBannerImgs {
+    display: flex;
+    gap: 12px;
+}
+
+.footerA {
+    text-decoration: none;
+    color: #E5E7EB;
+}
