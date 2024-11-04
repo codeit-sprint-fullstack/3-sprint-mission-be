@@ -50,7 +50,6 @@ app.get('/tasks/:id', asyncHandler(async (req, res) => {
   }
 }));
 
-
 app.post('/tasks', asyncHandler(async (req, res) => {
   const newTask = await Task.create(req.body)
   res.status(201).send(newTask);
@@ -80,4 +79,4 @@ app.delete('/tasks/:id', asyncHandler(async (req, res) => {
   }
 }))
 
-app.listen(3000, () => console.log('Server Started'));
+app.listen(process.env.PORT || 3000, () => console.log('Server Started'));
