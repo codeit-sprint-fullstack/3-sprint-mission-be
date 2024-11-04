@@ -33,7 +33,7 @@ function asyncHandler(handler) {
 }
 
 app.get('/products', asyncHandler(async (req, res) => {
-  console.log('sdfdff')
+
   const sort = req.query.sort;
   const count = Number(req.query.count) || 0;
 
