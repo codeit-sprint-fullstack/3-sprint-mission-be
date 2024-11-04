@@ -1,26 +1,47 @@
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 const TaskSchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
-      maxLength: 30,
-      // validate: {
-      //   validator: function (title) {
-      //     return title.split(' ').length > 1;
-      //     // 최소 2단어인지 확인.
-      //   },
-      //   message: 'Must contain at least 2 words.',
-      // }
+      validate: {
+        validator: {
+          minLength: 1,
+          maxLength: 10,
+        },
+        message: 'Name must contain between 1 and 10 characters.',
+      }
     },
     description: {
       type: String,
+      required: true,
+      validate: {
+        validator: {
+          minLength: 10,
+          maxLength: 100,
+        },
+        message: 'Description must contain between 10 and 100 characters.',
+      }
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    tags: {
+      type: String,
+      required: true,
+      validate: {
+        validator: {
+          minLength: 1,
+          maxLength: 5,
+        },
+        message: 'Tags must contain between 1 and 5 characters.',
+      }
     },
     isComplete: {
       type: Boolean,
       required: true,
-
       default: false,
     },
   },
