@@ -1,49 +1,23 @@
 ###
 
-GET http://localhost:3000/hello?keyword=panda
+GET http://localhost:8000/products
 
 ###
 
-GET http://localhost:3000/tasks
+GET http://localhost:8000/products/:id
 
 ###
 
-GET http://localhost:3000/tasks/abc
+GET http://localhost:8000/products
 
 ###
-
-GET http://localhost:3000/task/5
-
-###
-POST http://localhost:3000/tasks
+POST http://localhost:8000/products
 Content-Type: application/json
 
 {
-    "title" : "독서를 꾸준히 하기 위해서 어떻게 해야 하는가?",
-    "description" : "독서는 매우 힘든 일이고 본성에 반하는 일이기 때문에 의식적으로 독서 하기 위해 매일 매순간 결단하는 일이 필요하다. 더 나아가 독서의 중요성을 내 스스로 이해시키고 각인 시키는 것도 중요할 거라고 생각한다."
-}
-
-###
-GET http://localhost:3000/db/tasks?sort=desc&count=5
-
-###
-GET http://localhost:3000/db/task/671a0a8641e43069d8ac9e68
-
-###
-
-POST http://localhost:3000/db/tasks
-Content-Type: application/json
-
-{
-    "title" : "죽음",
-    "description" : "파괴 하라"
-}
-
-###
-PATCH http://localhost:3000/db/task/671aea1fb0cb874338428538
-Content-Type: application/json
-
-{
-    "title" : "행복사랑우정기쁨",
-    "description" : "파괴 하라123123123"
+    "name": "상품 이름",
+    "description": "상품 설명",
+    "price": 10200,
+    "tags": "태그",
+    "isComplete": false,
 }
