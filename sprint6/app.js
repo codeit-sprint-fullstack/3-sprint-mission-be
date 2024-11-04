@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-import { DATABASE_URL } from "./env.js";
-import Task from "./models/Task.js";
+import { DATABASE_URL } from "./.env";
+// import Task from "./models/Task.js";
+import Product from "./models/Product.js";
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 
@@ -9,11 +10,10 @@ mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
 dotenv.config();
 
 const app = express();
-const corsOptions = {
-  origin: ['http://localhost:3000', '(배포시 주소)'],
-};
 
-app.use(cors());
+app.use(
+  cors()
+);
 app.use(express.json());
 
 function asyncHandler(handler) {
@@ -32,57 +32,55 @@ function asyncHandler(handler) {
   }
 }
 
-app.get('/tasks', asyncHandler(async (req, res) => {
-
+app.get('/products', asyncHandler(async (req, res) => {
+  console.log('sdfdff')
   const sort = req.query.sort;
   const count = Number(req.query.count) || 0;
 
   const sortOption = {
-    createdAt: sort === 'oldest' ? 'asc' : 'desc'
+    createdAt: sort === 'recent' ? 'desc' : 'asc'
   };
-  const tasks = await Task.find().sort(sortOption).limit(count);
-
-  res.send(tasks);
+  const products = await Product.find().sort(sortOption).limit(count);
+  res.send(products);
 }));
 
-
-app.get('/tasks/:id', asyncHandler(async (req, res) => {
+app.get('/products/:id', asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const task = await Task.findById(id);
-  if (task) {
-    res.send(task);
+  const products = await Product.findById(id);
+  if (products) {
+    res.send(products);
   } else {
-    res.status(404).send({ message: '에러가 났습니다.' })
+    res.status(404).send({ message: '상품을 찾을 수 없습니다.' })
   }
 }));
 
-app.post('/tasks', asyncHandler(async (req, res) => {
-  const newTask = await Task.create(req.body)
-  res.status(201).send(newTask);
+app.post('/products', asyncHandler(async (req, res) => {
+  const newProduct = await Product.create(req.body)
+  res.status(201).send(newProduct);
 }));
 
-app.patch('/tasks/:id', asyncHandler(async (req, res) => {
+app.patch('/products/:id', asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const task = await Task.findById(id);
-  if (task) {
+  const products = await Product.findById(id);
+  if (products) {
     Object.keys(req.body).forEach((key) => {
       task[key] = req.body[key];
     })
-    await task.save();
-    res.send(task);
+    await products.save();
+    res.send(products);
   } else {
-    res.status(404).send({ message: '에러가 났습니다.' })
+    res.status(404).send({ message: '올바른 형식을 사용해주세요.' })
   }
 }))
 
-app.delete('/tasks/:id', asyncHandler(async (req, res) => {
+app.delete('/products/:id', asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const task = await Task.findByIdAndDelete(id);
-  if (task) {
+  const product = await Product.findByIdAndDelete(id);
+  if (product) {
     res.sendStatus(204);
   } else {
-    res.status(404).send({ message: '에러가 났습니다.' })
+    res.status(404).send({ message: 'id를 확인해주세요.' })
   }
 }))
 
-app.listen(process.env.PORT || 3000, () => console.log('Server Started'));
+app.listen(process.env.PORT || 8000, () => console.log('Server Started'));

@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "seed": "node data/seed.js"
+    "seed": "node scripts/seed.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
