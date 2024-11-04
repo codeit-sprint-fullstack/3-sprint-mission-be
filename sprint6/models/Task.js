@@ -1,40 +1,33 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"; 
 
 const TaskSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
       maxLength: 30,
+      validate: {
+        validator: function (title) {
+          return title.split(' ').length > 1;
+        },
+        message: 'Must contain at least 2 words.',
+      }
     },
     description: {
       type: String,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
-    tags: {
-      type: String,
-      maxLength: 5,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
     isComplete: {
       type: Boolean,
+      required: true,
+
       default: false,
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const Task = mongoose.model("Task", TaskSchema);
+const Task = mongoose.model('Task', TaskSchema);
+
 export default Task;

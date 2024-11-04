@@ -1,127 +1,83 @@
 import express from "express";
 import mongoose from "mongoose";
-import { MockData } from "./data/mock.js";
 import { DATABASE_URL } from "./env.js";
-import router from "./routes/index.js";
 import Task from "./models/Task.js";
-import cors from "cors";
+import * as dotenv from 'dotenv';
+
+mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
+dotenv.config();
 
 const app = express();
-
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: "*",
-    "Access-Control-Allow-Origin": "*",
-  })
-);
 
 function asyncHandler(handler) {
   return async function (req, res) {
     try {
       await handler(req, res);
-    } catch (err) {
-      console.log("err", err);
+    } catch (e) {
+      if (e.name === 'ValidationError') {
+        res.status(400).send({ message: e.message });
+      } else if (e.name === 'CastError') {
+        res.status(404).send({ message: 'Cannot find given id.' });
+      } else {
+        res.status(500).send({ message: e.message });
+      }
     }
-  };
+  }
 }
 
-mongoose
-  .connect(DATABASE_URL)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
+app.get('/tasks', asyncHandler(async (req, res) => {
 
-app.use("/", router);
-
-app.get("/good", (req, res) => {
-  res.send({ message: "goo22d" });
-});
-
-app.get("/hello", (req, res) => {
-  const keywordQuery = req.query.keyword;
-  res.send("");
-});
-
-app.get("/tasks", (req, res) => {
-  res.send(MockData);
-});
-
-app.get("/tasks/abc", (req, res) => {
-  const result = [];
-  for (let i = 0; i < MockData.length; i++) {
-    if (MockData[i].isComplete) result.push(MockData[i]);
-  }
-  res.send(result);
-});
-
-// :id에 동적 url을 받아올 수 있다
-app.get("/task/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const task = MockData.find((task) => task.id === id);
-  res.send(task);
-});
-
-app.get("/db/tasks", async (req, res) => {
-  const sort = req.query.sort; // asc, desc
-  const count = Number(req.query.count);
+  const sort = req.query.sort;
+  const count = Number(req.query.count) || 0;
 
   const sortOption = {
-    createdAt: sort || "asc",
+    createdAt: sort === 'oldest' ? 'asc' : 'desc'
   };
-  const allData = await Task.find().sort(sortOption).limit(count);
-  res.send(allData);
-});
+  const tasks = await Task.find().sort(sortOption).limit(count);
 
-app.get("/db/task/:id", async (req, res) => {
+  res.send(tasks);
+}));
+
+
+app.get('/tasks/:id', asyncHandler(async (req, res) => {
   const id = req.params.id;
   const task = await Task.findById(id);
-  res.send(task);
-});
-
-app.post("/tasks", (req, res) => {
-  const requestBody = req.body;
-  const ids = MockData.map((data) => data.id);
-  requestBody.id = Math.max(...ids) + 1;
-  requestBody.isComplete = false;
-  requestBody.createdAt = new Date();
-  requestBody.updatedAt = new Date();
-  console.log("requestBody", requestBody);
-  MockData.push(requestBody);
-  res.status(201).send(requestBody);
-});
-
-app.post("/db/tasks", async (req, res) => {
-  try {
-    // 1. 예외처리, title길이라던지, 필수값이라던지..
-    // 2. 코드 오류 처리하기
-    const newTask = await Task.create(req.body);
-    res.status(201).send(newTask);
-  } catch (err) {
-    console.log("err", err);
-    res.status(400).send({ message: "응에러" });
+  if (task) {
+    res.send(task);
+  } else {
+    res.status(404).send({ message: '에러가 났습니다.' })
   }
-});
+}));
 
-app.patch("/db/task/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const task = await Task.findById(id);
-    // 기존거 있는지 확인
 
-    if (task) {
-      // 객체 변경
-      task.title = req.body.title;
-      task.description = req.body.description;
-    }
+app.post('/tasks', asyncHandler(async (req, res) => {
+  const newTask = await Task.create(req.body)
+  res.status(201).send(newTask);
+}));
 
-    // 변경한 객체 db 저장
+app.patch('/tasks/:id', asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const task = await Task.findById(id);
+  if (task) {
+    Object.keys(req.body).forEach((key) => {
+      task[key] = req.body[key];
+    })
     await task.save();
     res.send(task);
-  } catch (err) {
-    console.log("err", err);
-    res.send("실패^^");
+  } else {
+    res.status(404).send({ message: '에러가 났습니다.' })
   }
-});
+}))
 
-app.listen(8000, () => console.log("서버 시작"));
+app.delete('/tasks/:id', asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const task = await Task.findByIdAndDelete(id);
+  if (task) {
+    res.sendStatus(204);
+  } else {
+    res.status(404).send({ message: '에러가 났습니다.' })
+  }
+}))
+
+app.listen(3000, () => console.log('Server Started'));
