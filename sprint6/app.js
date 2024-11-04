@@ -1,7 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
 import { DATABASE_URL } from "./.env";
-// import Task from "./models/Task.js";
 import Product from "./models/Product.js";
 import * as dotenv from 'dotenv';
 import cors from 'cors';
