@@ -3,11 +3,17 @@ import mongoose from "mongoose";
 import { DATABASE_URL } from "./env.js";
 import Task from "./models/Task.js";
 import * as dotenv from 'dotenv';
+import cors from 'cors';
 
 mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
 dotenv.config();
 
 const app = express();
+const corsOptions = {
+  origin: ['http://localhost:3000', '(배포시 주소)'],
+};
+
+app.use(cors());
 app.use(express.json());
 
 function asyncHandler(handler) {
