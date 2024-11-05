@@ -1,0 +1,110 @@
+.product-registration {
+  font-family: 'Pretendard';
+  font-size: 18px;
+  font-weight: 700;
+  color: #1F2937;
+  line-height: 26px;
+  margin-left: 360px;
+  margin-right: 360px;
+  width: 1200px;
+  height: 830px;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.registration-header {
+  font-family: 'Pretendard';
+ 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-registration h2 {
+  text-align: left;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.product-registration form {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-registration label {
+  font-weight: bold;
+  color: #555;
+  margin-top: 15px;
+}
+
+.product-registration input[type="text"],
+.product-registration input[type="number"],
+.product-registration textarea {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-top: 8px;
+  font-size: 16px;
+  background-color: #f5f7fa; /* 배경색을 약간 연하게 */
+  color: #333;
+}
+
+.product-registration textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+.product-registration input[type="text"]::placeholder,
+.product-registration input[type="number"]::placeholder,
+.product-registration textarea::placeholder {
+  color: #a0a0a0;
+}
+
+.product-registration button {
+  font-family: 'Pretendard';
+  font-size: 16px;
+  line-height: 26px;
+  width: 74px;
+  height: 42px;
+  color: #fff;
+  background-color: #9CA3AF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.product-registration button:hover {
+  background-color: #3692FF;
+}
+
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tag {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.tag span {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #888;
+}
+
+.tag span:hover {
+  color: #555;
+}
