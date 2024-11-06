@@ -3,12 +3,6 @@ import mongoose from 'mongoose';
 import { MONGO_URI, PORT } from './env';
 import cors from 'cors';
 import router from '../routes/index';
-import Task from '../models/Task';
-
-type AsyncHandlerCallback = (
-  req: express.Request,
-  res: express.Response
-) => Promise<void>;
 
 const app = express();
 
