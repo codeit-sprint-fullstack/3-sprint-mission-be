@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AsyncRequestHandler } from '../types/asyncRequestHandler';
 
-const asyncRequestHandler = (handler: AsyncRequestHandler) => {
+const asyncRequestHandler = <T>(handler: AsyncRequestHandler<T>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
