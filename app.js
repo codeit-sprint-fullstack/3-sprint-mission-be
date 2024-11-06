@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import productRoutes from './routes/products.js';
 
 dotenv.config(); // .env 파일에서 환경 변수 로드
 
@@ -15,6 +16,9 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB 연결됨'))
   .catch((error) => console.log('MongoDB 연결오류:', error));
+
+// 라우트 연결
+app.use('/api/products', productRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
