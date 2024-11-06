@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { DATABASE_URL } from "./.env";
-import Product from "./models/Product.js";
+import Product from "./sprint6/models/Product.js";
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 
