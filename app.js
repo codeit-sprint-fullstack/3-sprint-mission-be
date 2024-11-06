@@ -1,12 +1,16 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import productRoutes from './routes/products.js';
 
 dotenv.config(); // .env 파일에서 환경 변수 로드
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+// CORS 설정
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // JSON 파싱 미들웨어
 app.use(express.json());
