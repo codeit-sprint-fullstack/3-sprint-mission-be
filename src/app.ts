@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { MONGO_URI, PORT } from './env';
 import cors from 'cors';
-import router from '../routes/index';
+import router from './routes/index';
 
 const app = express();
 
