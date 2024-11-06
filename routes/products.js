@@ -4,30 +4,38 @@ import Product from '../models/Product.js';
 
 // 1. 상품 목록 조회 API
 router.get('/', async (req, res) => {
+  // offset, limit, order, keyword 파라미터를 쿼리에서 받아오기
+  const { offset = 0, limit = 10, orderBy = 'recent', keyword = '' } = req.query;
+
+  // 검색 조건 설정 (keyword가 있으면 name과 description에 포함된 데이터 검색)
+  const searchQuery = keyword
+    ? {
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } }, // 대소문자 구분 없이 검색
+        { description: { $regex: keyword, $options: 'i' } },
+      ],
+    }
+    : {};
+
   try {
-    const { page = 1, limit = 10, search = '', order = 'recent' } = req.query;
-    const skip = (page - 1) * limit;
-    const sortOption = order === 'recent' ? { createdAt: -1 } : { createdAt: 1 };
+    // MongoDB 쿼리 실행
+    const products = await Product.find(searchQuery)
+      .sort(orderBy === 'recent' ? { createdAt: -1 } : {}) // 최신순 정렬
+      .skip(parseInt(offset, 10)) // offset 설정
+      .limit(parseInt(limit, 10)) // limit 설정
+      .select('id name price createdAt favoriteCount'); // 필요한 필드만 선택
 
-    const query = search ? { name: new RegExp(search, 'i') } : {};
-    const products = await Product.find(query)
-      .sort(sortOption)
-      .skip(skip)
-      .limit(parseInt(limit))
-      .select('id name price createdAt');
+    // 총 상품 수 구하기 (검색 조건 적용)
+    const totalCount = await Product.countDocuments(searchQuery);
 
-    const totalItems = await Product.countDocuments(query);
-
-    res.status(200).json({
-      data: products,
-      totalItems,
-      totalPages: Math.ceil(totalItems / limit),
-      currentPage: page,
-    });
+    // 응답
+    res.json({ products, totalCount });
   } catch (error) {
-    res.status(500).json({ message: '상품 목록을 불러오는 중 오류가 발생했습니다.', error });
+    console.error('상품 목록 조회 중 오류:', error);
+    res.status(500).json({ error: '상품 목록을 가져오는 중 오류가 발생했습니다.' });
   }
 });
+
 
 // 2. 상품 상세 조회 API
 router.get('/:id', async (req, res) => {

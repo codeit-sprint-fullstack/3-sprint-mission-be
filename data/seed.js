@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import mockData from './mock.js';
-import Product from '../models/Products.js';
+import Product from '../models/Product.js';
 import dotenv from 'dotenv';
 
 dotenv.config(); // .env 파일에서 환경 변수 로드
