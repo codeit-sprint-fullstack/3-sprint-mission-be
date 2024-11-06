@@ -10,7 +10,10 @@ mongoose.connect(process.env.DATABASE_URL).then(() => console.log('Connected to 
 const app = express();
 
 app.use(
-  cors()
+  cors({
+    method: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+  })
 );
 app.use(express.json());
 
