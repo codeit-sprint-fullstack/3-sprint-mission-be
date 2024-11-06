@@ -1,0 +1,26 @@
+###
+GET http://localhost:8000/article
+
+###
+GET http://localhost:8000/articleList
+
+###
+POST http://localhost:8000/article
+Content-Type: application/json
+
+{
+  "title": "제목 테스트",
+  "content" : "내용 테스트"
+}
+
+###
+PATCH http://localhost:8000/article/22562a0e-1407-4ad3-8669-19d4f812d686
+Content-Type: application/json
+
+{
+  "title": "제목 수정",
+  "content" : "내용 수정"
+}
+
+###
+DELETE http://localhost:8000/article/22562a0e-1407-4ad3-8669-19d4f812d686
