@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { MockData } from "./mock.js";
 // import { DATABASE_URL } from "../.env";
-import Product from "../models/Product.js";
+import Product from "../../models/Product.js";
 import * as dotenv from 'dotenv';
 
 // .env 파일을 읽어와 환경변수로 설정

@@ -1,12 +1,16 @@
+if (process.env.NODE_ENV !== 'production') {
+  import('dotenv').then((dotenv) => dotenv.config());
+}
+
 import express from "express";
 import mongoose from "mongoose";
 import { DATABASE_URL } from "./.env";
-import Product from "./sprint6/models/Product.js";
+import Product from "./models/Product.js";
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 
-mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
 dotenv.config();
+mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
 
 const app = express();
 
@@ -60,16 +64,10 @@ app.post('/products', asyncHandler(async (req, res) => {
 
 app.patch('/products/:id', asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const products = await Product.findById(id);
-  if (products) {
-    Object.keys(req.body).forEach((key) => {
-      task[key] = req.body[key];
-    })
-    await products.save();
-    res.send(products);
-  } else {
-    res.status(404).send({ message: '올바른 형식을 사용해주세요.' })
-  }
+  console.log(req.body);
+  const products = await Product.findByIdAndUpdate(id, req.body, { new: true });
+  console.log(products);
+  res.send(products);
 }))
 
 app.delete('/products/:id', asyncHandler(async (req, res) => {
