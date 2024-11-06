@@ -62,14 +62,4 @@ export const fieldTypeValidator = (value, type) => {
     default:
       break;
   }
-  // string: value => value !== null && typeof value === 'string' && value.length > 0 && value.length <= 255,
-  // number: value =>
-  //   value !== null &&
-  //   typeof value === 'number' &&
-  //   !isNaN(value) &&
-  //   value >= 0 &&
-  //   value < Number.MAX_SAFE_INTEGER &&
-  //   value % 1 === 0,
-  // array: value =>
-  //   value !== null && Array.isArray(value) && value.every(tag => typeof tag === 'string') && value.length > 0,
 };
