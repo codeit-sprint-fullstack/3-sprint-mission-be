@@ -1,16 +1,11 @@
-if (process.env.NODE_ENV !== 'production') {
-  import('dotenv').then((dotenv) => dotenv.config());
-}
-
 import express from "express";
 import mongoose from "mongoose";
-import { DATABASE_URL } from "./.env";
 import Product from "./models/Product.js";
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 
 dotenv.config();
-mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
+mongoose.connect(process.env.DATABASE_URL).then(() => console.log('Connected to DB'));
 
 const app = express();
 
