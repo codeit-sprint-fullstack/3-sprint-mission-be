@@ -24,3 +24,32 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8000/article/22562a0e-1407-4ad3-8669-19d4f812d686
+
+
+###
+//댓글
+
+###
+GET http://localhost:8000/articleComment
+
+###
+GET http://localhost:8000/articleComment/8f945b19-11f7-4b5b-b935-18d742f60e59
+###
+POST http://localhost:8000/articleComment
+Content-Type: application/json
+
+{
+  "content" : ["댓글 테스트4"],
+  "articleId" : "849c9978-e460-4935-a2c1-c4de377df215"
+}
+
+###
+PATCH http://localhost:8000/articleComment/22562a0e-1407-4ad3-8669-19d4f812d686
+Content-Type: application/json
+
+{
+  "content" : ["내용 수정"],
+}
+
+###
+DELETE http://localhost:8000/articleComment/a7d04ed8-44f7-49ae-b347-17af01f8b83a

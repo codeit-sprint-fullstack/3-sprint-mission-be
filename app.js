@@ -55,7 +55,7 @@ app.get('/articleList', asyncHandler(async (req, res) => {
                 id: true,
                 title: true,
                 content: true,
-                createdAt: true
+                createdAt: true,
             }
         });
         res.status(200).json({
@@ -67,7 +67,7 @@ app.get('/articleList', asyncHandler(async (req, res) => {
     }
 }));
 
-//---------------
+//---------------게시글
 app.get('/article', asyncHandler(async (req, res) => {
     const article = await prisma.article.findMany({
         select: {
@@ -103,5 +103,55 @@ app.delete('/article/:id', asyncHandler(async (req, res) => {
     });
     res.sendStatus(204);
 }));
+
+//-------------------댓글
+app.post('/articleComment', asyncHandler(async (req, res) => {
+    const { content, articleId } = req.body;
+
+    const article = await prisma.article.findUnique({
+        where: { id: articleId },
+    });
+
+    const articleComment = await prisma.articleComment.create({
+        data: req.body,
+    });
+    res.status(201).send(articleComment);
+
+    if (!article) {
+        return res.status(404).send({ message: '게시글을 찾을 수 없습니다.' });
+    }
+}));
+
+app.get('/articleComment', asyncHandler(async (req, res) => {
+    const articleComment = await prisma.articleComment.findMany();
+    res.send(articleComment);
+}));
+
+app.get('/articleComment/:id', asyncHandler(async (req, res) => {
+    const { articleId } = req.params;
+    const articleComment = await prisma.articleComment.findMany({
+        where: { articleId },
+    });
+    res.send(articleComment);
+}));
+
+app.patch('/articleComment/:id', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const article = await prisma.articleComment.update({
+        where: { id },
+        data: req.body,
+    });
+    res.send(article);
+}));
+
+app.delete('/articleComment/:id', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    await prisma.articleComment.delete({
+        where: { id },
+    });
+    res.sendStatus(204);
+}));
+
+
 
 app.listen(process.env.PORT || 8000, () => console.log('서버가 시작되었습니다~'));
