@@ -1,0 +1,224 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --error-color: red;
+  --blue-bg-color: #3692ff;
+}
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+body {
+  width: 100vw;
+  height: 100%;
+  background-color: #fcfcfc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+#sec_login, #sec_signup {
+  width:40%;
+  max-height: 100%;
+  min-width: 360px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label, .simple_login, .move_box_title {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+input {
+  width:100%;
+  min-width: 360px;
+  height:56px;
+  border-radius: 12px;
+  background-color: #f3f4f6;
+  border: 0;
+  padding: 16px 24px;
+  
+}
+
+input:focus {
+  outline:2px solid #3692ff;
+}
+
+.logo {
+  position: relative;
+  min-width: 360px;
+  bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo img {
+  width: 100%;
+  min-width: 360px;
+  height: auto;
+}
+
+.login_box , .signup_box{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.password-div {
+  position: relative;
+  width: 100%;
+  min-width: 360px;
+}
+
+.eyes {
+  position: absolute;
+  cursor: pointer;
+  top:41px;
+  right:20px;
+}
+
+
+.btn {
+  width:100%;
+  height: 56px;
+  background-color:var(--blue-bg-color);
+  border-radius: 40px;
+  padding: 16px 124px;
+  text-align: center;
+  color: #f3f4f6;
+  margin: 20px 0;
+  font-size: 20px;
+  font-weight: 600px;
+  /* cursor: pointer; */
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:disabled {
+  background-color: lightgrey;
+}
+
+.simple_login {
+  width: 100%;
+  min-width: 360px;
+  height: 74px;
+  background-color: #E6F2FF;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  padding: 16px 23px;
+  font-size: 16px;
+  font-weight: 500;
+  justify-content: space-between;
+}
+
+.sns_box {
+  display: flex;
+  gap: 16px;
+}
+
+.sns_box img {
+  width: 42px;
+  height: 42px;
+}
+
+.move_box {
+  display: flex;
+  position: relative;
+  top:10px;
+  align-items: center;
+  text-align: center;
+  left:35%;
+  gap:5px;
+  min-width: 360px;
+}
+
+.move_box_title , .move_box a {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+#sec_signup {
+  position: absolute;
+  top:50px;
+}
+
+.signup_box {
+  display:flex; 
+  flex-direction: column;
+  gap:20px;
+  width: 100%;
+}
+
+.signup_box input {
+  width: 100%;
+}
+
+/*mission3*/
+
+.input_error_outline {
+  outline: 1px solid var(--error-color) !important;
+}
+
+#emailError, #passwordError, #confirmError{
+  color:var(--error-color);
+  font-size: 13px;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: none;
+}
+
+.modal_popup {
+  position: absolute;
+  background-color: white;
+  width: 50%;
+  height: 35%;
+  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.modal_popup div {
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  font-size: 2vh;
+}
+
+.ok_btn {
+  position: absolute;
+  background-color: var(--blue-bg-color);
+  color: white;
+  width: 25%;
+  height: 15%;
+  border-radius: 10px;
+  border: 0;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 2vh;
+}

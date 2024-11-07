@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+:root {
+  --font-pretendard: 'Pretendard', sans-serif;
+  --color-blue: #3692FF;
+}
+
+.header__box {
+  width: 100vw;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  padding: 0 200px 0;
+  height: 70px;
+  border-bottom: 1px solid grey;
+  justify-content: space-between;
+  z-index: 1000;
+  background-color: #FFFFFF;
+}
+
+.header__box__left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-right: 50px;
+}
+
+.word {
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #4B5563;
+  cursor: pointer;
+  min-width: 80px;
+  text-decoration-line: none;
+}
+
+.header__box__right {
+  min-width: 88px;
+  height: 42px;
+  background-color: var(--color-blue);
+  border-radius: 8px;
+  cursor: pointer;  
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  color: #F3F4F6;
+  border: 0;
+}
+

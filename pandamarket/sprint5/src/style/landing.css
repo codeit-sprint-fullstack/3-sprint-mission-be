@@ -1,0 +1,289 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: clamp(10px,1.5vw,16px);
+}
+
+:root {
+  --main-font-size: 2.5rem;
+}
+
+header {
+  width: 100vw;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 200px;
+  position: fixed;
+  background: #FFFFFF;
+  z-index: 1;
+}
+
+a {
+  cursor: pointer;
+  text-decoration-line: none;
+}
+
+.login-btn {
+  min-width: 128px;
+  height: 48px;
+  background-color: #3692ff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-font {
+  color: #f3f4f6;
+  font-weight: 600;
+  line-height: 26px;
+  font-size: 16px;
+}
+
+.section1 {
+  width: 100vw;
+  height: 540px;
+  background-color: #cfe5ff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.section1_block {
+  display: flex;
+  gap: 30px;
+  width:100%; 
+  height: 340px;
+  align-items: flex-end;
+  margin: 0 40px 0;
+}
+
+.section1_title_layer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width:35%;
+  min-width: 450px;
+  height: 300px;
+  gap: 30px;
+}
+
+.section1_title {
+  width: 70%;
+  font-weight: 700;
+  font-size: var(--main-font-size);
+  line-height: 3.5rem;
+  word-break:break-all;
+}
+
+.show-btn {
+  background-color: #3692ff;
+  color: #f9fafb;
+  width: 70%;
+  height: 56px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section1_image {
+  width: 100%;
+  height:auto;
+  position: relative;
+  top:4px;
+}
+
+.section2 {
+  display:flex;
+  width:100%;
+  height:720px;
+  justify-content: center;
+  align-items: center;
+}
+
+.section2_block {
+  width: 988px;
+  height: 444px;
+  background: #FCFCFC;
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap:30px;
+}
+
+.section2_image {
+  max-width: 100%;
+  height: auto;
+}
+
+.section2_title {
+  display: flex;
+  flex-direction: column;
+  height: 238px;
+  gap:10px;
+  margin-right: 30px;
+}
+
+.section2_word1 {
+  font-family: Pretendard;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  text-align: left;
+  color: #3692FF;
+}
+
+.section2_word2 {
+  font-family: Pretendard;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: 56px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: #374151;
+}
+
+.section2_word3 {
+  font-family: Pretendard;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 32px;
+  text-align: left;
+  color: #374151;
+}
+
+.section3_block {
+  width: 988px;
+  height: 444px;
+  background: #FCFCFC;
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap:30px;
+}
+
+.section3_title {
+  display: flex;
+  flex-direction: column;
+  height: 238px;
+  gap:10px;
+  margin-left: 30px;
+  margin-right: 40px;
+}
+
+.section3_block p {
+  text-align: right;
+}
+
+.section5 {
+  display: flex;
+  position:relative;
+  top:80px;
+  background: #CFE5FF;
+  width:100%;
+  height: 540px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.section5_block {
+  display: flex;
+  width:1110px;
+  height: 397px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap:30px;
+}
+
+.section5_title_layer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 275px;
+
+}
+
+.section5_title {
+  font-family: Pretendard;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: 56px;
+  text-align: left;
+  color: #374151;
+  height: 172px;
+  width: 357px;
+  padding-bottom: 60px;
+}
+
+.section5_image {
+  max-width: 100%;
+  height: auto;
+  position: relative;
+  top: 4px;
+}
+
+footer {
+  width: 100%;
+  height: 160px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 200px;
+}
+
+.footer_block {
+  display: flex;
+  position: relative;
+  top:30px;
+  width: 80%;
+  height: 12.5%;
+  justify-content: space-between;
+}
+
+.footer_left {
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.09px;
+  text-align: center;
+  color: #9CA3AF;
+  width: 10%;
+}
+
+.footer_mid {
+  display: flex;
+  width:15%;
+  justify-content: space-between;
+}
+
+.mid_font {
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.09px;
+  text-align: center;
+  color: #E5E7EB;
+}
+
+.sns {
+  display: flex;
+  align-items: center;
+  height:100%;
+  width:10%;
+  gap:20px;
+}
+
+.sns_font {
+  width:15px;
+  height: 15px;
+}
