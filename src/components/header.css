@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('/src/fonts/ROKAF\ Sans\ Medium.ttf') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'rokaf';
+  src: url('/src/fonts/ROKAF\ Sans\ Medium.ttf') format('truetype');
+}
+
+
+.header {
+  font-family: 'Pretendard-Regular';
+  width: 100%;
+  height: 68px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-left: 200px;
+  text-decoration: none
+}
+
+.logo img {
+  width: 40px;
+  height: 40.14px;
+  margin-right: 10px;
+}
+
+.panda_text {
+  font-family: 'rokaf';
+  font-size: 25.63px;
+  font-weight: 700;
+  line-height: 34.6px;
+  color: #3692FF;
+}
+
+.nav ul {
+  display: flex;
+  list-style: none;
+}
+
+.nav li {
+  margin-right: 20px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #4B5563;
+  font-weight: bold;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  text-align: left;
+
+}
+
+
+
+.login-button button {
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  background-color: #007bff;
+  width: 88px;
+  height: 42px;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 200px;
+}
+
+.login-button button:hover {
+  background-color: #0056b3;
+}
+
+
+

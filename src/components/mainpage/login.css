@@ -1,0 +1,296 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  width: 640px;
+} 
+
+.logo-section {
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 396px;
+  height: 132px;
+}
+
+.title {
+  font-size: 1.8rem;
+  color: #339af0;
+  margin-top: 10px;
+}
+
+.tinyhead {
+  width: 63px;
+  height: 26px;
+  font-family: 'Pretendard';
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  margin-top: 24px
+}
+
+.login-form {
+  margin-bottom: 24px;
+}
+
+
+.input-group1 input {
+  width: 640px;
+  height: 56px;
+  flex-grow: 1;
+  padding: 16px 24px 16px 24px;
+  background-color: #F3F4F6;
+  font-family: 'Pretendard-Regular';
+  color: #9CA3AF;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-group1 input.error {
+  border: 1px solid red;
+}
+
+.error-message-mail {
+  font-family: 'Pretendard';
+  display: flex;
+  justify-content: space-between;
+  color: #F74747;
+  font-size: 15px;
+  visibility: hidden;
+  margin-top: 8px;
+  line-height: 17.9px;
+  font-weight: 600;
+}
+
+.error-message-password {
+  font-family: 'Pretendard';
+  display: flex;
+  justify-content: space-between;
+  color: #F74747;
+  font-size: 15px;
+  visibility: hidden;
+  margin-top: 8px;
+  line-height: 17.9px;
+  font-weight: 600;
+  position: absolute;
+  bottom: -20px;
+}
+
+
+.input-group1 input:focus {
+  outline: none;
+  border: 1px solid #3692ff;
+}
+
+.input-group2 {
+  width: 640px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+input[type="password"] {
+  flex: 1;
+  border: none;
+  outline: none; 
+  padding: 8px; 
+  font-size: 16px; 
+  color: #808080; 
+}
+
+.input-group2 input {
+  width: 640px;
+  height: 56px;
+  flex-grow: 1;
+  padding: 16px 24px 16px 24px;
+  background-color: #F3F4F6;
+  font-family: 'Pretendard-Regular';
+  color: #9CA3AF;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+}
+
+input[type="password"] {
+  padding-right: 40px; /* 토글 버튼이 겹치지 않도록 여유 공간 추가 */
+}
+
+.input-group2 input:focus {
+  outline: none;}
+ 
+.toggle-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 16px;
+}
+
+.toggle-password img {
+  width: 24px;
+  height: 24px;
+}
+
+.login-btn {
+  width: 640px;
+  height: 56px;
+  background-color: #3692FF;
+  font-family: 'Pretendard';
+  color: white;
+  font-size: 20px;
+  font-weight: 600px;
+  padding: 16px 124px 16px 124px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 40px;
+  margin-top: 30px;
+}
+
+.login-btn:disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+} 
+
+.social-login {
+  font-size: 16px;
+  line-height: 26px;
+  font-family: 'Pretendard';
+  font-weight: 500;
+  color: #1F2937;
+  width: 640px;
+  height: 74px;
+  background-color: #E6F2FF;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+}
+.easylogin {
+  margin-left: 23px;
+}
+
+.googlekakao {
+  margin-right: 23px;
+}
+
+.google {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.kakao {
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-link {
+  font-size: 14px;
+  font-family: 'Pretendard';
+  font-weight: 500;
+  line-height: 24px;
+  margin-top: 20px;
+}
+
+.signup-link a {
+  font-size: 14px;
+  font-family: 'Pretendard';
+  font-weight: 500;
+  line-height: 16.71px;
+  color: #3182F6;
+  text-decoration: underline;
+}
+
+/* 모달 전체 배경 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* 모달 내용 */
+.modal-content {
+  background-color: white;
+  margin: 20% auto;
+  padding: 30px;
+  border-radius: 8px;
+  width: 520px;
+  height: 250px; 
+  position: relative;
+  text-align: center; /* 텍스트를 중앙에 정렬 */
+}
+
+/* 모달 텍스트 */
+.modalmessage {
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19.09px;
+  text-align: center;
+  color:  #1F2937;/* 텍스트 색상 */
+  margin-bottom: 30px;
+}
+
+/* 확인 버튼 */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-modal-btn {
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19.09px;
+  background-color: #3692FF; /* 파란색 버튼 */
+  color: white;
+  border: none;
+  padding: 12px 23px 12px 23px;
+  gap: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}

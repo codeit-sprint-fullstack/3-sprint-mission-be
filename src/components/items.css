@@ -1,0 +1,161 @@
+.product-list {
+  padding: 10px;
+  margin-right: 230px;
+}
+
+.product-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+  margin-right: 360px;
+  gap: 12px;
+}
+.product-list-title {
+  font-family: 'Pretendard';
+  margin-left: 360px;
+  margin-bottom: 24px;
+  margin-top: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-right: auto;
+}
+
+.search-bar {
+  width: 325px;
+  height: 42px;
+  padding-left: 36px; 
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  background-image: url('/src/components/icons/ic_search.png'); /* 돋보기 이미지 경로 */
+  background-repeat: no-repeat;
+  background-size: 24px 24px; /* 돋보기 아이콘 크기 조정 */
+  background-position: 10px center; /* 돋보기 위치 설정 */
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+}
+
+.add-product-button {
+  width: 133px;
+  height: 42px;
+  font-family: 'Pretendard';
+  padding: 8px 16px;
+  background-color: #3692FF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+.add-product-button:hover {
+  background-color: #0056b3;
+}
+
+.sort-dropdown {
+  font-family: 'Pretendard';
+  width: 130px;
+  height: 42px;
+  color: #1F2937;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+}
+
+.product-list-grid {
+  margin-left: 360px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 24px;
+}
+
+.product-list-card {
+  width: 221px;
+  height: 317px;
+  padding: 10px;
+  /* border: 1px solid #ddd; */
+  border-radius: 8px;
+  text-align: left;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  transition: transform 0.2s ease;
+}
+
+.product-list-card:hover {
+  transform: scale(1.05);
+}
+
+.product-list-card img {
+  width: 221px;
+  height: 221px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-list-info h3 {
+  font-family: 'Pretendard';
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  margin: 10px 0;
+  color: #333;
+}
+
+.product-list-info p {
+ 
+  font-family: 'Pretendard';
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #4B5563;
+}
+
+.product-list-info p:first-of-type {
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 26px;
+  color: #1F2937;
+}
+
+.product-list-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 140px;
+}
+
+.product-list-pagination button {
+  color: #6B7280;
+  font-family: 'Pretendard;';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  width: 40px;
+  height: 40px;
+  margin: 0 4px;
+  padding: 8px 12px;
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.product-list-pagination button.active {
+  background-color: #2F80ED;
+  color: #fff;
+}
+
