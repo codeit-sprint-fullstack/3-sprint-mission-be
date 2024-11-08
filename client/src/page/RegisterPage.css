@@ -1,0 +1,91 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+.registerPage{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    height: 100vh;
+    padding: 24px 24px 0px 24px;
+}
+
+.registerCon{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 1200px;
+}
+
+.registerButtonCon{
+    display: flex;
+    justify-content: space-between;
+}
+.registerPageBt{
+    height: 42px;
+    padding: 12px 23px 12px 23px;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+    background-color: #9CA3AF;
+    color: #F3F4F6;
+}
+
+.registerPageInputCon{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+}
+
+.registerPageInput{
+    border: 0;
+    outline: none;
+    background-color: #F3F4F6;
+    color: #1F2937;
+    width: 100%;
+    border-radius: 12px;
+    padding: 16px 0px 16px 0px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-indent: 24px;  
+    margin-top: 16px;
+    resize: none;
+}
+.small{
+    height: 24px;
+}
+.big{
+    height: 250px;
+}
+
+input::placeholder {
+    color: #9CA3AF;
+    font-family: pretendard;
+}
+
+input:focus {
+    border: solid #3692FF;
+
+}
+
+textarea::placeholder {
+    color: #9CA3AF;
+    font-family: pretendard;
+
+}
+
+textarea:focus {
+    border: solid #3692FF;
+
+}
+
+.registerPageText1{
+    font-size: 20px ;
+    font-weight: 700 ;
+    line-height: 32px;
+}
+
+.registerPageText2{
+    font-size: 18px;
+    font-weight: 700 ;
+    line-height: 26px;
+}

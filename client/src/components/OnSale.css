@@ -1,0 +1,48 @@
+    
+.OnSaleInput {
+    border: 0;
+    outline: none;
+    background-color: #F3F4F6;
+    color: #1F2937;
+    width: 325px;
+    height: 46px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-indent: 24px;
+   
+}
+.registerBt {
+    display: flex;
+    padding: 12px 23px 12px 23px;
+    height: 20px;
+    line-height: 26px;
+    border-radius: 8px;
+    background-color: #3692FF;
+    color: #F3F4F6;
+    /* 위에 커서 두면 클릭 커서로 바뀜 */
+    cursor: pointer;
+    /* div 안에 정중앙 정렬 */
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.onSaleBanner{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.rightBanner{
+    display: flex;
+    gap: 10px;
+}
+
+.smallImg{
+    width: 221px;
+    height: 221px;
+    border-radius: 16px;
+}

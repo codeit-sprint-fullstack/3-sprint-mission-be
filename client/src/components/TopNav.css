@@ -1,0 +1,55 @@
+.topNavLoginBt {
+    display: flex;
+    padding: 12px 23px 12px 23px;
+    height: 20px;
+    line-height: 26px;
+    border-radius: 8px;
+    background-color: #3692FF;
+    color: #F3F4F6;
+    /* 위에 커서 두면 클릭 커서로 바뀜 */
+    cursor: pointer;
+    /* div 안에 정중앙 정렬 */
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+/* 상단 구분 div */
+.topNav {
+    /* 화면 위에 고정시키기 */
+    position: sticky;
+    top: 0;
+    padding: 9px 200px 9px 200px;
+    /* nav 구분하는 선 */
+    border-bottom: 1px solid #dfdfdf;
+    background-color: white;
+   
+}
+
+#logoImg{
+    width: 153px;
+    height: 51px;
+}
+
+.navCon{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.leftCon{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap:24px;
+}
+
+.navLinkBt{
+    color: #4B5563;
+    font-weight: bold   ;
+    text-decoration: none;
+    
+}
+.navLinkBt.active {
+    color: #3692ff;
+  }

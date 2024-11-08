@@ -1,0 +1,228 @@
+body {
+    margin: 0;
+}
+
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.boldText {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    margin-top: 0px;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 640px;
+    margin: 0px 16px 0px 16px;
+}
+.errorText{
+    color: #F74747;
+    display: none;
+}
+.errorBorder{
+    border: 1px solid #F74747 !important;
+}
+
+.pandaLogo {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+
+}
+.pandaLogoCon{
+    display: flex;
+    justify-content: center;
+    width: 396px;
+    aspect-ratio: 396 / 132;
+}
+
+#pandaLogoImg {
+   width: 100%;
+   height: 100%;
+
+}
+
+.inputStyle {
+    border: 0;
+    outline: none;
+    background-color: #F3F4F6;
+    color: #1F2937;
+    width: 100%;
+    height: 26px;
+    border-radius: 12px;
+    padding: 16px 0px 16px 0px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-indent: 24px;
+}
+
+input>placeholder {
+    color: #9CA3AF;
+}
+
+input:focus {
+    border: solid #3692FF;
+
+}
+
+#loginBt{
+    pointer-events: none;
+    text-decoration-line: none ;
+}
+
+#signUpBt{
+    pointer-events: none;
+    text-decoration-line: none ;
+}
+
+#likeBtA {
+    background-color: #9CA3AF;
+    color: #F3F4F6;
+    text-align: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
+.simpleLogin {
+    display: flex;
+    align-items: center;
+    padding: 0px 24px 0px 24px;
+    background-color: #E6F2FF;
+    border-radius: 8px;
+    height: 74px;
+}
+
+.simpleLoginCon {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.simpleLogoText {
+    display: flex;
+    align-items: center;
+}
+
+.linkImgs {
+    display: flex;
+    gap: 10px;
+}
+
+.smallImg {
+    width: 42px;
+    height: 42px;
+}
+
+.signUpQuestion {
+    text-align: center;
+
+}
+
+.signUpQuestion>a {
+    color: #3182F6;
+}
+
+.inputEye {
+    position: relative;
+
+}
+
+.inputEye>i {
+    position: absolute;
+    left: 93%;
+    top: 23px;
+    cursor: pointer;
+}
+
+#modal{
+    display: none; 
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+.modalPopup{
+    position: absolute;
+    width: 540px;
+    height: 250px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    background-color: #ffffff ;
+}
+
+.smallBt{
+    position: absolute;
+    width: 120px;
+    height: 48px;
+    top: 174px;
+    left: 392px;
+    border-radius: 8px;
+    background-color: #3692FF;
+    color: #FFFFFF;
+    font-weight: 600;
+    border: 0 ;
+
+    box-shadow: 1px 1px 1px black;
+
+    transition-duration: 0.3s;
+}
+.smallBt:active{
+    margin-left: 3px;
+    margin-top: 3px;
+    box-shadow: none;
+}
+
+#modalText{
+    position: absolute;
+    width:100%;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 500;
+    line-height: 19.09px;
+}
+
+@media (max-width: 750px){
+    .wrap{
+        align-items: start;
+    }
+     .pandaLogoCon{
+        width: 198px;
+        aspect-ratio: 198 / 66  ;
+     }
+     .loginContainer{
+        max-width: 400px;
+        margin-top: 16px;
+     }
+     .inputEye > i{
+        left: 90%;
+     }
+     .modalPopup{
+        width: 327px;
+        height: 220px;
+     }
+     #modalBt{
+        top: 149px;
+        left: 104px;
+     }
+
+}
