@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 // id가 유효한 ObjectId인지 확인하는 함수
 export const isValidObjectId = id => mongoose.isValidObjectId(id);
 
-// 현재 시간을 한국 시간으로 표시
+// 현재 시간을 한국 시간(KST)으로 표시(표기 방식은 년/월/일 시:분:초.밀리초 형식을 쓰려고 ja-JP로 설정함)
 const timestamp = new Intl.DateTimeFormat('ja-JP', {
   year: 'numeric',
   month: '2-digit',
@@ -17,6 +17,7 @@ const timestamp = new Intl.DateTimeFormat('ja-JP', {
   second: '2-digit',
   fractionalSecondDigits: 3,
   hour12: false,
+  timeZone: 'Asia/Seoul',
 }).format(new Date());
 
 // 에러 메시지와 함께 에러 상태를 반환하는 함수
