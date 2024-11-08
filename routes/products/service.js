@@ -40,9 +40,8 @@ const getProducts = async (req, res) => {
   console.log(`[GET] queryObj`, { ...req.query });
   try {
     // 상품 목록을 조회하여 응답
+    // 만약 products가 비어 있는 것은 에러(404)가 아니므로 정상(200) 응답으로 보내야 함
     const products = await Product.find(query).sort(order).skip(offset).limit(limit);
-    // 상품 목록이 없을 경우 404 에러 반환
-    if (!products || products.length === 0) return sendError(res, 404, ErrorMessages.ERROR_GET_PRODUCTS);
     // console.log(`[GET]`, products);
     const filtered = [
       '_id',
