@@ -11,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    method: ['GET', 'POST'],
+    method: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type'],
   })
 );
