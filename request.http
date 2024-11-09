@@ -1,0 +1,9 @@
+
+POST http://localhost:8000/products
+
+###
+
+GET  http://localhost:8000/products
+
+### 
+DELETE http://localhost:8000/products/6729aca104e8787739e01fb6
