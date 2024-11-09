@@ -1,0 +1,79 @@
+import { Request, Response } from 'express';
+import Product from '../../models/product';
+import { PRODUCT_RESPONSE_MESSAGES } from '../../constants/messages';
+import { QUERY_OPTIONS } from '../../constants/queryOptions';
+import { assert } from 'superstruct';
+import { CreateProduct, GetProductList, validateId } from '../../utils/struct';
+
+export const postProduct = async (req: Request, res: Response) => {
+  assert(req.body, CreateProduct);
+  const { name, description, price, tags, images } = req.body;
+  const newProduct = await Product.create({
+    name,
+    description,
+    price,
+    tags,
+    images,
+  });
+  return res.status(201).json(newProduct);
+};
+
+export const getProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  assert(id, validateId);
+  const product = await Product.findById(id);
+  if (product) return res.status(200).json(product);
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
+};
+
+export const editProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  assert(id, validateId);
+  const { name, description, price, tags, images } = req.body;
+  const product = await Product.findById(id);
+  if (product) {
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    product.tags = tags;
+    product.images = images;
+    await product.save();
+    return res.status(201).json(product);
+  }
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
+};
+
+export const deleteProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  assert(id, validateId);
+  const product = await Product.findByIdAndDelete(id);
+
+  if (product) return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGES.productDeleted });
+
+  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
+};
+
+export const getProductList = async (req: Request, res: Response) => {
+  assert(req.body, GetProductList);
+  const {
+    name,
+    price,
+    description,
+    page = 1,
+    pageSize = 100,
+    sort = QUERY_OPTIONS.defaultSort,
+    order = QUERY_OPTIONS.order.desc,
+  } = req.query;
+  const skip = (Number(page) - 1) * Number(pageSize);
+
+  const products = await Product.find({
+    ...(name && { name: { $regex: name, $options: 'i' } }),
+    ...(price && { price }),
+    ...(description && { description: { $regex: description, $options: 'i' } }),
+  })
+    .sort({ [sort as string]: order === QUERY_OPTIONS.order.asc ? 1 : -1 })
+    .skip(skip)
+    .limit(Number(pageSize));
+
+  if (products) return res.status(200).json({ list: products, totalCount: products.length });
+};
