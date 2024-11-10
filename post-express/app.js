@@ -67,11 +67,15 @@ app.delete("/board/:id", asyncHandler(async (req, res) => {
 }));
 
 app.get("/board", asyncHandler(async (req, res) => {
-    const {offset = 0, limit = 10} = req.query;
+    const { searchKeyword, offset = 0, limit = 10} = req.query;
     const articles = await prisma.article.findMany({
         orderBy: {createdAt: "asc"},
         skip: parseInt(offset),
         take: parseInt(limit),
+        OR: [ 
+            { titel: { contains: searchKeyword} }, 
+            { content: { contains: searchKeyword} },
+        ],
         select:{
             id:true,
             title:true,
