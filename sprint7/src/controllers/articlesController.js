@@ -64,7 +64,7 @@ export const getArticle = async (req, res, next) => {
 }
 
 // 게시글 수정
-export const updataArticle = async (req, res, next) => {
+export const updateArticle = async (req, res, next) => {
   try {
     const { title, content } = req.body;
     const updataArticle = await prisma.article.update({
