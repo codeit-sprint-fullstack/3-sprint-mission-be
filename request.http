@@ -1,9 +1,32 @@
+GET  http://localhost:8000/article
 
-POST http://localhost:8000/products
+### 
+GET  http://localhost:8000/article?orderBy=recent
+
+### 
+GET  http://localhost:8000/article?orderBy=oldest
 
 ###
 
-GET  http://localhost:8000/products
+GET  http://localhost:8000/article/qwer
+
+###
+POST http://localhost:8000/article
+Content-Type: application/json
+
+{
+    "title": "New Article",
+    "content": "This is a new article"
+}
+
+###
+PATCH http://localhost:8000/article/qwer
+Content-Type: application/json
+
+{
+    "title": "수정 제목",
+    "content": "수정 내용"
+}
 
 ### 
-DELETE http://localhost:8000/products/6729aca104e8787739e01fb6
+DELETE http://localhost:8000/article/e2956195-223c-43e5-a99c-539fac5fe424
