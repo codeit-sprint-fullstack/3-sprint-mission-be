@@ -67,13 +67,8 @@ app.delete("/board/:id", asyncHandler(async (req, res) => {
 }));
 
 app.get("/board", asyncHandler(async (req, res) => {
-    const { searchKeyword, offset = 0, limit = 10} = req.query;
-    console.log(searchKeyword);
+    const {offset = 0, limit = 10} = req.query;
     const articles = await prisma.article.findMany({
-        OR: [ 
-            { title: { contains: searchKeyword} }, 
-            { content: { contains: searchKeyword} },
-        ],
         orderBy: {createdAt: "asc"},
         skip: parseInt(offset),
         take: parseInt(limit),
@@ -190,11 +185,15 @@ app.delete("/product/:id", asyncHandler(async (req, res) => {
 }));
 
 app.get("/product/:id", asyncHandler(async (req, res) => {
-    const {id} = req.params;
+    const { searchKeyword, offset = 0, limit = 10} = req.query;
     const product = await prisma.product.findUnique({
-        where:{
-            id,
-        },
+        orderBy: {createdAt: "asc"},
+        skip: parseInt(offset),
+        take: parseInt(limit),
+        OR: [ 
+            { name: { contains: searchKeyword} }, 
+            { description: { contains: searchKeyword} },
+        ],
         select:{
             id:true,
             name:true,
