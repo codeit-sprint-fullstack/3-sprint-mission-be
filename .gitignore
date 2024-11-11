@@ -1,0 +1,24 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# Lock file for exact dependency versions to avoid mismatches
+package-lock.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Log files
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# MongoDB and Mongoose files
+/data/mock.js
