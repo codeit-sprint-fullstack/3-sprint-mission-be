@@ -37,7 +37,7 @@ const getArticleComment = asyncHandler(async (req, res) => {
         }
     });
 
-    res.send(articleComment);
+    res.status(200).send(articleComment);
 });
 
 // 게시글 id로 댓글 조회
@@ -46,7 +46,7 @@ const getArticleCommentId = asyncHandler(async (req, res) => {
     const articleComment = await prisma.articleComment.findMany({
         where: { articleId },
     });
-    res.send(articleComment);
+    res.status(200).send(articleComment);
 });
 
 //댓글 생성, 게시글id로 게시글에 댓글 생성
@@ -74,7 +74,7 @@ const patchArticleCommentUpdate = asyncHandler(async (req, res) => {
         where: { id },
         data: req.body,
     });
-    res.send(article);
+    res.status(200).send(article);
 });
 
 //댓글 id로 댓글 삭제

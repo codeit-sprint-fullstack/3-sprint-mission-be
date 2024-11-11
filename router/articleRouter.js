@@ -30,39 +30,34 @@ function asyncHandler(handler) {
 // id, title, content, createdAt를 조회 , 한 화면에 보이는 목록 5개로 임의설정, 
 // title, content로 검색가능하게 설정
 const getArticleList = asyncHandler(async (req, res) => {
-    try {
-        const { page = 1, pageSize = 5, orderBy = "recent", keyword = "" } = req.query;
-        const searchQuery = keyword ? {
-            OR: [
-                { title: { contains: keyword, mode: 'insensitive' } }, //postgres에서 대소문자 구분하지않게 설정
-                { content: { contains: keyword, mode: 'insensitive' } },
-            ]
-        } : {};
+    const { page = 1, pageSize = 5, orderBy = "recent", keyword = "" } = req.query;
+    const searchQuery = keyword ? {
+        OR: [
+            { title: { contains: keyword, mode: 'insensitive' } }, //postgres에서 대소문자 구분하지않게 설정
+            { content: { contains: keyword, mode: 'insensitive' } },
+        ]
+    } : {};
 
-        const sortOption = orderBy === "recent" ? { createdAt: 'desc' } : { favoriteCount: 'desc' }; //최신순 선택시 최신순으로 정렬하기
+    const sortOption = orderBy === "recent" ? { createdAt: 'desc' } : { favoriteCount: 'desc' }; //최신순 선택시 최신순으로 정렬하기
 
-        const offset = (page - 1) * pageSize;
-        const limit = pageSize;
+    const offset = (page - 1) * pageSize;
+    const limit = pageSize;
 
-        const articles = await prisma.article.findMany({
-            where: searchQuery,  // searchQuery를 포함하는지
-            orderBy: sortOption, // 최신순 정렬
-            skip: offset,  //offset
-            take: limit,   // limit
-            select: {
-                id: true,
-                title: true,
-                content: true,
-                createdAt: true,
-            }
-        });
-        res.status(200).json({
-            Articles: articles
-        });
-
-    } catch (err) {
-        res.status(500).send("실패");
-    }
+    const articles = await prisma.article.findMany({
+        where: searchQuery,  // searchQuery를 포함하는지
+        orderBy: sortOption, // 최신순 정렬
+        skip: offset,  //offset
+        take: limit,   // limit
+        select: {
+            id: true,
+            title: true,
+            content: true,
+            createdAt: true,
+        }
+    });
+    res.status(200).json({
+        Articles: articles
+    });
 });
 
 //게시글id로 조회 ,  id, title, content, createdAt를 조회
@@ -77,7 +72,7 @@ const getArticle = asyncHandler(async (req, res) => {
             createdAt: true
         }
     });
-    res.send(article);
+    res.status(200).send(article);
 });
 
 //게시글 생성, title, content
@@ -95,7 +90,7 @@ const patchArticleUpdate = asyncHandler(async (req, res) => {
         where: { id },
         data: req.body,
     });
-    res.send(article);
+    res.status(200).send(article);
 });
 
 //게시글 id로 게시글 삭제, 게시글이 사라지면 댓글도 사라짐
