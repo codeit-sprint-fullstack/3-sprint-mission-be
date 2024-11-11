@@ -30,7 +30,10 @@ function asyncHandler(handler) {
     };
 }
 
-//---------------
+//--------------- 게시글 목록 조회
+// id, title, content, createdAt를 조회 , 한 화면에 보이는 목록 5개로 임의설정, 
+// title, content로 검색가능하게 설정
+
 app.get('/articleList', asyncHandler(async (req, res) => {
     try {
         const { page = 1, pageSize = 5, orderBy = "recent", keyword = "" } = req.query;
@@ -67,9 +70,11 @@ app.get('/articleList', asyncHandler(async (req, res) => {
     }
 }));
 
-//---------------게시글
-app.get('/article', asyncHandler(async (req, res) => {
+//게시글id로 조회 ,  id, title, content, createdAt를 조회
+app.get('/article/:id', asyncHandler(async (req, res) => {
+    const { id } = req.params;
     const article = await prisma.article.findMany({
+        where: { id },
         select: {
             id: true,
             title: true,
@@ -80,6 +85,7 @@ app.get('/article', asyncHandler(async (req, res) => {
     res.send(article);
 }));
 
+//게시글 생성, title, content
 app.post('/article', asyncHandler(async (req, res) => {
     const article = await prisma.article.create({
         data: req.body,
@@ -87,6 +93,7 @@ app.post('/article', asyncHandler(async (req, res) => {
     res.status(201).send(article);
 }));
 
+//게시글id로 게시글 수정
 app.patch('/article/:id', asyncHandler(async (req, res) => {
     const { id } = req.params;
     const article = await prisma.article.update({
@@ -96,6 +103,7 @@ app.patch('/article/:id', asyncHandler(async (req, res) => {
     res.send(article);
 }));
 
+//게시글 id로 게시글 삭제, 게시글이 사라지면 댓글도 사라짐
 app.delete('/article/:id', asyncHandler(async (req, res) => {
     const { id } = req.params;
     await prisma.article.delete({
@@ -104,7 +112,33 @@ app.delete('/article/:id', asyncHandler(async (req, res) => {
     res.sendStatus(204);
 }));
 
+
+//-------------------
 //-------------------댓글
+
+//댓글 목록 조회
+app.get('/articleComment', asyncHandler(async (req, res) => {
+    const articleComment = await prisma.articleComment.findMany({
+        select: {
+            id: true,
+            content: true,
+            createdAt: true,
+        }
+    });
+
+    res.send(articleComment);
+}));
+
+// 게시글 id로 댓글 조회
+app.get('/articleComment/:articleId', asyncHandler(async (req, res) => {
+    const { articleId } = req.params;
+    const articleComment = await prisma.articleComment.findMany({
+        where: { articleId },
+    });
+    res.send(articleComment);
+}));
+
+//댓글 생성, 게시글id로 게시글에 댓글 생성
 app.post('/articleComment', asyncHandler(async (req, res) => {
     const { content, articleId } = req.body;
 
@@ -122,19 +156,7 @@ app.post('/articleComment', asyncHandler(async (req, res) => {
     }
 }));
 
-app.get('/articleComment', asyncHandler(async (req, res) => {
-    const articleComment = await prisma.articleComment.findMany();
-    res.send(articleComment);
-}));
-
-app.get('/articleComment/:id', asyncHandler(async (req, res) => {
-    const { articleId } = req.params;
-    const articleComment = await prisma.articleComment.findMany({
-        where: { articleId },
-    });
-    res.send(articleComment);
-}));
-
+//댓글 id로 댓글 수정
 app.patch('/articleComment/:id', asyncHandler(async (req, res) => {
     const { id } = req.params;
     const article = await prisma.articleComment.update({
@@ -144,6 +166,7 @@ app.patch('/articleComment/:id', asyncHandler(async (req, res) => {
     res.send(article);
 }));
 
+//댓글 id로 댓글 삭제
 app.delete('/articleComment/:id', asyncHandler(async (req, res) => {
     const { id } = req.params;
     await prisma.articleComment.delete({
