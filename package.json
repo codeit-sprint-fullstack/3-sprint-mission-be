@@ -11,10 +11,12 @@
   "author": "KDW",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "mongoose": "^8.7.3"
+    "mongoose": "^8.7.3",
+    "prisma": "^5.22.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

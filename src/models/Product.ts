@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const TaskSchema = new mongoose.Schema(
+const ProductSchema = new mongoose.Schema(
   {
     id: {
       type: String,
@@ -23,6 +23,6 @@ const TaskSchema = new mongoose.Schema(
   }
 );
 
-const Task = mongoose.model('Task', TaskSchema);
+const Product = mongoose.model('Task', ProductSchema);
 
-export default Task;
+export default Product;

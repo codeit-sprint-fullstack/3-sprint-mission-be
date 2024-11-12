@@ -1,6 +1,6 @@
 // 비즈니스 로직 공간
 import { RequestHandler, Response, Request, NextFunction } from 'express';
-import Task from '../../models/Task';
+import Task from '../../models/Product';
 
 const asyncHandler = (
   handler: (req: Request, res: Response, next: NextFunction) => Promise<void>

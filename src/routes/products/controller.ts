@@ -12,6 +12,6 @@ router.post('/', service.postProduct); // 상품 등록
 
 router.patch('/:id', service.patchProduct); // 상품 수정
 
-router.delete('/', service.deleteProduct); // 상품 삭제
+router.delete('/:id', service.deleteProduct); // 상품 삭제
 
 export default router;
