@@ -92,12 +92,79 @@ const getArticleList = asyncHandler(async (req, res) => {
   res.send(articles);
 });
 
+/* ----- 게시글 댓글 관련 API ----- */
+
+// 게시글 댓글 목록 조회 API
+const getArticleCommentList = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const comments = await prisma.articleComment.findMany({
+    where: {
+      articleId: id,
+    },
+    include: {
+      user: true, // 댓글 작성자 정보
+    },
+  });
+
+  res.status(200).send(comments);
+});
+
+// 게시글 댓글 등록 API
+const createArticleComment = asyncHandler(async (req, res) => {
+  const { content, userId, articleId } = req.body;
+
+  const comment = await prisma.articleComment.create({
+    data: {
+      content,
+      user: { connect: { id: userId } }, // 유저 ID
+      article: { connect: { id: articleId } }, // 게시글 ID
+    },
+  });
+
+  res.status(201).send(comment);
+});
+
+// 게시글 댓글 수정 API
+const updateArticleComment = asyncHandler(async (req, res) => {
+  const { id } = req.params; // 댓글 ID
+  const { content } = req.body;
+
+  const comment = await prisma.articleComment.update({
+    where: {
+      id,
+    },
+    data: {
+      content,
+    },
+  });
+
+  res.status(200).send(comment);
+});
+
+// 게시글 댓글 삭제 API
+const deleteArticleComment = asyncHandler(async (req, res) => {
+  const { id } = req.params; // 댓글 ID
+
+  await prisma.articleComment.delete({
+    where: {
+      id,
+    },
+  });
+
+  res.status(200).send({ message: '댓글 삭제 성공' });
+});
+
 const service = {
   createArticle,
   getArticle,
   updateArticle,
   deleteArticle,
   getArticleList,
+  getArticleCommentList,
+  createArticleComment,
+  updateArticleComment,
+  deleteArticleComment,
 };
 
 export default service;

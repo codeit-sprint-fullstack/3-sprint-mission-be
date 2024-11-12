@@ -30,3 +30,30 @@ Content-Type: application/json
 
 ### 
 DELETE http://localhost:8000/article/e2956195-223c-43e5-a99c-539fac5fe424
+
+
+### 
+GET  http://localhost:8000/article/qwer
+
+### 
+GET  http://localhost:8000/article/qwer/comment
+
+###
+POST http://localhost:8000/article/qwer/comment
+Content-Type: application/json
+
+{
+    "userId": "test",
+    "content": "댓글 내용",
+    "articleId": "qwer"
+}
+
+###
+PATCH http://localhost:8000/user
+Content-Type: application/json
+
+{
+    "nickname": "수정 닉네임"
+}
+
+
