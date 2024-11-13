@@ -1,0 +1,6 @@
+###
+
+GET http://localhost:8000/board?searchKeyword=a
+
+###
+GET  http://localhost:8000/board/111
