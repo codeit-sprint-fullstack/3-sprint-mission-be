@@ -1,0 +1,62 @@
+### 게시글 조회 , id로 조회
+GET http://localhost:8000/article/7c328783-42ef-4194-a71a-0c4c6925919a
+
+### 게시글 목록조회
+GET http://localhost:8000/article/articleList
+
+###
+# 게시글 생성
+POST http://localhost:8000/article
+Content-Type: application/json
+
+{
+  "title": "제목 테스트1111",
+  "content" : "내용 테스트1111"
+}
+
+###
+#게시글 수정
+PATCH http://localhost:8000/article/ecd54e4e-9047-4c85-b6ac-f3c675922db3
+Content-Type: application/json
+
+{
+  "title": "제목 수정",
+  "content" : "내용 수정"
+}
+
+###
+#게시글 삭제 , 게시글이 지워지면  댓글이 지워지는지 테스트 확인
+DELETE http://localhost:8000/article/7c328783-42ef-4194-a71a-0c4c6925919a
+
+
+
+###
+#댓글 조회
+GET http://localhost:8000/articleComment
+
+###
+#특정 게시글의 댓글 조회 / articleId로 조회
+GET http://localhost:8000/articleComment/093b306d-7cf2-4f8d-a03d-04523e4c940a
+
+###
+#댓글 생성
+POST http://localhost:8000/articleComment
+Content-Type: application/json
+
+{
+  "content" : "댓글 테스트14",
+  "articleId" : "093b306d-7cf2-4f8d-a03d-04523e4c940a"
+}
+
+###
+#댓글 수정 / 댓글id로 수정
+PATCH http://localhost:8000/articleComment/aea413b3-0585-46e0-80cc-189942564a89
+Content-Type: application/json
+
+{
+  "content" : "내용 수정33313"
+}
+
+###
+#댓글 삭제 / 댓글id로 삭제
+DELETE http://localhost:8000/articleComment/65c0d702-f627-4f50-b884-8d9a96f03615
