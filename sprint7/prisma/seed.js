@@ -10,7 +10,7 @@ async function main() {
   // 목 데이터 삽입
   await prisma.product.createMany({
     data: ProductsMockData,
-    skipDuplicates: true,
+    skipDuplicat일es: true,
   });
 }
 

@@ -1,10 +1,9 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-
-// import Product from "./models/Product.js";
-// import cors from 'cors';
+import { PrismaClient, Prisma } from "@prisma/client";
+import { assert } from "superstruct";
+import { CreateProduct, PatchProduct } from "./structs.js";
 
 const prisma = new PrismaClient();
 
@@ -16,9 +15,15 @@ function asyncHandler(handler) {
     try {
       await handler(req, res);
     } catch (e) {
-      if (e.name === 'ValidationError') {
+      if (
+        e.name === 'StructureError' ||
+      e instanceof Prisma.PrismaClientValidationError
+      ) {
         res.status(400).send({ message: e.message });
-      } else if (e.name === 'CastError') {
+      } else if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
         res.status(404).send({ message: 'Cannot find given id.' });
       } else {
         res.status(500).send({ message: e.message });
@@ -53,7 +58,7 @@ app.get('/products', asyncHandler(async (req, res) => {
 
 app.get('/products/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const products = await prisma.product.findUnique({
+  const products = await prisma.product.findUniqueOrThrow({
     where: { id },
   });
   if (products) {
@@ -63,27 +68,36 @@ app.get('/products/:id', asyncHandler(async (req, res) => {
   }
 }));
 
-// app.post('/products', asyncHandler(async (req, res) => {
-//   const newProduct = await Product.create(req.body)
-//   res.status(201).send(newProduct);
-// }));
+app.post('/products', asyncHandler(async (req, res) => {
+  assert(req.body, CreateProduct);
+  const newProduct = await prisma.product.create({
+    data: req.body,
+  })
+  console.log(produnewProductcts);
+  res.status(201).send(newProduct);
+}));
 
-// app.patch('/products/:id', asyncHandler(async (req, res) => {
-//   const id = req.params.id;
-//   console.log(req.body);
-//   const products = await Product.findByIdAndUpdate(id, req.body, { new: true });
-//   console.log(products);
-//   res.send(products);
-// }))
+app.patch('/products/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  assert(req.body, PatchProduct);
+  const products = await prisma.product.update({
+    where: { id },
+    data: req.body,
+  });
+  console.log(products);
+  res.send(products);
+}))
 
-// app.delete('/products/:id', asyncHandler(async (req, res) => {
-//   const id = req.params.id;
-//   const product = await Product.findByIdAndDelete(id);
-//   if (product) {
-//     res.sendStatus(204);
-//   } else {
-//     res.status(404).send({ message: 'id를 확인해주세요.' })
-//   }
-// }))
+app.delete('/products/:id', asyncHandler(async (req, res) => {
+  const productId = req.params.id;
+  const product = await prisma.product.delete({
+    where: { id: productId },
+  });
+  if (product) {
+    res.sendStatus(204);
+  } else {
+    res.status(404).send({ message: 'id를 확인해주세요.' })
+  }
+}))
 
 app.listen(process.env.PORT || 8000, () => console.log('Server Started'));
