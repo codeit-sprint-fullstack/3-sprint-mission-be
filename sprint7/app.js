@@ -28,9 +28,25 @@ function asyncHandler(handler) {
 }
 
 app.get('/products', asyncHandler(async (req, res) => {
+  const { offset = 0, limit = 10, order = 'newest' } = req.query;
+
+  let orderBy;
+  switch (order) {
+    case 'newst':
+      orderBy = { createdAt: 'desc' };
+      break;
+    case 'best':
+      orderBy = { likes: 'desc' };
+      break;
+    default:
+      orderBy = { createdAt: 'desc' };
+  }
 
   const products = await prisma.product.findMany({
-    take: 10,
+    orderBy,
+    // parseInt 정수로 반환
+    skip: parseInt(offset), // skip으로 offset설정
+    take: parseInt(limit),  // take으로 limit설정
   });
   res.send(products);
 }));

@@ -1,6 +1,10 @@
 ###
 
-GET http://localhost:8000/products
+GET http://localhost:8000/products?order=best
+
+###
+
+GET http://localhost:8000/products?order=newst&limit=3
 
 ###
 
@@ -16,7 +20,6 @@ Content-Type: application/json
 
 {
     "name": "상품 이름",
-    "email": "상품 이메일",
     "description": "상품 설명",
     "price": 10200,
     "tags": "태그",
