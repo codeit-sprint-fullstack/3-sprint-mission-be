@@ -20,5 +20,4 @@ Content-Type: application/json
     "description": "상품 설명",
     "price": 10200,
     "tags": "태그",
-    "isComplete": false,
 }

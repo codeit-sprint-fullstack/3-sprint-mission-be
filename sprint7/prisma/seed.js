@@ -1,19 +1,26 @@
-import mongoose from "mongoose";
-import { MockData } from "./mocks/mock.js";
-// import { DATABASE_URL } from "../.env";
-import Product from "../../models/Product.js";
-import * as dotenv from 'dotenv';
+import { PrismaClient } from "@prisma/client";
+import { ProductsMockData } from "./mocks/productsMock.js";
 
-// .env 파일을 읽어와 환경변수로 설정
-dotenv.config();
+const prisma = new PrismaClient();
 
-// 환경변수가 설정된 이후에 데이터베이스에 연결
-mongoose.connect(process.env.DATABASE_URL);
+async function main() { 
+  // 기존 데이터 삭제
+  await prisma.product.deleteMany();
+  
+  // 목 데이터 삽입
+  await prisma.product.createMany({
+    data: ProductsMockData,
+    skipDuplicates: true,
+  });
+}
 
-// 데이터 삭제 및 삽입
-await Product.deleteMany({});
-await Product.insertMany(MockData);
-
+main()
+.then(async () => {
+  await prisma.$disconnect();
+})
+.catch(async (e) => {
+  console.error(e);
+  await prisma.$disconnect();
+  process.exit(1);
+});
 console.log("success");
-// 데이터베이스 연결 종료
-mongoose.connection.close();

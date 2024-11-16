@@ -47,27 +47,27 @@ app.get('/products/:id', asyncHandler(async (req, res) => {
   }
 }));
 
-app.post('/products', asyncHandler(async (req, res) => {
-  const newProduct = await Product.create(req.body)
-  res.status(201).send(newProduct);
-}));
+// app.post('/products', asyncHandler(async (req, res) => {
+//   const newProduct = await Product.create(req.body)
+//   res.status(201).send(newProduct);
+// }));
 
-app.patch('/products/:id', asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  console.log(req.body);
-  const products = await Product.findByIdAndUpdate(id, req.body, { new: true });
-  console.log(products);
-  res.send(products);
-}))
+// app.patch('/products/:id', asyncHandler(async (req, res) => {
+//   const id = req.params.id;
+//   console.log(req.body);
+//   const products = await Product.findByIdAndUpdate(id, req.body, { new: true });
+//   console.log(products);
+//   res.send(products);
+// }))
 
-app.delete('/products/:id', asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  const product = await Product.findByIdAndDelete(id);
-  if (product) {
-    res.sendStatus(204);
-  } else {
-    res.status(404).send({ message: 'id를 확인해주세요.' })
-  }
-}))
+// app.delete('/products/:id', asyncHandler(async (req, res) => {
+//   const id = req.params.id;
+//   const product = await Product.findByIdAndDelete(id);
+//   if (product) {
+//     res.sendStatus(204);
+//   } else {
+//     res.status(404).send({ message: 'id를 확인해주세요.' })
+//   }
+// }))
 
 app.listen(process.env.PORT || 8000, () => console.log('Server Started'));
