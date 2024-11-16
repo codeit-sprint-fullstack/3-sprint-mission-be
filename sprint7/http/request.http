@@ -16,6 +16,7 @@ Content-Type: application/json
 
 {
     "name": "상품 이름",
+    "email": "상품 이메일",
     "description": "상품 설명",
     "price": 10200,
     "tags": "태그",

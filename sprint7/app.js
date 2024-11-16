@@ -1,20 +1,14 @@
-import express from "express";
-import mongoose from "mongoose";
-import Product from "./models/Product.js";
 import * as dotenv from 'dotenv';
-import cors from 'cors';
-
 dotenv.config();
-mongoose.connect(process.env.DATABASE_URL).then(() => console.log('Connected to DB'));
+import express from "express";
+import { PrismaClient } from "@prisma/client";
+
+// import Product from "./models/Product.js";
+// import cors from 'cors';
+
+const prisma = new PrismaClient();
 
 const app = express();
-
-app.use(
-  cors({
-    method: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
-  })
-);
 app.use(express.json());
 
 function asyncHandler(handler) {
@@ -35,19 +29,17 @@ function asyncHandler(handler) {
 
 app.get('/products', asyncHandler(async (req, res) => {
 
-  const sort = req.query.sort;
-  const count = Number(req.query.count) || 0;
-
-  const sortOption = {
-    createdAt: sort === 'recent' ? 'desc' : 'asc'
-  };
-  const products = await Product.find().sort(sortOption).limit(count);
+  const products = await prisma.product.findMany({
+    take: 10,
+  });
   res.send(products);
 }));
 
 app.get('/products/:id', asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  const products = await Product.findById(id);
+  const { id } = req.params;
+  const products = await prisma.product.findUnique({
+    where: { id },
+  });
   if (products) {
     res.send(products);
   } else {

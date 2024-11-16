@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { MockData } from "./mock.js";
+import { MockData } from "./mocks/mock.js";
 // import { DATABASE_URL } from "../.env";
 import Product from "../../models/Product.js";
 import * as dotenv from 'dotenv';
