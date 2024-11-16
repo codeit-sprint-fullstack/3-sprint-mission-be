@@ -18,23 +18,29 @@ model Product {
   name        String
   description String
   price       Int
-  likes       Int?        @default(0) // likes 필드에 기본값을 0으로 지정
-  tags        String
+  likes       Int?      @default(0) // likes 필드에 기본값을 0으로 지정
+  tags        String[]
+  ProductComment     Comment[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  Article     Article[]
 }
 
 model Article {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   title     String
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  ArticleComment   Comment[]
 }
 
-// model Comment {
-
-// }
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
