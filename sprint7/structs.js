@@ -18,3 +18,4 @@ export const CreateArticle = s.object({
   content: s.size(s.string(), 1, Infinity),
 });
 
+export const PatchArticle = s.partial(CreateArticle);

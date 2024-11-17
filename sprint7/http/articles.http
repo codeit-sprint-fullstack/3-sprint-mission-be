@@ -8,4 +8,23 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:8000/articles/2a945e08-bafe-43e3-92bb-cdecfdc45bf4
+
+###
 GET http://localhost:8000/articles
+
+
+###
+GET http://localhost:8000/articles?order=oldest&limit=3
+
+###
+PATCH http://localhost:8000/articles/2a945e08-bafe-43e3-92bb-cdecfdc45bf4
+Content-Type: application/json
+
+{
+  "title": "올리브 오일은 언제 상하나요?",
+  "content": "올리브 오일은 올리브 기름을 말하는 것입니다. 하지만 올리브 오일이라고 부릅니다. 그것은 상하지만 상하지 않습니다. 결구 자연으로 돌아가 다른 올리브를 생성할 것이기 때문입니다."
+}
+
+###
+DELETE  http://localhost:8000/articles/2a945e08-bafe-43e3-92bb-cdecfdc45bf4

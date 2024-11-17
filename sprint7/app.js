@@ -3,7 +3,12 @@ dotenv.config();
 import express from "express";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { assert } from "superstruct";
-import { CreateProduct, PatchProduct, CreateArticle } from "./structs.js";
+import {
+  CreateProduct,
+  PatchProduct,
+  CreateArticle,
+  PatchArticle
+} from "./structs.js";
 
 const prisma = new PrismaClient();
 
@@ -37,11 +42,11 @@ function asyncHandler(handler) {
 
 // 상품 목록 조회
 app.get('/products', asyncHandler(async (req, res) => {
-  const { offset = 0, limit = 10, order = 'newest' } = req.query;
+  const { offset = 0, limit = 10, order = 'recent' } = req.query;
 
   let orderBy;
   switch (order) {
-    case 'newst':
+    case 'recent':
       orderBy = { createdAt: 'desc' };
       break;
     case 'best':
@@ -62,9 +67,9 @@ app.get('/products', asyncHandler(async (req, res) => {
 
 // 상품 조회
 app.get('/products/:productId', asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { productId } = req.params;
   const products = await prisma.product.findUniqueOrThrow({
-    where: { id },
+    where: { id: productId },
   });
   if (products) {
     res.send(products);
@@ -85,10 +90,10 @@ app.post('/products', asyncHandler(async (req, res) => {
 
 // 상품 수정
 app.patch('/products/:productId', asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { productId } = req.params;
   assert(req.body, PatchProduct);
   const products = await prisma.product.update({
-    where: { id },
+    where: { id: productId },
     data: req.body,
   });
   console.log(products);
@@ -125,12 +130,37 @@ app.post('/articles', asyncHandler(async (req, res) => {
 }))
 
 // 게시글 조회
+app.get('/articles/:articleId', asyncHandler(async (req, res) => {
+  const { articleId } = req.params;
+  const articles = await prisma.article.findUniqueOrThrow({
+    where: { id: articleId },
+  });
+  if (articles) {
+    res.send(articles);
+  } else {
+    res.status(404).send({ message: '상품을 찾을 수 없습니다.' })
+  }
+}))
+
+// 게시글 수정
+app.patch('/articles/:articleId', asyncHandler(async (req, res) => {
+  const { articleId } = req.params;
+  assert(req.body, PatchArticle);
+  const articles = await prisma.article.update({
+    where: { id: articleId },
+    data: req.body,
+  });
+  console.log(articles);
+  res.send(articles);
+}))
+
+// 게시글 목록 조회
 app.get('/articles', asyncHandler(async (req, res) => {
-  const { offset = 0, limit = 10, order = 'newest' } = req.query;
+  const { offset = 0, limit = 10, order = 'recent' } = req.query;
 
   let orderBy;
   switch (order) {
-    case 'newst':
+    case 'recent':
       orderBy = { createdAt: 'desc' };
       break;
     case 'best':
@@ -150,5 +180,17 @@ app.get('/articles', asyncHandler(async (req, res) => {
   res.send(articles);
 }))
 
+// 게시글 삭제
+app.delete('/articles/:articleId', asyncHandler(async (req, res) => {
+  const { articleId } = req.params;
+  const article = await prisma.article.delete({
+    where: { id: articleId },
+  });
+  if (article) {
+    res.sendStatus(204);
+  } else {
+    res.status(404).send({ message: 'id를 확인해주세요.' })
+  }
+}))
 
 app.listen(process.env.PORT || 8000, () => console.log('Server Started'));
