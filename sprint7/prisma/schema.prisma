@@ -38,10 +38,11 @@ model Article {
 model Comment {
   id        String   @id @default(uuid())
   content   String
+  likes     Int?      @default(0)
   article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String
+  product   Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

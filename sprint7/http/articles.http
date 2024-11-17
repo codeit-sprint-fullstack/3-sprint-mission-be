@@ -8,10 +8,10 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8000/articles/2a945e08-bafe-43e3-92bb-cdecfdc45bf4
+GET http://localhost:8000/articles
 
 ###
-GET http://localhost:8000/articles
+GET http://localhost:8000/articles/2a945e08-bafe-43e3-92bb-cdecfdc45bf4
 
 
 ###

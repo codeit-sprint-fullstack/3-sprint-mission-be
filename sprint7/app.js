@@ -7,7 +7,9 @@ import {
   CreateProduct,
   PatchProduct,
   CreateArticle,
-  PatchArticle
+  PatchArticle,
+  CreateComment,
+  PatchComment
 } from "./structs.js";
 
 const prisma = new PrismaClient();
@@ -187,6 +189,76 @@ app.delete('/articles/:articleId', asyncHandler(async (req, res) => {
     where: { id: articleId },
   });
   if (article) {
+    res.sendStatus(204);
+  } else {
+    res.status(404).send({ message: 'id를 확인해주세요.' })
+  }
+}))
+
+// 게시글 댓글 목록 조회
+app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
+  const { offset = 0, limit = 10, order = 'recent' } = req.query;
+
+  let orderBy;
+  switch (order) {
+    case 'recent':
+      orderBy = { createdAt: 'desc' };
+      break;
+    case 'best':
+      orderBy = { likes: 'desc' };
+      break;
+    case 'oldeest':
+      orderBy = { createdAt: 'asc' };
+      break;
+    default:
+      orderBy = { createdAt: 'desc' };
+  }
+  const articles = await prisma.comment.findMany({
+    orderBy,
+    skip: parseInt(offset),
+    take: parseInt(limit),
+  })
+  res.send(articles);
+}))
+
+
+/** Comments Routes **/
+
+// 게시글 댓글 등록
+app.post('/articles/:articleId/comments', asyncHandler(async (req, res) => {
+  const { articleId } = req.params;
+  const { content } = req.body;
+  const newComment = await prisma.comment.create({
+    data: {
+      content,
+      article: {
+        connect: { id: articleId },
+      },
+    }
+  })
+  console.log(newComment);
+  res.status(201).send(newComment);
+}))
+
+// 게시글 댓글 수정
+app.patch('/comments/:commentId', asyncHandler(async (req, res) => {  
+  const { commentId } = req.params;
+  const { content } = req.body;
+  const comments = await prisma.comment.update({
+    where: { id: commentId },
+    data: { content },
+  });
+  console.log(comments);
+  res.send(comments);
+}))
+
+// 게시글 댓글 삭제
+app.delete('/comments/:commentId', asyncHandler(async (req, res) => {
+  const { commentId } = req.params;
+  const comment = await prisma.comment.delete({
+    where: { id: commentId },
+  });
+  if (comment) {
     res.sendStatus(204);
   } else {
     res.status(404).send({ message: 'id를 확인해주세요.' })

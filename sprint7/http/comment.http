@@ -1,0 +1,18 @@
+###
+POST http://localhost:8000/articles/ce8e723e-d580-42c0-b760-583bcfd15e25/comments 
+Content-Type: application/json
+
+{
+  "content": "부동산 투자는 시기보다는 지역과 매물이 중요하다고 볼 수 있습니다. 만약 강남에 부동산 투자를 할 수 있다면 당신은 시기를 따지지 마시고 바로 사시는 걸 추천합니다."
+}
+
+###
+PATCH http://localhost:8000/comments/1b0bfeb3-2d94-407c-b7a1-e9b2f3e3b6d3
+Content-Type: application/json
+
+{
+  "content": "부동산 투자는 시기보다는 지역과 매물이 중요하다고 볼 수 있습니다. 그러니 대출 받아 빨리 투자하세요. 강남에!"
+}
+
+###
+DELETE  http://localhost:8000/comments/1b0bfeb3-2d94-407c-b7a1-e9b2f3e3b6d3

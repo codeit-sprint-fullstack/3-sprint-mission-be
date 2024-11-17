@@ -19,3 +19,12 @@ export const CreateArticle = s.object({
 });
 
 export const PatchArticle = s.partial(CreateArticle);
+
+
+/** Comments Routes **/
+
+export const CreateComment = s.object({
+  content: s.size(s.string(), 1, Infinity),
+});
+
+export const PatchComment = s.partial(CreateComment);
