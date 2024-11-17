@@ -29,6 +29,7 @@ model Article {
   id        String    @id @default(uuid())
   title     String
   content   String
+  likes     Int?      @default(0)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   ArticleComment   Comment[]
