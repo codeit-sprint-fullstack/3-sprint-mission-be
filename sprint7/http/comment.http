@@ -7,6 +7,9 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:8000/comments
+
+###
 PATCH http://localhost:8000/comments/1b0bfeb3-2d94-407c-b7a1-e9b2f3e3b6d3
 Content-Type: application/json
 
@@ -15,4 +18,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE  http://localhost:8000/comments/1b0bfeb3-2d94-407c-b7a1-e9b2f3e3b6d3
+DELETE  http://localhost:8000/comments

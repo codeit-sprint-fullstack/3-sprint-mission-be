@@ -174,12 +174,16 @@ app.get('/articles', asyncHandler(async (req, res) => {
     default:
       orderBy = { createdAt: 'desc' };
   }
+  const totalArticles = await prisma.article.count();
   const articles = await prisma.article.findMany({
     orderBy,
     skip: parseInt(offset),
     take: parseInt(limit),
   })
-  res.send(articles);
+
+  const totalPages = Math.ceil(totalArticles / parseInt(limit));
+
+  res.send({ totalArticles, articles, totalPages });
 }))
 
 // 게시글 삭제
@@ -197,7 +201,8 @@ app.delete('/articles/:articleId', asyncHandler(async (req, res) => {
 
 // 게시글 댓글 목록 조회
 app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
-  const { offset = 0, limit = 10, order = 'recent' } = req.query;
+  const { articleId } = req.params;
+  const { cursor, limit = 10, order = 'recent' } = req.query;
 
   let orderBy;
   switch (order) {
@@ -207,25 +212,34 @@ app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
     case 'best':
       orderBy = { likes: 'desc' };
       break;
-    case 'oldeest':
+    case 'oldest':
       orderBy = { createdAt: 'asc' };
       break;
     default:
       orderBy = { createdAt: 'desc' };
   }
-  const articles = await prisma.comment.findMany({
+  const comments = await prisma.comment.findMany({
+    where: {
+      articleId,
+    },
     orderBy,
-    skip: parseInt(offset),
     take: parseInt(limit),
-  })
-  res.send(articles);
-}))
+    skip: cursor ? 1 : 0,
+    cursor: cursor ? { id: cursor } : undefined,
+  });
 
+  const lastComment = comments[comments.length - 1];
+  const nextCursor = lastComment ? lastComment.id : null;
+
+  res.send({ comments, nextCursor });
+  // send() 메서드를 사용할 때 인자의 값이 복수일 때는 객체로 전달해야 한다.
+}))
 
 /** Comments Routes **/
 
 // 게시글 댓글 등록
 app.post('/articles/:articleId/comments', asyncHandler(async (req, res) => {
+  assert(req.body, CreateComment);
   const { articleId } = req.params;
   const { content } = req.body;
   const newComment = await prisma.comment.create({
@@ -241,7 +255,8 @@ app.post('/articles/:articleId/comments', asyncHandler(async (req, res) => {
 }))
 
 // 게시글 댓글 수정
-app.patch('/comments/:commentId', asyncHandler(async (req, res) => {  
+app.patch('/comments/:commentId', asyncHandler(async (req, res) => {
+  assert(req.body, PatchComment);
   const { commentId } = req.params;
   const { content } = req.body;
   const comments = await prisma.comment.update({
@@ -263,6 +278,44 @@ app.delete('/comments/:commentId', asyncHandler(async (req, res) => {
   } else {
     res.status(404).send({ message: 'id를 확인해주세요.' })
   }
+}))
+
+// 모드 게시글 댓글 목록 조회
+app.get('/comments', asyncHandler(async (req, res) => {
+  const { cursor, limit = 10, order = 'recent' } = req.query;
+
+  let orderBy;
+  switch (order) {
+    case 'recent':
+      orderBy = { createdAt: 'desc' };
+      break;
+    case 'best':
+      orderBy = { likes: 'desc' };
+      break;
+    case 'oldest':
+      orderBy = { createdAt: 'asc' };
+      break;
+    default:
+      orderBy = { createdAt: 'desc' };
+  }
+  const totalArticleComments = await prisma.comment.count();
+  const comments = await prisma.comment.findMany({
+    orderBy,
+    take: parseInt(limit),
+    skip: cursor ? 1 : parseInt(limit),
+    cursor: cursor ? { id: cursor } : undefined,
+  })
+
+  const lastComment = comments[comments.length - 1];
+  const nextCursor = lastComment ? lastComment.id : null;
+  const totalPage = Math.ceil(totalArticleComments / parseInt(limit));
+
+  res.send({
+    totalArticleComments,
+    comments,
+    nextCursor,
+    totalPage
+  });
 }))
 
 app.listen(process.env.PORT || 8000, () => console.log('Server Started'));
