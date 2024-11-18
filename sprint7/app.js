@@ -158,7 +158,7 @@ app.patch('/articles/:articleId', asyncHandler(async (req, res) => {
 
 // 게시글 목록 조회
 app.get('/articles', asyncHandler(async (req, res) => {
-  const { offset = 0, limit = 10, order = 'recent' } = req.query;
+  const { keyword, offset = 0, limit = 10, order = 'recent' } = req.query;
 
   let orderBy;
   switch (order) {
@@ -174,13 +174,27 @@ app.get('/articles', asyncHandler(async (req, res) => {
     default:
       orderBy = { createdAt: 'desc' };
   }
-  const totalArticles = await prisma.article.count();
+  if (keyword) {
+    const articles = await prisma.article.findMany({
+      where: {
+        OR: [
+          { title: { contains: keyword, mode: 'insensitive' } },
+          { content: { contains: keyword, mode: 'insensitive' } },
+        ],
+      },
+      orderBy,
+      skip: parseInt(offset),
+      take: parseInt(limit),
+    })
+    res.send(articles);
+    return;
+  }
   const articles = await prisma.article.findMany({
     orderBy,
     skip: parseInt(offset),
     take: parseInt(limit),
   })
-
+  const totalArticles = await prisma.article.count();
   const totalPages = Math.ceil(totalArticles / parseInt(limit));
 
   res.send({ totalArticles, articles, totalPages });

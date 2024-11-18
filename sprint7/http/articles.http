@@ -11,8 +11,7 @@ Content-Type: application/json
 GET http://localhost:8000/articles?limit=100
 
 ###
-GET http://localhost:8000/articles/
-
+GET http://localhost:8000/articles?keyword=증권
 
 ###
 GET http://localhost:8000/articles?order=oldest&limit=3
