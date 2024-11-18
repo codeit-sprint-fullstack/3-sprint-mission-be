@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { ProductsMockData } from "./mocks/productsMock.js";
-import { ArticlesMockData } from "./mocks/articlesMock.js";
-import { CommentsMockData } from "./mocks/commentsMock.js";
+import { PRODUCTS } from "./mocks/productsMock.js";
+import { ARTICLES } from "./mocks/articlesMock.js";
+import { COMMENTS } from "./mocks/commentsMock.js";
 
 const prisma = new PrismaClient();
 
@@ -9,18 +9,18 @@ async function main() {
   // // 기존 데이터 삭제
   // await prisma.product.deleteMany();
   // await prisma.article.deleteMany();
-  await prisma.comment.deleteMany();
+  await prisma.comment.deleteMany(); // article(id) 데이터 삭제되면 comment 데이터 못 씀(유지하기). 
   // 목 데이터 삽입
   // await prisma.product.createMany({
-  //   data: ProductsMockData,
+  //   data: PRODUCTS,
   //   skipDuplicates: true,
   // });
   // await prisma.article.createMany({
-  //   data: ArticlesMockData,
+  //   data: ARTICLES,
   //   skipDuplicates: true,
   // });
   await prisma.comment.createMany({
-    data: CommentsMockData,
+    data: COMMENTS,
     skipDuplicates: true,
   });
 }

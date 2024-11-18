@@ -1,4 +1,4 @@
-export const ProductsMockData = [
+export const PRODUCTS = [
   {
     name: 'iPhone 13',
     description: 'Latest Apple smartphone with A15 Bionic chip.',

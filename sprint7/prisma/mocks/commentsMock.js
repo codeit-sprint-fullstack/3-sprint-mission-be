@@ -1,4 +1,4 @@
-export const CommentsMockData = [
+export const COMMENTS = [
   {
     content: "스트레스를 받을 때 어떻게 관리하시나요?",
     likes: 13,

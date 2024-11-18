@@ -1,4 +1,4 @@
-export const ArticlesMockData = [
+export const ARTICLES = [
   {
     title: "애플 맥북 얼마에 팔아요?",
     content: "2023년도 맥북 얼마에 파는 게 좋을까요?",
