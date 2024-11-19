@@ -11,6 +11,7 @@ import {
   CreateComment,
   PatchComment
 } from "./structs.js";
+import orderByFunction from "./orderByFunction.js";
 
 const prisma = new PrismaClient();
 
@@ -48,21 +49,10 @@ app.get('/products', asyncHandler(async (req, res) => {
   const offsetNum = parseInt(offset);
   const limitNum = parseInt(limit);
 
-  let orderBy;
-  switch (order) {
-    case 'recent':
-      orderBy = { createdAt: 'desc' };
-      break;
-    case 'best':
-      orderBy = { likes: 'desc' };
-      break;
-    default:
-      orderBy = { createdAt: 'desc' };
-  }
+  const orderBy = orderByFunction(order);
 
   const products = await prisma.product.findMany({
     orderBy,
-    // parseInt 정수로 반환
     skip: offsetNum, // skip으로 offset설정
     take: limitNum,  // take으로 limit설정
   });
@@ -91,7 +81,7 @@ app.post('/products', asyncHandler(async (req, res) => {
     })
     console.log(produnewProductcts);
     res.status(201).send(newProduct);
-  } catch (error) { 
+  } catch (error) {
     res.status(400).send('Bad Request: ' + error.message);
   }
 }));
@@ -170,20 +160,8 @@ app.patch('/articles/:articleId', asyncHandler(async (req, res) => {
 app.get('/articles', asyncHandler(async (req, res) => {
   const { keyword, offset = 0, limit = 10, order = 'recent' } = req.query;
 
-  let orderBy;
-  switch (order) {
-    case 'recent':
-      orderBy = { createdAt: 'desc' };
-      break;
-    case 'best':
-      orderBy = { likes: 'desc' };
-      break;
-    case 'oldeest':
-      orderBy = { createdAt: 'asc' };
-      break;
-    default:
-      orderBy = { createdAt: 'desc' };
-  }
+  const orderBy = orderByFunction(order);
+
   if (keyword) {
     const articles = await prisma.article.findMany({
       where: {
@@ -228,20 +206,7 @@ app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const { cursor, limit = 10, order = 'recent' } = req.query;
 
-  let orderBy;
-  switch (order) {
-    case 'recent':
-      orderBy = { createdAt: 'desc' };
-      break;
-    case 'best':
-      orderBy = { likes: 'desc' };
-      break;
-    case 'oldest':
-      orderBy = { createdAt: 'asc' };
-      break;
-    default:
-      orderBy = { createdAt: 'desc' };
-  }
+  const orderBy = orderByFunction(order);
   const comments = await prisma.comment.findMany({
     where: {
       articleId,
@@ -263,7 +228,7 @@ app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
 
 // 게시글 댓글 등록
 app.post('/articles/:articleId/comments', asyncHandler(async (req, res) => {
-  try{
+  try {
     assert(req.body, CreateComment);
     const { articleId } = req.params;
     const { content } = req.body;
@@ -312,20 +277,7 @@ app.delete('/comments/:commentId', asyncHandler(async (req, res) => {
 app.get('/comments', asyncHandler(async (req, res) => {
   const { cursor, limit = 10, order = 'recent' } = req.query;
 
-  let orderBy;
-  switch (order) {
-    case 'recent':
-      orderBy = { createdAt: 'desc' };
-      break;
-    case 'best':
-      orderBy = { likes: 'desc' };
-      break;
-    case 'oldest':
-      orderBy = { createdAt: 'asc' };
-      break;
-    default:
-      orderBy = { createdAt: 'desc' };
-  }
+  const orderBy = orderByFunction(order);
   const totalArticleComments = await prisma.comment.count();
   const comments = await prisma.comment.findMany({
     orderBy,
