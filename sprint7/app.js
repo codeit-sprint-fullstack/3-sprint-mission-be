@@ -263,19 +263,23 @@ app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
 
 // 게시글 댓글 등록
 app.post('/articles/:articleId/comments', asyncHandler(async (req, res) => {
-  assert(req.body, CreateComment);
-  const { articleId } = req.params;
-  const { content } = req.body;
-  const newComment = await prisma.comment.create({
-    data: {
-      content,
-      article: {
-        connect: { id: articleId },
-      },
-    }
-  })
-  console.log(newComment);
-  res.status(201).send(newComment);
+  try{
+    assert(req.body, CreateComment);
+    const { articleId } = req.params;
+    const { content } = req.body;
+    const newComment = await prisma.comment.create({
+      data: {
+        content,
+        article: {
+          connect: { id: articleId },
+        },
+      }
+    })
+    console.log(newComment);
+    res.status(201).send(newComment);
+  } catch (error) {
+    res.status(400).send('Bad Request: ' + error.message);
+  }
 }))
 
 // 게시글 댓글 수정
