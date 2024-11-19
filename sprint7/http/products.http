@@ -1,0 +1,41 @@
+###
+
+GET http://localhost:8000/products
+
+###
+
+GET http://localhost:8000/products?order=best&limit=3
+
+###
+
+GET http://localhost:8000/products/2b4fafd7-07e6-492b-b8fc-70b0f966d8b8
+
+###
+
+GET http://localhost:8000/products
+
+###
+POST http://localhost:8000/products
+Content-Type: application/json
+
+{
+    "name": "독서필사",
+    "description": "독서 이후에 필사와 같은 타자 필사를 할 수 있게 하는 노트북 입니다.",
+    "price": 1003200,
+    "tags": "필사, 독서, 노트북"
+}
+
+###
+PATCH  http://localhost:8000/products/2b4fafd7-07e6-492b-b8fc-70b0f966d8b8
+Content-Type: application/json
+
+{
+    "name": "올리브오일",
+    "description": "올리브 오일은 올리브 기름을 말하는 것입니다. 하지만 올리브 오일이라고 부릅니다.",
+    "price": 8000,
+    "tags": "tag"
+}
+
+###
+
+DELETE  http://localhost:8000/products/2b4fafd7-07e6-492b-b8fc-70b0f966d8b8
