@@ -45,6 +45,8 @@ function asyncHandler(handler) {
 // 상품 목록 조회
 app.get('/products', asyncHandler(async (req, res) => {
   const { offset = 0, limit = 10, order = 'recent' } = req.query;
+  const offsetNum = parseInt(offset);
+  const limitNum = parseInt(limit);
 
   let orderBy;
   switch (order) {
@@ -61,8 +63,8 @@ app.get('/products', asyncHandler(async (req, res) => {
   const products = await prisma.product.findMany({
     orderBy,
     // parseInt 정수로 반환
-    skip: parseInt(offset), // skip으로 offset설정
-    take: parseInt(limit),  // take으로 limit설정
+    skip: offsetNum, // skip으로 offset설정
+    take: limitNum,  // take으로 limit설정
   });
   res.send(products);
 }));
@@ -82,12 +84,16 @@ app.get('/products/:productId', asyncHandler(async (req, res) => {
 
 // 상품 생성
 app.post('/products', asyncHandler(async (req, res) => {
-  assert(req.body, CreateProduct);
-  const newProduct = await prisma.product.create({
-    data: req.body,
-  })
-  console.log(produnewProductcts);
-  res.status(201).send(newProduct);
+  try {
+    assert(req.body, CreateProduct);
+    const newProduct = await prisma.product.create({
+      data: req.body,
+    })
+    console.log(produnewProductcts);
+    res.status(201).send(newProduct);
+  } catch (error) { 
+    res.status(400).send('Bad Request: ' + error.message);
+  }
 }));
 
 // 상품 수정
