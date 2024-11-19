@@ -125,16 +125,20 @@ app.delete('/products/:productId', asyncHandler(async (req, res) => {
 
 // 게시글 생성
 app.post('/articles', asyncHandler(async (req, res) => {
-  assert(req.body, CreateArticle);
-  const { title, content } = req.body;
-  const nweArticle = await prisma.article.create({
-    data: {
-      title,
-      content,
-    }
-  })
-  console.log(nweArticle);
-  res.status(201).send(nweArticle);
+  try {
+    assert(req.body, CreateArticle);
+    const { title, content } = req.body;
+    const nweArticle = await prisma.article.create({
+      data: {
+        title,
+        content,
+      }
+    })
+    console.log(nweArticle);
+    res.status(201).send(nweArticle);
+  } catch (error) {
+    res.status(400).send('Bad Request: ' + error.message);
+  }
 }))
 
 // 게시글 조회
