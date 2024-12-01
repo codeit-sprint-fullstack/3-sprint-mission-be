@@ -1,79 +1,100 @@
 import { Request, Response } from 'express';
-import Product from '../../models/product';
-import { PRODUCT_RESPONSE_MESSAGES } from '../../constants/messages';
-import { QUERY_OPTIONS } from '../../constants/queryOptions';
-import { assert } from 'superstruct';
-import { CreateProduct, GetProductList, validateId } from '../../utils/struct';
+import { assert, create } from 'superstruct';
+import {
+  CreateProductStruct,
+  EditProductStruct,
+  GetProductListRequestStruct,
+  validateId,
+} from '../../structs/ProductStruct';
+import { Prisma } from '@prisma/client';
+import { prismaClient } from '../../prismaClient';
+import { Product } from '../../models/product';
 
 export const postProduct = async (req: Request, res: Response) => {
-  assert(req.body, CreateProduct);
-  const { name, description, price, tags, images } = req.body;
-  const newProduct = await Product.create({
-    name,
-    description,
-    price,
-    tags,
-    images,
+  assert(req.body, CreateProductStruct);
+
+  const newProduct = await prismaClient.product.create({
+    data: req.body,
   });
+
   return res.status(201).json(newProduct);
 };
 
 export const getProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   assert(id, validateId);
-  const product = await Product.findById(id);
-  if (product) return res.status(200).json(product);
-  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
+  try {
+    const product = await prismaClient.product.findUniqueOrThrow({
+      where: { id },
+    });
+    return res.status(200).json(product);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      return res.status(404).json({ message: '상품이 존재하지 않습니다.' });
+    }
+    throw e;
+  }
 };
 
 export const editProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   assert(id, validateId);
-  const { name, description, price, tags, images } = req.body;
-  const product = await Product.findById(id);
-  if (product) {
-    product.name = name;
-    product.description = description;
-    product.price = price;
-    product.tags = tags;
-    product.images = images;
-    await product.save();
-    return res.status(201).json(product);
-  }
-  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
+  assert(req.body, EditProductStruct);
+
+  const product = await prismaClient.product.update({
+    where: { id },
+    data: req.body,
+  });
+  return res.status(200).json(product);
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   assert(id, validateId);
-  const product = await Product.findByIdAndDelete(id);
-
-  if (product) return res.status(200).json({ message: PRODUCT_RESPONSE_MESSAGES.productDeleted });
-
-  return res.status(404).json({ message: PRODUCT_RESPONSE_MESSAGES.cannotFindProduct });
+  await prismaClient.product.delete({ where: { id } });
+  res.sendStatus(204);
 };
 
 export const getProductList = async (req: Request, res: Response) => {
-  assert(req.body, GetProductList);
-  const {
-    name,
-    price,
-    description,
-    page = 1,
-    pageSize = 100,
-    sort = QUERY_OPTIONS.defaultSort,
-    order = QUERY_OPTIONS.order.desc,
-  } = req.query;
-  const skip = (Number(page) - 1) * Number(pageSize);
+  const { skip, take, orderBy, word } = create(req.query, GetProductListRequestStruct);
 
-  const products = await Product.find({
-    ...(name && { name: { $regex: name, $options: 'i' } }),
-    ...(price && { price }),
-    ...(description && { description: { $regex: description, $options: 'i' } }),
-  })
-    .sort({ [sort as string]: order === QUERY_OPTIONS.order.asc ? 1 : -1 })
-    .skip(skip)
-    .limit(Number(pageSize));
+  const whereClause = word
+    ? {
+        OR: [
+          {
+            name: {
+              contains: word,
+            },
+          },
+          {
+            description: {
+              contains: word,
+            },
+          },
+        ],
+      }
+    : undefined;
 
-  if (products) return res.status(200).json({ list: products, totalCount: products.length });
+  const total = await prismaClient.product.count({ where: whereClause });
+
+  const productEntities = await prismaClient.product.findMany({
+    skip,
+    take,
+    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { createdAt: 'asc' },
+    where: whereClause,
+  });
+
+  const products = productEntities.map((productEntity) => new Product(productEntity));
+
+  return res.status(200).json({
+    count: total,
+    data: products.slice(0, take).map((product) => ({
+      id: product.getId(),
+      name: product.getName(),
+      description: product.getDescription(),
+      price: product.getPrice(),
+      tags: product.getTags(),
+      createdAt: product.getCreatedAt(),
+    })),
+  });
 };
