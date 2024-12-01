@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
 import { assert, create } from 'superstruct';
 import {
-  CreateProductStruct,
+  CreateProductRequestStruct,
   EditProductStruct,
   GetProductListRequestStruct,
-  validateId,
 } from '../../structs/ProductStruct';
 import { Prisma } from '@prisma/client';
 import { prismaClient } from '../../prismaClient';
 import { Product } from '../../models/product';
+import { EXCEPTION_MESSAGES } from '../../constant/ExceptionMessages';
 
 export const postProduct = async (req: Request, res: Response) => {
-  assert(req.body, CreateProductStruct);
+  const data = create(req.body, CreateProductRequestStruct);
 
   const newProduct = await prismaClient.product.create({
-    data: req.body,
+    data,
   });
 
   return res.status(201).json(newProduct);
@@ -22,7 +22,6 @@ export const postProduct = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  assert(id, validateId);
   try {
     const product = await prismaClient.product.findUniqueOrThrow({
       where: { id },
@@ -30,7 +29,7 @@ export const getProduct = async (req: Request, res: Response) => {
     return res.status(200).json(product);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: '상품이 존재하지 않습니다.' });
+      return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
     }
     throw e;
   }
@@ -38,21 +37,33 @@ export const getProduct = async (req: Request, res: Response) => {
 
 export const editProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  assert(id, validateId);
   assert(req.body, EditProductStruct);
 
-  const product = await prismaClient.product.update({
-    where: { id },
-    data: req.body,
-  });
-  return res.status(200).json(product);
+  try {
+    const product = await prismaClient.product.update({
+      where: { id },
+      data: req.body,
+    });
+    return res.status(200).json(product);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+    }
+    throw e;
+  }
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  assert(id, validateId);
-  await prismaClient.product.delete({ where: { id } });
-  res.sendStatus(204);
+  try {
+    const { id } = req.params;
+    await prismaClient.product.delete({ where: { id } });
+    res.sendStatus(204);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
+    }
+    throw e;
+  }
 };
 
 export const getProductList = async (req: Request, res: Response) => {

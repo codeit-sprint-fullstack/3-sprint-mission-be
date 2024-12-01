@@ -14,54 +14,15 @@ import {
   partial,
   nonempty,
 } from 'superstruct';
-import { PRODUCT_VALIDATION_MESSAGES } from '../constants/messages';
 
-const validateName = refine(
-  string(),
-  'min-length',
-  (value) => value.length >= 1 || PRODUCT_VALIDATION_MESSAGES.invalidNameLength,
-);
-
-const validatePrice = refine(
-  number(),
-  'price',
-  (value) => (value >= 0 && Number.isInteger(value)) || PRODUCT_VALIDATION_MESSAGES.invalidPrice,
-);
-
-const validatePage = refine(
-  number(),
-  'page',
-  (value) => (value > 0 && Number.isInteger(value)) || PRODUCT_VALIDATION_MESSAGES.invalidPage,
-);
-
-const validateSort = refine(
-  enums(['desc', 'asc']),
-  'sort',
-  () => PRODUCT_VALIDATION_MESSAGES.invalidSortOption,
-);
-
-export const validateId = refine(
-  string(),
-  'id',
-  (value) => value.length > 1 || PRODUCT_VALIDATION_MESSAGES.invalidId,
-);
-
-export const CreateProductStruct = object({
-  name: validateName,
-  price: validatePrice,
-  description: string(),
-  tags: array(string()),
+export const CreateProductRequestStruct = object({
+  name: coerce(nonempty(string()), string(), (value) => value.trim()),
+  price: min(integer(), 0),
+  description: nonempty(string()),
+  tags: array(nonempty(string())),
 });
 
-export const EditProductStruct = partial(CreateProductStruct);
-
-export const GetProductList = object({
-  name: optional(validateName),
-  price: optional(validatePrice),
-  page: optional(validatePage),
-  pageSize: optional(validatePage),
-  order: optional(validateSort),
-});
+export const EditProductStruct = partial(CreateProductRequestStruct);
 
 export const GetProductListRequestStruct = object({
   skip: defaulted(
