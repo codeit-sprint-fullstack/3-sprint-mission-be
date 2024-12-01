@@ -7,3 +7,11 @@ export interface ProductModel {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ArticleModel {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
