@@ -8,7 +8,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { prismaClient } from '../../prismaClient';
 import { Product } from '../../models/product';
-import { EXCEPTION_MESSAGES } from '../../constant/ExceptionMessages';
+import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 
 export const postProduct = async (req: Request, res: Response) => {
   const data = create(req.body, CreateProductRequestStruct);
@@ -37,12 +37,12 @@ export const getProduct = async (req: Request, res: Response) => {
 
 export const editProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  assert(req.body, EditProductStruct);
+  const data = create(req.body, EditProductStruct);
 
   try {
     const product = await prismaClient.product.update({
       where: { id },
-      data: req.body,
+      data,
     });
     return res.status(200).json(product);
   } catch (e) {
