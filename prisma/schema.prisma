@@ -8,26 +8,32 @@ datasource db {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  price       Float
-  tags        String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id             String    @id @default(uuid())
+  name           String
+  description    String
+  price          Int
+  tags           String[]
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @db.Timestamptz(6)
+  ProductComment Comment[]
 }
 
 model Article {
-  id        String   @id @default(uuid())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String    @id @default(uuid())
+  title          String
+  content        String
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @db.Timestamptz(6)
+  ArticleComment Comment[]
 }
 
 model Comment {
   id        String   @id @default(uuid())
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  articleId String?
+  productId String?
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
