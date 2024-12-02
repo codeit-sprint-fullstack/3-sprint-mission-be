@@ -13,10 +13,10 @@ import {
 const router = express.Router();
 
 router.post('/', asyncRequestHandler(postProduct));
-router.get('/:id', asyncRequestHandler(getProduct));
-router.post('/:id', asyncRequestHandler(editProduct));
+router.get('/:productId', asyncRequestHandler(getProduct));
+router.post('/:productId', asyncRequestHandler(editProduct));
 router.get('/', asyncRequestHandler(getProductList));
-router.delete('/:id', asyncRequestHandler(deleteProduct));
+router.delete('/:productId', asyncRequestHandler(deleteProduct));
 router.post('/:productId/comments', asyncRequestHandler(postProductComment));
 router.get('/:productId/comments', asyncRequestHandler(getProductComments));
 

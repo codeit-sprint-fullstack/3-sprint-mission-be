@@ -23,10 +23,10 @@ export const postProduct = async (req: Request, res: Response) => {
 };
 
 export const getProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { productId } = req.params;
   try {
     const product = await prismaClient.product.findUniqueOrThrow({
-      where: { id },
+      where: { id: productId },
     });
     return res.status(200).json(product);
   } catch (e) {
@@ -38,12 +38,12 @@ export const getProduct = async (req: Request, res: Response) => {
 };
 
 export const editProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { productId } = req.params;
   const data = create(req.body, EditProductStruct);
 
   try {
     const product = await prismaClient.product.update({
-      where: { id },
+      where: { id: productId },
       data,
     });
     return res.status(200).json(product);
@@ -57,8 +57,8 @@ export const editProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    await prismaClient.product.delete({ where: { id } });
+    const { productId } = req.params;
+    await prismaClient.product.delete({ where: { id: productId } });
     res.sendStatus(204);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
