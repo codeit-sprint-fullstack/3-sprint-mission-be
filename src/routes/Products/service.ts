@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { assert, create } from 'superstruct';
+import { create } from 'superstruct';
 import {
   CreateProductRequestStruct,
   EditProductStruct,
@@ -9,6 +9,8 @@ import { Prisma } from '@prisma/client';
 import { prismaClient } from '../../prismaClient';
 import { Product } from '../../models/product';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
+import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
+import { Comment } from '../../models/comment';
 
 export const postProduct = async (req: Request, res: Response) => {
   const data = create(req.body, CreateProductRequestStruct);
@@ -107,5 +109,84 @@ export const getProductList = async (req: Request, res: Response) => {
       tags: product.getTags(),
       createdAt: product.getCreatedAt(),
     })),
+  });
+};
+
+export const postProductComment = async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const { content } = create(req.body, CreateCommentStruct);
+
+  const commentEntity = await prismaClient.$transaction(async (t) => {
+    const targetProductEntity = await t.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!targetProductEntity) {
+      return null;
+    }
+
+    return await t.comment.create({
+      data: {
+        productId,
+        content,
+      },
+    });
+  });
+
+  if (!commentEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  const comment = new Comment(commentEntity);
+
+  return res.status(201).json({
+    id: comment.getId(),
+    content: comment.getContent(),
+    createdAt: comment.getCreatedAt(),
+  });
+};
+
+export const getProductComments = async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const { cursor, take } = create(req.query, GetCommentListStruct);
+
+  const commentEntities = await prismaClient.$transaction(async (t) => {
+    const targetProductEntity = await t.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!targetProductEntity) return null;
+
+    return await t.comment.findMany({
+      cursor: cursor
+        ? {
+            id: cursor,
+          }
+        : undefined,
+      take: take + 1,
+      where: {
+        articleId: productId,
+      },
+    });
+  });
+
+  if (!commentEntities)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
+
+  const hasNext = comments.length === take + 1;
+
+  return res.status(200).json({
+    data: comments.slice(0, take).map((comment) => ({
+      id: comment.getId(),
+      articleId: comment.getArticleId(),
+      content: comment.getContent(),
+      createdAt: comment.getCreatedAt(),
+    })),
+    hasNext,
+    nextCursor: hasNext ? comments[comments.length - 1].getId() : null,
   });
 };
