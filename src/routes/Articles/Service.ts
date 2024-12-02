@@ -9,6 +9,8 @@ import {
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 import { Prisma } from '@prisma/client';
 import { Article } from '../../models/article';
+import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
+import { Comment } from '../../models/comment';
 
 export const postArticle = async (req: Request, res: Response) => {
   const data = create(req.body, CreateArticleRequestStruct);
@@ -107,5 +109,84 @@ export const getArticleList = async (req: Request, res: Response) => {
       createdAt: article.getCreatedAt(),
       updatedAt: article.getUpdatedAt(),
     })),
+  });
+};
+
+export const postArticleComment = async (req: Request, res: Response) => {
+  const { articleId } = req.params;
+  const { content } = create(req.body, CreateCommentStruct);
+
+  const commentEntity = await prismaClient.$transaction(async (t) => {
+    const targetArticleEntity = await t.article.findUnique({
+      where: {
+        id: articleId,
+      },
+    });
+
+    if (!targetArticleEntity) {
+      return null;
+    }
+
+    return await t.comment.create({
+      data: {
+        articleId,
+        content,
+      },
+    });
+  });
+
+  if (!commentEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
+
+  const comment = new Comment(commentEntity);
+
+  return res.status(201).json({
+    id: comment.getId(),
+    content: comment.getContent(),
+    createdAt: comment.getCreatedAt(),
+  });
+};
+
+export const getArticleComments = async (req: Request, res: Response) => {
+  const { articleId } = req.params;
+  const { cursor, take } = create(req.query, GetCommentListStruct);
+
+  const commentEntities = await prismaClient.$transaction(async (t) => {
+    const targetArticleEntity = await t.article.findUnique({
+      where: {
+        id: articleId,
+      },
+    });
+
+    if (!targetArticleEntity) return null;
+
+    return await t.comment.findMany({
+      cursor: cursor
+        ? {
+            id: cursor,
+          }
+        : undefined,
+      take: take + 1,
+      where: {
+        articleId,
+      },
+    });
+  });
+
+  if (!commentEntities)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
+
+  const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
+
+  const hasNext = comments.length === take + 1;
+
+  return res.status(200).json({
+    data: comments.slice(0, take).map((comment) => ({
+      id: comment.getId(),
+      articleId: comment.getArticleId(),
+      content: comment.getContent(),
+      createdAt: comment.getCreatedAt(),
+    })),
+    hasNext,
+    nextCursor: hasNext ? comments[comments.length - 1].getId() : null,
   });
 };

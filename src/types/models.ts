@@ -15,3 +15,12 @@ export interface ArticleModel {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CommentModel {
+  id: string;
+  productId: string | null;
+  articleId: string | null;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
