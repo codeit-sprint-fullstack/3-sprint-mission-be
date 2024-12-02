@@ -5,9 +5,9 @@ import { editArticle, postArticle, getArticle, getArticleList, deleteArticle } f
 const router = express.Router();
 
 router.post('/', asyncRequestHandler(postArticle));
-router.patch('/:id', asyncRequestHandler(editArticle));
+router.patch('/:articleId', asyncRequestHandler(editArticle));
 router.get('/', asyncRequestHandler(getArticleList));
-router.get('/:id', asyncRequestHandler(getArticle));
-router.delete('/:id', asyncRequestHandler(deleteArticle));
+router.get('/:articleId', asyncRequestHandler(getArticle));
+router.delete('/:articleId', asyncRequestHandler(deleteArticle));
 
 export default router;

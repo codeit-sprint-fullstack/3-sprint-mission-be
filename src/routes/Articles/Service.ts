@@ -21,11 +21,11 @@ export const postArticle = async (req: Request, res: Response) => {
 };
 
 export const getArticle = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { articleId } = req.params;
 
   try {
-    const article = await prismaClient.product.findUniqueOrThrow({
-      where: { id },
+    const article = await prismaClient.article.findUniqueOrThrow({
+      where: { id: articleId },
     });
     return res.status(200).json(article);
   } catch (e) {
@@ -37,12 +37,12 @@ export const getArticle = async (req: Request, res: Response) => {
 };
 
 export const editArticle = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { articleId } = req.params;
   const data = create(req.body, EditArticleRequestStruct);
 
   try {
     const article = await prismaClient.article.update({
-      where: { id },
+      where: { id: articleId },
       data,
     });
     return res.status(200).json(article);
@@ -56,8 +56,8 @@ export const editArticle = async (req: Request, res: Response) => {
 
 export const deleteArticle = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    await prismaClient.article.delete({ where: { id } });
+    const { articleId } = req.params;
+    await prismaClient.article.delete({ where: { id: articleId } });
     res.sendStatus(204);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
