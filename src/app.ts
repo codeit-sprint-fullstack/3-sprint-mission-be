@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import productRouter from './routes/Products/Controller';
 import articleRouter from './routes/Articles/Controller';
+import commentRouter from './routes/Comments/Controller';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -16,6 +17,7 @@ app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 app.use('/products', productRouter);
 app.use('/articles', articleRouter);
+app.use('/comments', commentRouter);
 
 const startServer = () => {
   try {
