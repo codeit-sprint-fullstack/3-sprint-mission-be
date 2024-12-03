@@ -107,7 +107,6 @@ export const getArticleList = async (req: Request, res: Response) => {
       title: article.getTitle(),
       content: article.getContent(),
       createdAt: article.getCreatedAt(),
-      updatedAt: article.getUpdatedAt(),
     })),
   });
 };
