@@ -11,13 +11,7 @@ Content-Type: application/json
 GET http://localhost:8000/articles?limit=100
 
 ###
-GET http://localhost:8000/articles?keyword=증권
-
-###
-GET http://localhost:8000/articles?order=oldest&limit=3
-
-###
-PATCH http://localhost:8000/articles/2a945e08-bafe-43e3-92bb-cdecfdc45bf4
+PATCH http://localhost:8000/articles/8f02ccce-2be2-4dfd-b8b9-4be79ff81b05
 Content-Type: application/json
 
 {
@@ -26,17 +20,25 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:8000/articles?order=oldest&limit=3
+
+
+# 게시글 댓글 목록 조회
+###
+GET http://localhost:8000/articles?keyword=증권
+
+###
 DELETE  http://localhost:8000/articles/
 
 # 게시글 댓글 목록 조회
 ###
-GET http://localhost:8000/articles/1f94f843-9ab3-471a-8d1f-3500599c93d5/comments
+GET http://localhost:8000/articles/2cbe8fe7-6014-4c3a-b019-31f05be94a8f/comments
 
 # 게시글 댓글 등록
 ###
-POST http://localhost:8000/articles/1f94f843-9ab3-471a-8d1f-3500599c93d5/comments
+POST http://localhost:8000/articles/2cbe8fe7-6014-4c3a-b019-31f05be94a8f/comments
 Content-Type: application/json
 
 {
-  "content": "언어를 배우려면 일단 계속 해당 언어에 노출이 돼야 합니다."
+  "content": "매우 잘 자는 방법은 매우 힘들게 운동을 하고 자는 것이라고 생각하기 쉬운데 오히려 더 잠이 안 올수도 있다고 생각되지만 그래도 피곤하면 자게 돼 있죠.."
 }
