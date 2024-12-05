@@ -11,35 +11,13 @@ import {
   CreateComment,
   PatchComment
 } from "./structs.js";
+import asyncHandler from "./asyncHandlerFunction.js";
 import orderByFunction from "./orderByFunction.js";
 
 const prisma = new PrismaClient();
 
 const app = express();
 app.use(express.json());
-
-// 에러 처리 함수
-function asyncHandler(handler) {
-  return async function (req, res) {
-    try {
-      await handler(req, res);
-    } catch (e) {
-      if (
-        e.name === 'StructureError' ||
-        e instanceof Prisma.PrismaClientValidationError
-      ) {
-        res.status(400).send({ message: e.message });
-      } else if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
-        res.status(404).send({ message: 'Cannot find given id.' });
-      } else {
-        res.status(500).send({ message: e.message });
-      }
-    }
-  }
-}
 
 /** Products Routes **/
 
@@ -79,7 +57,7 @@ app.post('/products', asyncHandler(async (req, res) => {
     const newProduct = await prisma.product.create({
       data: req.body,
     })
-    console.log(produnewProductcts);
+    console.log(newProduct);
     res.status(201).send(newProduct);
   } catch (error) {
     res.status(400).send('Bad Request: ' + error.message);
@@ -100,7 +78,7 @@ app.patch('/products/:productId', asyncHandler(async (req, res) => {
 
 // 상품 삭제
 app.delete('/products/:productId', asyncHandler(async (req, res) => {
-  const productId = req.params.id;
+  const productId = req.params.productId;
   const product = await prisma.product.delete({
     where: { id: productId },
   });
