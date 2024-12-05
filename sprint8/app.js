@@ -159,6 +159,8 @@ app.patch('/articles/:articleId', asyncHandler(async (req, res) => {
 // 게시글 목록 조회
 app.get('/articles', asyncHandler(async (req, res) => {
   const { keyword, offset = 0, limit = 10, order = 'recent' } = req.query;
+  const offsetNum = parseInt(offset);
+  const limitNum = parseInt(limit);
 
   const orderBy = orderByFunction(order);
 
@@ -171,16 +173,16 @@ app.get('/articles', asyncHandler(async (req, res) => {
         ],
       },
       orderBy,
-      skip: parseInt(offset),
-      take: parseInt(limit),
+      skip: offsetNum,
+      take: limitNum,
     })
     res.send(articles);
     return;
   }
   const articles = await prisma.article.findMany({
     orderBy,
-    skip: parseInt(offset),
-    take: parseInt(limit),
+    skip: offsetNum,
+    take: limitNum,
   })
   const totalArticles = await prisma.article.count();
   const totalPages = Math.ceil(totalArticles / parseInt(limit));
@@ -206,13 +208,15 @@ app.get('/articles/:articleId/comments', asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const { cursor, limit = 10, order = 'recent' } = req.query;
 
+  const limitNum = parseInt(limit);
+
   const orderBy = orderByFunction(order);
   const comments = await prisma.comment.findMany({
     where: {
       articleId,
     },
     orderBy,
-    take: parseInt(limit),
+    take: limitNum,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
   });
@@ -277,18 +281,20 @@ app.delete('/comments/:commentId', asyncHandler(async (req, res) => {
 app.get('/comments', asyncHandler(async (req, res) => {
   const { cursor, limit = 10, order = 'recent' } = req.query;
 
+  const limitNum = parseInt(limit);
+
   const orderBy = orderByFunction(order);
   const totalArticleComments = await prisma.comment.count();
   const comments = await prisma.comment.findMany({
     orderBy,
-    take: parseInt(limit),
-    skip: cursor ? 1 : parseInt(limit),
+    take: limitNum,
+    skip: cursor ? 1 : limitNum,
     cursor: cursor ? { id: cursor } : undefined,
   })
 
   const lastComment = comments[comments.length - 1];
   const nextCursor = lastComment ? lastComment.id : null;
-  const totalPage = Math.ceil(totalArticleComments / parseInt(limit));
+  const totalPage = Math.ceil(totalArticleComments / limitNum);
 
   res.send({
     totalArticleComments,
