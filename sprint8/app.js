@@ -13,6 +13,10 @@ import {
 } from "./structs.js";
 import asyncHandler from "./asyncHandlerFunction.js";
 import orderByFunction from "./orderByFunction.js";
+import {
+  productsPaginationHandler,
+  articlesPaginationHandler
+} from "./paginationHandler.js";
 
 const prisma = new PrismaClient();
 
@@ -34,7 +38,9 @@ app.get('/products', asyncHandler(async (req, res) => {
     skip: offsetNum, // skip으로 offset설정
     take: limitNum,  // take으로 limit설정
   });
-  res.send(products);
+  console.log("products, 여기긴", products);
+  const responseData = await productsPaginationHandler(products, offsetNum, limitNum);
+  res.send(responseData);
 }));
 
 // 상품 조회
@@ -157,15 +163,15 @@ app.get('/articles', asyncHandler(async (req, res) => {
     res.send(articles);
     return;
   }
+  
   const articles = await prisma.article.findMany({
     orderBy,
     skip: offsetNum,
     take: limitNum,
   })
-  const totalArticles = await prisma.article.count();
-  const totalPages = Math.ceil(totalArticles / parseInt(limit));
 
-  res.send({ totalArticles, articles, totalPages });
+  const responseData = await articlesPaginationHandler(articles, offsetNum, limitNum);
+  res.send(responseData);
 }))
 
 // 게시글 삭제
