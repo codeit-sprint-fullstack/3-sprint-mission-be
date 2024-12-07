@@ -13,7 +13,9 @@ const allowedOrigins = [process.env.DEPLOYED_URL, process.env.LOCALHOST].filter(
 ) as string[];
 
 const app = express();
-app.use(cors({ origin: allowedOrigins }));
+app.use(
+  cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'] }),
+);
 app.use(express.json());
 app.use('/products', productRouter);
 app.use('/articles', articleRouter);
