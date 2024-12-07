@@ -168,6 +168,11 @@ export const getArticleComments = async (req: Request, res: Response) => {
       where: {
         articleId,
       },
+      orderBy: [
+        {
+          createdAt: 'asc',
+        },
+      ],
     });
   });
 
