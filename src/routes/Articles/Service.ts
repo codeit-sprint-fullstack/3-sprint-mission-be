@@ -26,10 +26,17 @@ export const getArticle = async (req: Request, res: Response) => {
   const { articleId } = req.params;
 
   try {
-    const article = await prismaClient.article.findUniqueOrThrow({
+    const articleEntity = await prismaClient.article.findUniqueOrThrow({
       where: { id: articleId },
     });
-    return res.status(200).json(article);
+    const article = new Article(articleEntity);
+
+    return res.status(200).json({
+      id: article.getId(),
+      title: article.getTitle(),
+      content: article.getContent(),
+      createdAt: article.getCreatedAt(),
+    });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
       return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
