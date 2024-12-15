@@ -1,0 +1,38 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 게시글
+model Article {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  //comments  Comment[] @relation("ArticleComments", onDelete: CASCADE)
+}
+
+// 중고마켓
+model Marketplace {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+// 댓글
+model Comment {
+  id           Int       @id @default(autoincrement())
+  content      String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  postId       Int // 게시글 id (게시글과 연결하기 위함)
+  userId       Int // 댓글 작성자 id
+  postType     String // 게시판 유형 (중고마켓: market or 자유게시판: community)
+}
