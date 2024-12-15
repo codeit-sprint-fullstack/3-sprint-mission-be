@@ -1,0 +1,21 @@
+###
+POST http://localhost:8000/articles/20e56878-61cb-443a-8d28-a11d8e251bbe/comments 
+Content-Type: application/json
+
+{
+  "content": "부동산 투자는 시기보다는 지역과 매물이 중요하다고 볼 수 있습니다. 만약 강남에 부동산 투자를 할 수 있다면 당신은 시기를 따지지 마시고 바로 사시는 걸 추천합니다."
+}
+
+###
+PATCH http://localhost:8000/comments/ab25eb65-190a-46f6-9108-a8782b583f42
+Content-Type: application/json
+
+{
+  "content": "인문고전 독서의 중요성에 대해서는 말해도 끝이 없을 거다. 매일 꾸준히 시간을 내서 의도적으로 매우 힘들게 가지 않으면 책을 읽을 수 없을 것이다. 힘써 최선을 다하여 책을 읽자!"
+}
+
+###
+DELETE  http://localhost:8000/comments/3fb53aa1-caaf-4ec2-98d8-f097100d6737
+
+###
+GET http://localhost:8000/comments
