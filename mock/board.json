@@ -1,0 +1,55 @@
+[
+  {
+    "title": "게시판 공지사항",
+    "content": "이 게시판은 공지사항을 위한 공간입니다.",
+    "images": [
+      "https://example.com/image1.jpg",
+      "https://example.com/image2.jpg"
+    ]
+  },
+  {
+    "title": "오늘의 할일",
+    "content": "할 일을 정리해서 공유합니다.",
+    "images": []
+  },
+  {
+    "title": "여행 사진 공유",
+    "content": "지난 여행에서 찍은 사진입니다.",
+    "images": ["https://example.com/travel1.jpg"]
+  },
+  {
+    "title": "맛집 추천",
+    "content": "이번 주말에 갈 만한 맛집을 추천합니다.",
+    "images": ["https://example.com/food1.jpg", "https://example.com/food2.jpg"]
+  },
+  {
+    "title": "독서 클럽 공지",
+    "content": "다음 독서 모임 일정 및 책 선정 내용입니다.",
+    "images": []
+  },
+  {
+    "title": "운동 기록",
+    "content": "오늘 한 운동을 기록합니다.",
+    "images": ["https://example.com/workout1.jpg"]
+  },
+  {
+    "title": "개발자 모임 후기",
+    "content": "지난주 개발자 모임 후기를 공유합니다.",
+    "images": ["https://example.com/dev1.jpg", "https://example.com/dev2.jpg"]
+  },
+  {
+    "title": "영화 감상 후기",
+    "content": "최근 본 영화에 대한 감상을 나눕니다.",
+    "images": []
+  },
+  {
+    "title": "취미 생활 공유",
+    "content": "최근 새로 시작한 취미입니다.",
+    "images": ["https://example.com/hobby1.jpg"]
+  },
+  {
+    "title": "다이어트 일지",
+    "content": "다이어트 진행 상황과 식단을 공유합니다.",
+    "images": ["https://example.com/diet1.jpg", "https://example.com/diet2.jpg"]
+  }
+]

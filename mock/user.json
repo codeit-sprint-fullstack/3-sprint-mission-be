@@ -1,0 +1,38 @@
+[
+  {
+    "email": "user1@naver.com",
+    "name": "이름1",
+    "password": "password123",
+    "image": "/img/ic_profile.png"
+  },
+  {
+    "email": "user2@naver.com",
+    "name": "이름2",
+    "password": "securepass456",
+    "image": "/img/ic_profile.png"
+  },
+  {
+    "email": "user3@naver.com",
+    "name": "이름3",
+    "password": "mypassword789",
+    "image": "/img/custom_image1.png"
+  },
+  {
+    "email": "user4@naver.com",
+    "name": "이름4",
+    "password": "password321",
+    "image": "/img/custom_image2.png"
+  },
+  {
+    "email": "user5@naver.com",
+    "name": "이름5",
+    "password": "securepassword654",
+    "image": "/img/ic_profile.png"
+  },
+  {
+    "email": "user6@naver.com",
+    "name": "이름6",
+    "password": "anotherpass987",
+    "image": "/img/custom_image3.png"
+  }
+]

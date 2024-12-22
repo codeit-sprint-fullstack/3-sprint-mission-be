@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// npx prisma migrate dev
+// npx prisma studio <- gui 여는거
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Int      @default(0)
+  tags        String[]
+  favorite    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  uuid      String    @id @default(uuid())
+  email     String    @unique
+  name      String
+  password  String
+  image     String?   @default("/img/ic_profile.png")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  board     Board[]
+  comment   Comment[]
+}
+
+model Board {
+  id          String    @id @default(uuid())
+  boardNumber Int       @unique @default(autoincrement())
+  user        User      @relation(fields: [userUuid], references: [uuid])
+  userUuid    String
+  title       String
+  content     String
+  favorite    Int       @default(0)
+  images      String[]  @default([])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  comment     Comment[]
+}
+
+model Comment {
+  id       String @id @default(uuid())
+  user     User   @relation(fields: [userUuid], references: [uuid])
+  coment   String @default("")
+  board    Board  @relation(fields: [boardId], references: [id])
+  boardId  String
+  userUuid String
+}
