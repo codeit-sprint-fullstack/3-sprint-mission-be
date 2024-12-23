@@ -1,7 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
-import { Product } from '@prisma/client';
 import { articleMocks } from './mocks/articleMocks';
 import { productMocks } from './mocks/productMocks';
+import { productCommentMocks } from './mocks/commentMocks';
+import { articleCommentMocks } from './mocks/commentMocks';
+import { userMocks } from './mocks/userMocks';
 
 const prisma = new PrismaClient();
 
@@ -9,6 +11,12 @@ async function main() {
   await prisma.article.deleteMany();
   await prisma.product.deleteMany();
   await prisma.comment.deleteMany();
+  await prisma.user.deleteMany();
+
+  await prisma.user.createMany({
+    data: userMocks,
+    skipDuplicates: true,
+  });
 
   await prisma.article.createMany({
     data: articleMocks,
@@ -18,15 +26,8 @@ async function main() {
     data: productMocks,
     skipDuplicates: true,
   });
-
-  const products = await prisma.article.findMany();
-  const productIds = products.map((product: Product) => product.id);
-  const commentMocks = productIds.map((id: Product, index: number) => ({
-    content: `테스트 내용 ${index}`,
-    articleId: id,
-  }));
   await prisma.comment.createMany({
-    data: commentMocks,
+    data: [...productCommentMocks, ...articleCommentMocks],
     skipDuplicates: true,
   });
 }
