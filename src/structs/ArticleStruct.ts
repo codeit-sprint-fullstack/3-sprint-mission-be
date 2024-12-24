@@ -10,11 +10,22 @@ import {
   max,
   enums,
   optional,
+  array,
+  refine,
 } from 'superstruct';
 
 export const CreateArticleRequestStruct = object({
   title: coerce(nonempty(string()), string(), (value) => value.trim()),
-  content: nonempty(string()),
+  content: refine(
+    nonempty(string()),
+    '내용은 10자 이상 100자 이하로 입력해주세요.',
+    (Value) => Value.length >= 10 && Value.length <= 100,
+  ),
+  images: refine(
+    array(string()),
+    '이미지는 최대 3개 업로드 가능합니다.',
+    (value) => value.length <= 3,
+  ),
 });
 
 export const EditArticleRequestStruct = partial(CreateArticleRequestStruct);
