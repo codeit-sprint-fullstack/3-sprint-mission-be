@@ -11,12 +11,18 @@ import { Prisma } from '@prisma/client';
 import { Article } from '../../models/article';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
+import { INCLUDE_USER_CLAUSE, getOrderByClause, getWhereByWord } from '../../constants/prisma';
+import { handlePrismaError } from '../../utils/handlePrismaError';
 
 export const postArticle = async (req: Request, res: Response) => {
   const data = create(req.body, CreateArticleRequestStruct);
 
   const newArticle = await prismaClient.article.create({
-    data,
+    data: {
+      ...data,
+      userId: req.user!.userId,
+    },
+    include: INCLUDE_USER_CLAUSE,
   });
 
   return res.status(201).json(newArticle);
@@ -27,16 +33,12 @@ export const getArticle = async (req: Request, res: Response) => {
 
   try {
     const articleEntity = await prismaClient.article.findUniqueOrThrow({
-      where: { id: articleId },
+      where: { id: parseInt(articleId) },
+      include: INCLUDE_USER_CLAUSE,
     });
     const article = new Article(articleEntity);
 
-    return res.status(200).json({
-      id: article.getId(),
-      title: article.getTitle(),
-      content: article.getContent(),
-      createdAt: article.getCreatedAt(),
-    });
+    return res.status(200).json(article.toJSON());
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
       return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
@@ -51,28 +53,22 @@ export const editArticle = async (req: Request, res: Response) => {
 
   try {
     const article = await prismaClient.article.update({
-      where: { id: articleId },
+      where: { id: parseInt(articleId) },
       data,
     });
     return res.status(200).json(article);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
-    }
-    throw e;
+    handlePrismaError(e, res);
   }
 };
 
 export const deleteArticle = async (req: Request, res: Response) => {
   try {
     const { articleId } = req.params;
-    await prismaClient.article.delete({ where: { id: articleId } });
+    await prismaClient.article.delete({ where: { id: parseInt(articleId) } });
     res.sendStatus(204);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
-    }
-    throw e;
+    handlePrismaError(e, res);
   }
 };
 
@@ -101,31 +97,28 @@ export const getArticleList = async (req: Request, res: Response) => {
   const articleEntities = await prismaClient.article.findMany({
     skip,
     take,
-    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { createdAt: 'asc' },
-    where: whereClause,
+    orderBy: getOrderByClause(orderBy || 'recent'),
+    where: getWhereByWord(word),
+    include: INCLUDE_USER_CLAUSE,
   });
 
   const articles = articleEntities.map((articleEntity) => new Article(articleEntity));
 
   return res.status(200).json({
     count: total,
-    data: articles.slice(0, take).map((article) => ({
-      id: article.getId(),
-      title: article.getTitle(),
-      content: article.getContent(),
-      createdAt: article.getCreatedAt(),
-    })),
+    data: articles.slice(0, take).map((article) => article.toJSON()),
   });
 };
 
 export const postArticleComment = async (req: Request, res: Response) => {
   const { articleId } = req.params;
   const { content } = create(req.body, CreateCommentStruct);
+  const { userId } = req.user!;
 
   const commentEntity = await prismaClient.$transaction(async (t) => {
     const targetArticleEntity = await t.article.findUnique({
       where: {
-        id: articleId,
+        id: parseInt(articleId),
       },
     });
 
@@ -135,9 +128,11 @@ export const postArticleComment = async (req: Request, res: Response) => {
 
     return await t.comment.create({
       data: {
-        articleId,
+        articleId: parseInt(articleId),
         content,
+        userId,
       },
+      include: INCLUDE_USER_CLAUSE,
     });
   });
 
@@ -145,11 +140,7 @@ export const postArticleComment = async (req: Request, res: Response) => {
 
   const comment = new Comment(commentEntity);
 
-  return res.status(201).json({
-    id: comment.getId(),
-    content: comment.getContent(),
-    createdAt: comment.getCreatedAt(),
-  });
+  return res.status(201).json(comment.toJSON());
 };
 
 export const getArticleComments = async (req: Request, res: Response) => {
@@ -159,7 +150,7 @@ export const getArticleComments = async (req: Request, res: Response) => {
   const commentEntities = await prismaClient.$transaction(async (t) => {
     const targetArticleEntity = await t.article.findUnique({
       where: {
-        id: articleId,
+        id: parseInt(articleId),
       },
     });
 
@@ -168,18 +159,19 @@ export const getArticleComments = async (req: Request, res: Response) => {
     return await t.comment.findMany({
       cursor: cursor
         ? {
-            id: cursor,
+            id: parseInt(cursor),
           }
         : undefined,
       take: take + 1,
       where: {
-        articleId,
+        articleId: parseInt(articleId),
       },
       orderBy: [
         {
           createdAt: 'asc',
         },
       ],
+      include: INCLUDE_USER_CLAUSE,
     });
   });
 
@@ -191,12 +183,7 @@ export const getArticleComments = async (req: Request, res: Response) => {
   const hasNext = comments.length === take + 1;
 
   return res.status(200).json({
-    data: comments.slice(0, take).map((comment) => ({
-      id: comment.getId(),
-      articleId: comment.getArticleId(),
-      content: comment.getContent(),
-      createdAt: comment.getCreatedAt(),
-    })),
+    data: comments.map((comment) => comment.toJSON()),
     hasNext,
     nextCursor: hasNext ? comments[comments.length - 1].getId() : null,
   });
