@@ -18,25 +18,21 @@ router.get('/', asyncRequestHandler(getProductList));
 router.get('/:productId/comments', asyncRequestHandler(getProductComments));
 router.get('/:productId', asyncRequestHandler(getProduct));
 
-const authRouter = express.Router();
-
-authRouter.post('/', createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProduct));
-authRouter.patch(
+router.post('/', createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProduct));
+router.patch(
   '/:productId',
   createAuthMiddleware(AUTH_MESSAGES.update),
   asyncRequestHandler(editProduct),
 );
-authRouter.delete(
+router.delete(
   '/:productId',
   createAuthMiddleware(AUTH_MESSAGES.delete),
   asyncRequestHandler(deleteProduct),
 );
-authRouter.post(
+router.post(
   '/:productId/comments',
   createAuthMiddleware(AUTH_MESSAGES.create),
   asyncRequestHandler(postProductComment),
 );
-
-router.use('/', authRouter);
 
 export default router;
