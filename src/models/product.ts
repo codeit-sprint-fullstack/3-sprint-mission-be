@@ -1,19 +1,28 @@
+import { userInfo } from '../types/models';
 import { ProductModel } from '../types/models';
 
 export class Product {
-  #id;
+  #id: number;
 
-  #name;
+  #name: string;
 
-  #description;
+  #description: string;
 
-  #price;
+  #price: number;
 
-  #tags;
+  #tags: string[];
 
-  #createdAt;
+  #images: string[];
 
-  #updatedAt;
+  #favoriteCount: number;
+
+  #isFavorite: boolean;
+
+  #user: userInfo;
+
+  #createdAt: Date;
+
+  #updatedAt: Date;
 
   constructor(param: ProductModel) {
     this.#id = param.id;
@@ -21,6 +30,14 @@ export class Product {
     this.#description = param.description;
     this.#price = param.price;
     this.#tags = Array.from(param.tags);
+    this.#images = Array.from(param.images);
+    this.#favoriteCount = param.favoriteCount;
+    this.#isFavorite = param.isFavorite;
+    this.#user = {
+      id: param.user.id,
+      nickname: param.user.nickname,
+      image: param.user.image,
+    };
     this.#createdAt = param.createdAt;
     this.#updatedAt = param.updatedAt;
   }
@@ -45,11 +62,43 @@ export class Product {
     return this.#tags;
   }
 
+  getImages() {
+    return this.#images;
+  }
+
+  getFavoriteCount() {
+    return this.#favoriteCount;
+  }
+
+  getIsFavorite() {
+    return this.#isFavorite;
+  }
+
+  getUser() {
+    return this.#user;
+  }
+
   getCreatedAt() {
     return this.#createdAt;
   }
 
   getUpdatedAt() {
     return this.#updatedAt;
+  }
+
+  toJSON() {
+    return {
+      name: this.getName(),
+      price: this.getPrice(),
+      description: this.getDescription(),
+      tags: this.getTags(),
+      images: this.getImages(),
+      id: this.getId(),
+      favoriteCount: this.getFavoriteCount(),
+      isFavorite: this.getIsFavorite(),
+      user: this.getUser(),
+      createdAt: this.getCreatedAt(),
+      updatedAt: this.getUpdatedAt(),
+    };
   }
 }

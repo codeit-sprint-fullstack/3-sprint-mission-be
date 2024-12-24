@@ -11,60 +11,88 @@ import { Product } from '../../models/product';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
+import { handlePrismaError } from '../../utils/handlePrismaError';
+import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../constants/prisma';
+import { AUTH_MESSAGES } from '../../constants/authMessages';
 
 export const postProduct = async (req: Request, res: Response) => {
   const data = create(req.body, CreateProductRequestStruct);
 
-  const newProduct = await prismaClient.product.create({
-    data,
+  const productEntity = await prismaClient.product.create({
+    data: {
+      ...data,
+      userId: req.user!.userId,
+    },
+    include: INCLUDE_USER_CLAUSE,
   });
 
-  return res.status(201).json(newProduct);
+  const product = new Product(productEntity);
+
+  return res.status(201).json(product.toJSON());
 };
 
 export const getProduct = async (req: Request, res: Response) => {
   const { productId } = req.params;
   try {
-    const product = await prismaClient.product.findUniqueOrThrow({
-      where: { id: productId },
+    const productEntity = await prismaClient.product.findUniqueOrThrow({
+      where: { id: parseInt(productId) },
+      include: INCLUDE_USER_CLAUSE,
     });
-    return res.status(200).json(product);
+    const product = new Product(productEntity);
+
+    return res.status(200).json(product.toJSON());
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
-    }
-    throw e;
+    return handlePrismaError(e, res);
   }
 };
 
 export const editProduct = async (req: Request, res: Response) => {
   const { productId } = req.params;
   const data = create(req.body, EditProductStruct);
+  const userId = req.user?.userId;
+
+  const existingProduct = await prismaClient.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+
+  if (!existingProduct)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  if (existingProduct.userId !== userId)
+    return res.status(403).json({ message: AUTH_MESSAGES.update });
 
   try {
-    const product = await prismaClient.product.update({
-      where: { id: productId },
+    const productEntity = await prismaClient.product.update({
+      where: { id: parseInt(productId) },
       data,
+      include: INCLUDE_USER_CLAUSE,
     });
-    return res.status(200).json(product);
+    const product = new Product(productEntity);
+
+    return res.status(200).json(product.toJSON());
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
-    }
-    throw e;
+    return handlePrismaError(e, res);
   }
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const existingProduct = await prismaClient.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+  const userId = req.user?.userId;
+
+  if (!existingProduct)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  if (existingProduct.userId !== userId)
+    return res.status(403).json({ message: AUTH_MESSAGES.delete });
+
   try {
-    const { productId } = req.params;
-    await prismaClient.product.delete({ where: { id: productId } });
+    await prismaClient.product.delete({ where: { id: parseInt(productId) } });
     res.sendStatus(204);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
-    }
-    throw e;
+    return handlePrismaError(e, res);
   }
 };
 
@@ -88,38 +116,40 @@ export const getProductList = async (req: Request, res: Response) => {
       }
     : undefined;
 
-  const total = await prismaClient.product.count({ where: whereClause });
+  const result = await prismaClient.$transaction(async (t) => {
+    const total = await t.product.count({ where: whereClause });
 
-  const productEntities = await prismaClient.product.findMany({
-    skip,
-    take,
-    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { createdAt: 'asc' },
-    where: whereClause,
+    const productEntities = await prismaClient.product.findMany({
+      skip,
+      take,
+      orderBy: getOrderByClause(word || 'recent'),
+      where: whereClause,
+      include: INCLUDE_USER_CLAUSE,
+    });
+
+    return {
+      total,
+      productEntities,
+    };
   });
 
-  const products = productEntities.map((productEntity) => new Product(productEntity));
+  const products = result.productEntities.map((productEntity) => new Product(productEntity));
 
   return res.status(200).json({
-    count: total,
-    data: products.slice(0, take).map((product) => ({
-      id: product.getId(),
-      name: product.getName(),
-      description: product.getDescription(),
-      price: product.getPrice(),
-      tags: product.getTags(),
-      createdAt: product.getCreatedAt(),
-    })),
+    count: result.total,
+    data: products.map((product) => product.toJSON()),
   });
 };
 
 export const postProductComment = async (req: Request, res: Response) => {
   const { productId } = req.params;
   const { content } = create(req.body, CreateCommentStruct);
+  const { userId } = req.user!;
 
   const commentEntity = await prismaClient.$transaction(async (t) => {
     const targetProductEntity = await t.product.findUnique({
       where: {
-        id: productId,
+        id: parseInt(productId),
       },
     });
 
@@ -129,9 +159,11 @@ export const postProductComment = async (req: Request, res: Response) => {
 
     return await t.comment.create({
       data: {
-        productId,
+        productId: parseInt(productId),
         content,
+        userId,
       },
+      include: INCLUDE_USER_CLAUSE,
     });
   });
 
@@ -139,11 +171,7 @@ export const postProductComment = async (req: Request, res: Response) => {
 
   const comment = new Comment(commentEntity);
 
-  return res.status(201).json({
-    id: comment.getId(),
-    content: comment.getContent(),
-    createdAt: comment.getCreatedAt(),
-  });
+  return res.status(201).json(comment.toJSON());
 };
 
 export const getProductComments = async (req: Request, res: Response) => {
@@ -153,7 +181,7 @@ export const getProductComments = async (req: Request, res: Response) => {
   const commentEntities = await prismaClient.$transaction(async (t) => {
     const targetProductEntity = await t.product.findUnique({
       where: {
-        id: productId,
+        id: parseInt(productId),
       },
     });
 
@@ -162,13 +190,14 @@ export const getProductComments = async (req: Request, res: Response) => {
     return await t.comment.findMany({
       cursor: cursor
         ? {
-            id: cursor,
+            id: parseInt(cursor),
           }
         : undefined,
       take: take + 1,
       where: {
-        articleId: productId,
+        productId: parseInt(productId),
       },
+      include: INCLUDE_USER_CLAUSE,
     });
   });
 
@@ -180,13 +209,8 @@ export const getProductComments = async (req: Request, res: Response) => {
   const hasNext = comments.length === take + 1;
 
   return res.status(200).json({
-    data: comments.slice(0, take).map((comment) => ({
-      id: comment.getId(),
-      articleId: comment.getArticleId(),
-      content: comment.getContent(),
-      createdAt: comment.getCreatedAt(),
-    })),
+    data: comments.slice(0, take).map((comment) => comment.toJSON()),
     hasNext,
-    nextCursor: hasNext ? comments[comments.length - 1].getId() : null,
+    nextCursor: comments[comments.length - 1].getId(),
   });
 };
