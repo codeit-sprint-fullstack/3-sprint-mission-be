@@ -33,7 +33,7 @@ model Article {
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   comments  Comment[]
   isLiked   Boolean   @default(false)
-  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
 }
 
