@@ -1,7 +1,7 @@
-import { CommentModel } from '../types/models';
+import { CommentModel, userInfo } from '../types/models';
 
 export class Comment {
-  #id: string;
+  #id: number;
 
   #content: string;
 
@@ -9,17 +9,18 @@ export class Comment {
 
   #updatedAt: Date;
 
-  #productId: string | null;
-
-  #articleId: string | null;
+  #user: userInfo;
 
   constructor(param: CommentModel) {
     this.#id = param.id;
     this.#content = param.content;
     this.#createdAt = param.createdAt;
     this.#updatedAt = param.updatedAt;
-    this.#productId = param.productId;
-    this.#articleId = param.articleId;
+    this.#user = {
+      id: param.user.id,
+      image: param.user.image,
+      nickname: param.user.nickname,
+    };
   }
 
   getId() {
@@ -38,11 +39,17 @@ export class Comment {
     return this.#updatedAt;
   }
 
-  getProductId() {
-    return this.#productId;
+  getUser() {
+    return this.#user;
   }
 
-  getArticleId() {
-    return this.#articleId;
+  toJSON() {
+    return {
+      id: this.getId(),
+      content: this.getContent(),
+      createdAt: this.getCreatedAt(),
+      updatedAt: this.getUpdatedAt(),
+      user: this.getUser(),
+    };
   }
 }
