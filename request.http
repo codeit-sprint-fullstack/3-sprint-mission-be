@@ -1,0 +1,63 @@
+
+
+GET http://localhost:8000/article/list
+
+###
+
+GET http://localhost:8000/article/:id
+
+###
+
+PATCH  http://localhost:8000/db/tasks/6721de31af799ac0bde66355
+
+###
+GET http://localhost:8000/db/tasks/query?keyword=글자
+
+###
+DELETE http://localhost:8000/db/tasks/6721cf08af799ac0bde66353
+
+
+
+###
+GET http://localhost:8000/api/test
+
+
+
+###
+POST http://localhost:8000/api/postregistration
+Content-Type: application/json
+
+{
+    "title":"강수정",
+    "content":"내옹입니다"
+}
+
+
+
+###
+GET http://localhost:8000/api/articleList
+
+
+
+###
+PATCH  http://localhost:8000/api/postPatch
+Content-Type: application/json
+
+{
+    "id": "1306caf6-f5e8-463a-b548-a453eeea8f8d",
+    "title":"오늘의 저녁메뉴",
+    "content":"뭐 먹고싶어?"
+}
+
+###
+DELETE  http://localhost:8000/api/postDelete/1306caf6-f5e8-463a-b548-a453eeea8f8d
+
+
+
+###
+POST http://localhost:8000/api/postget
+Content-Type: application/json
+
+{
+   "title" :"운동"
+}
