@@ -44,8 +44,8 @@ export interface UserModel {
   id: number;
   email: string;
   nickname: string;
-  image?: string;
   encryptedPassword: string;
+  image: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
