@@ -5,6 +5,7 @@ import productRouter from './routes/Products/Controller';
 import articleRouter from './routes/Articles/Controller';
 import commentRouter from './routes/Comments/Controller';
 import authRouter from './routes/auth/controller';
+import imageRouter from './routes/Upload/Controller';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -22,6 +23,7 @@ app.use('/products', productRouter);
 app.use('/articles', articleRouter);
 app.use('/comments', commentRouter);
 app.use('/auth', authRouter);
+app.use('/upload', imageRouter);
 
 const startServer = () => {
   try {
