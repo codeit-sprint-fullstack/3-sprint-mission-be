@@ -4,6 +4,7 @@ import cors from 'cors';
 import productRouter from './routes/Products/Controller';
 import articleRouter from './routes/Articles/Controller';
 import commentRouter from './routes/Comments/Controller';
+import authRouter from './routes/auth/controller';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/products', productRouter);
 app.use('/articles', articleRouter);
 app.use('/comments', commentRouter);
+app.use('/auth', authRouter);
 
 const startServer = () => {
   try {
