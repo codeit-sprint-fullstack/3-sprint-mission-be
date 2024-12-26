@@ -1,6 +1,25 @@
 ###
+POST http://localhost:8000/board
+Content-Type: application/json
 
-GET http://localhost:8000/board?searchKeyword=a
+{
+  "title": "하이",
+  "content": "하이"
+}
 
 ###
-GET  http://localhost:8000/board/111
+GET http://localhost:8000/board/5/comment
+
+###
+POST http://localhost:8000/board/1/comments
+Content-Type: application/json
+
+{
+  "content": "안녕"
+}
+
+###
+DELETE http://localhost:8000/board/comment/11
+
+###
+POST http://localhost:8000/
