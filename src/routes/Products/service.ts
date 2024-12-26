@@ -10,9 +10,12 @@ import { Product } from '../../models/product';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
-import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../constants/prisma';
+import { INCLUDE_USER_CLAUSE } from '../../constants/prisma';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { parseId } from '../../utils/parseId';
+import ProductRepository from '../../repositories/productRepository';
+
+const productRepository = new ProductRepository();
 
 export const postProduct = async (req: Request, res: Response) => {
   const data = create(req.body, CreateProductRequestStruct);
@@ -20,13 +23,7 @@ export const postProduct = async (req: Request, res: Response) => {
 
   if (!userId) return res.status(403).json({ message: AUTH_MESSAGES.create });
 
-  const productEntity = await prismaClient.product.create({
-    data: {
-      ...data,
-      userId,
-    },
-    include: INCLUDE_USER_CLAUSE,
-  });
+  const productEntity = await productRepository.create(userId, data);
   const product = new Product(productEntity);
 
   return res.status(201).json(product.toJSON());
@@ -34,10 +31,10 @@ export const postProduct = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
-  const productEntity = await prismaClient.product.findUniqueOrThrow({
-    where: { id: productId! },
-    include: INCLUDE_USER_CLAUSE,
-  });
+  const productEntity = await productRepository.findById(productId);
+
+  if (!productEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
   const product = new Product(productEntity);
 
   return res.status(200).json(product.toJSON());
@@ -48,9 +45,7 @@ export const editProduct = async (req: Request, res: Response) => {
   const data = create(req.body, EditProductStruct);
   const userId = req.user?.userId;
 
-  const existingProduct = await prismaClient.product.findUnique({
-    where: { id: productId },
-  });
+  const existingProduct = await productRepository.findById(productId);
 
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
@@ -58,11 +53,7 @@ export const editProduct = async (req: Request, res: Response) => {
   if (existingProduct.userId !== userId)
     return res.status(403).json({ message: AUTH_MESSAGES.update });
 
-  const productEntity = await prismaClient.product.update({
-    where: { id: productId },
-    data,
-    include: INCLUDE_USER_CLAUSE,
-  });
+  const productEntity = await productRepository.update(productId, data);
   const product = new Product(productEntity);
 
   return res.status(200).json(product.toJSON());
@@ -70,9 +61,7 @@ export const editProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
-  const existingProduct = await prismaClient.product.findUnique({
-    where: { id: productId },
-  });
+  const existingProduct = await productRepository.findById(productId);
   const userId = req.user?.userId;
 
   if (!existingProduct)
@@ -81,52 +70,25 @@ export const deleteProduct = async (req: Request, res: Response) => {
   if (existingProduct.userId !== userId)
     return res.status(403).json({ message: AUTH_MESSAGES.delete });
 
-  await prismaClient.product.delete({ where: { id: productId } });
+  await productRepository.delete(productId);
   res.sendStatus(204);
 };
 
 export const getProductList = async (req: Request, res: Response) => {
-  const { skip, take, orderBy, word } = create(req.query, GetProductListRequestStruct);
+  const {
+    page = 1,
+    pageSize = 10,
+    orderBy = 'recent',
+    keyword,
+  } = create(req.query, GetProductListRequestStruct);
 
-  const whereClause = word
-    ? {
-        OR: [
-          {
-            name: {
-              contains: word,
-            },
-          },
-          {
-            description: {
-              contains: word,
-            },
-          },
-        ],
-      }
-    : undefined;
+  const result = await productRepository.getProductList({ page, pageSize, orderBy, keyword });
 
-  const result = await prismaClient.$transaction(async (t) => {
-    const total = await t.product.count({ where: whereClause });
+  const products = result.list.map((product) => new Product(product).toJSON());
 
-    const productEntities = await prismaClient.product.findMany({
-      skip,
-      take,
-      orderBy: getOrderByClause(orderBy || 'recent'),
-      where: whereClause,
-      include: INCLUDE_USER_CLAUSE,
-    });
-
-    return {
-      total,
-      productEntities,
-    };
-  });
-
-  const products = result.productEntities.map((productEntity) => new Product(productEntity));
-
-  return res.status(200).json({
-    count: result.total,
-    data: products.map((product) => product.toJSON()),
+  return res.status(201).json({
+    ...result,
+    list: products,
   });
 };
 
@@ -135,11 +97,7 @@ export const postProductComment = async (req: Request, res: Response) => {
   const { content } = create(req.body, CreateCommentStruct);
   const userId = req.user?.userId;
 
-  const existingProduct = await prismaClient.product.findUnique({
-    where: {
-      id: productId,
-    },
-  });
+  const existingProduct = await productRepository.findById(productId);
 
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
@@ -164,11 +122,7 @@ export const getProductComments = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
   const { cursor, take } = create(req.query, GetCommentListStruct);
 
-  const existingProduct = await prismaClient.product.findUnique({
-    where: {
-      id: productId,
-    },
-  });
+  const existingProduct = await productRepository.findById(productId);
 
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });

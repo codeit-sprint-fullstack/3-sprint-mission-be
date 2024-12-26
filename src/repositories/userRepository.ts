@@ -1,5 +1,5 @@
 import { prismaClient } from '../prismaClient';
-import { CreateUserDto } from '../types/dtos/userDto';
+import { CreateUserRequestDto } from '../types/dtos/userDto';
 
 export default class UserRepository {
   async findByEmail(email: string) {
@@ -16,7 +16,7 @@ export default class UserRepository {
     });
   }
 
-  async create(data: CreateUserDto) {
+  async create(data: CreateUserRequestDto) {
     return await prismaClient.user.create({
       data,
     });

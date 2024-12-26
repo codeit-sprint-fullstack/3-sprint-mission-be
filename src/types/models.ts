@@ -1,22 +1,4 @@
-export interface userInfo {
-  image: string | null;
-  id: number;
-  nickname: string;
-}
-
-export interface ProductModel {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  tags: string[];
-  images: string[];
-  favoriteCount: number;
-  isFavorite: boolean;
-  user: userInfo;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { userInfo } from './dtos/userDto';
 
 export interface ArticleModel {
   id: number;

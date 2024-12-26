@@ -1,5 +1,5 @@
-import { userInfo } from '../types/models';
-import { ProductModel } from '../types/models';
+import { ProductResponseDto } from '../types/dtos/productDto';
+import { userInfo } from '../types/dtos/userDto';
 
 export class Product {
   #id: number;
@@ -24,7 +24,7 @@ export class Product {
 
   #updatedAt: Date;
 
-  constructor(param: ProductModel) {
+  constructor(param: ProductResponseDto) {
     this.#id = param.id;
     this.#name = param.name;
     this.#description = param.description;

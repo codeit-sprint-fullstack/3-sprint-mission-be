@@ -57,14 +57,14 @@ export const CreateProductRequestStruct = object({
 export const EditProductStruct = partial(CreateProductRequestStruct);
 
 export const GetProductListRequestStruct = object({
-  skip: defaulted(
-    coerce(min(integer(), 0), string(), (value) => Number.parseInt(value, 10)),
+  page: defaulted(
+    coerce(min(integer(), 1), string(), (value) => Number.parseInt(value, 10)),
     0,
   ),
-  take: defaulted(
+  pageSize: defaulted(
     coerce(max(min(integer(), 1), 10), string(), (value) => Number.parseInt(value, 10)),
     10,
   ),
   orderBy: optional(enums(['recent', 'favorite'])),
-  word: optional(nonempty(string())),
+  keyword: optional(nonempty(string())),
 });
