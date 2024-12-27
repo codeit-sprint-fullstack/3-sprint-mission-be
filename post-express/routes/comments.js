@@ -2,39 +2,59 @@ import express from 'express';
 import { assert } from 'superstruct';
 import { CreateComment, PatchComment } from '../structs.js';
 import { prisma } from '../prismaClient.js'; // 경로 수정
+import authenticate from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-    const createComment = await prisma.productComment.create({
-        data: {
-            content: req.body.content,
+// 댓글 수정 엔드포인트
+router.patch("/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    try {
+        const comment = await prisma.productComment.findUnique({
+            where: { id: parseInt(id, 10) },
+        });
+
+        if (!comment || comment.userId !== req.user.userId) {
+            return res.status(403).json({ message: '수정 권한이 없습니다.' });
         }
-    });
-    res.status(201).send(createComment);
+
+        const updatedComment = await prisma.productComment.update({
+            where: { id: parseInt(id, 10) },
+            data: { content },
+        });
+
+        res.status(200).json(updatedComment);
+    } catch (error) {
+        res.status(500).json({ message: '댓글 수정 중 오류가 발생했습니다.', error });
+    }
 });
 
-router.patch("/:id", async (req, res) => {
+// 댓글 삭제 엔드포인트
+router.delete("/:id", authenticate, async (req, res) => {
     const { id } = req.params;
-    const updateProductComment = await prisma.productComment.update({
-        data: req.body,
-        where: {
-            id,
-        },
-    });
-    res.status(201).send(updateProductComment);
+
+    try {
+        const comment = await prisma.productComment.findUnique({
+            where: { id: parseInt(id, 10) },
+        });
+
+        if (!comment || comment.userId !== req.user.userId) {
+            return res.status(403).json({ message: '삭제 권한이 없습니다.' });
+        }
+
+        await prisma.productComment.delete({
+            where: { id: parseInt(id, 10) },
+        });
+
+        res.sendStatus(204);
+    } catch (error) {
+        res.status(500).json({ message: '댓글 삭제 중 오류가 발생했습니다.', error });
+    }
 });
 
-router.delete("/:id", async (req, res) => {
-    const { id } = req.params;
-    await prisma.productComment.delete({
-        where: {
-            id,
-        },
-    });
-    res.sendStatus(204);
-});
-
+// 댓글 목록 조회 엔드포인트
 router.get("/", async (req, res) => {
     const { limit = 10 } = req.query;
     const comments = await prisma.productComment.findMany({
@@ -42,91 +62,6 @@ router.get("/", async (req, res) => {
         take: parseInt(limit),
     });
     res.status(201).send(comments);
-});
-
-router.post("/:articleId/comments", async (req, res) => {
-    const { articleId } = req.params;
-    const numId = parseInt(articleId, 10);
-    const { content } = req.body;
-    if (!content) {
-        return res.status(400).send({ message: "Content is required." });
-    }
-    assert(req.body, CreateComment);
-    const commentEntity = await prisma.$transaction(async (tx) => {
-        const targetArticleEntity = await tx.article.findUnique({
-            where: {
-                id: numId,
-            },
-        });
-        if (!targetArticleEntity) {
-            return res.status(404).send({ message: "Article not found" });
-        }
-        return await tx.articleComment.create({
-            data: {
-                articleId: numId,
-                content: content,
-            },
-        });
-    });
-
-    res.status(201).send(commentEntity);
-});
-
-router.patch("/articles/comment/:id", async (req, res) => {
-    const { id } = req.params;
-    const numId = parseInt(id, 10);
-    assert(req.body, PatchComment);
-    const updateArticleComment = await prisma.articleComment.update({
-        data: req.body,
-        where: {
-            id: numId,
-        },
-    });
-    res.status(201).send(updateArticleComment);
-});
-
-router.delete("/articles/comment/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const idNum = parseInt(id, 10);
-        if (isNaN(idNum)) {
-            return res.status(400).json({ error: "Invalid comment ID" });
-        }
-
-        const comment = await prisma.articleComment.findUnique({
-            where: { id: idNum },
-        });
-
-        if (!comment) {
-            return res.status(404).json({ error: "Comment not found" });
-        }
-
-        await prisma.articleComment.delete({
-            where: { id: idNum },
-        });
-
-        res.sendStatus(204);
-    } catch (error) {
-        console.error("Error deleting comment:", error);
-        res.status(500).json({ error: "An error occurred while deleting the comment" });
-    }
-});
-
-router.get("/articles/:articleId/comment", async (req, res) => {
-    const { articleId } = req.params;
-    const numId = parseInt(articleId, 10);
-    if (isNaN(numId)) {
-        return res.status(400).send({ message: "잘못된 articleId 형식입니다." });
-    }
-
-    const comment = await prisma.articleComment.findMany({
-        orderBy: { createdAt: "asc" },
-        where: {
-            articleId: numId,
-        },
-    });
-
-    res.status(200).send(comment);
 });
 
 export default router;
