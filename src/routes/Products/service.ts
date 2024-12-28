@@ -10,12 +10,15 @@ import { Product } from '../../models/product';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
-import { INCLUDE_USER_CLAUSE } from '../../constants/prisma';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { parseId } from '../../utils/parseId';
 import ProductRepository from '../../repositories/productRepository';
+import FavoriteRepository from '../../repositories/favoriteRepository';
+import CommentRepository from '../../repositories/commentRepository';
 
 const productRepository = new ProductRepository();
+const favoriteRepository = new FavoriteRepository();
+const commentRepository = new CommentRepository();
 
 export const postProduct = async (req: Request, res: Response) => {
   const data = create(req.body, CreateProductRequestStruct);
@@ -24,18 +27,20 @@ export const postProduct = async (req: Request, res: Response) => {
   if (!userId) return res.status(403).json({ message: AUTH_MESSAGES.create });
 
   const productEntity = await productRepository.create(userId, data);
-  const product = new Product(productEntity);
+  const product = new Product({ ...productEntity, isFavorite: false });
 
   return res.status(201).json(product.toJSON());
 };
 
 export const getProduct = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
+  const userId = req.user?.userId!;
   const productEntity = await productRepository.findById(productId);
 
   if (!productEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
 
-  const product = new Product(productEntity);
+  const isFavorite = await favoriteRepository.findIsFavorite(productId, userId);
+  const product = new Product({ ...productEntity, isFavorite });
 
   return res.status(200).json(product.toJSON());
 };
@@ -43,10 +48,9 @@ export const getProduct = async (req: Request, res: Response) => {
 export const editProduct = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
   const data = create(req.body, EditProductStruct);
-  const userId = req.user?.userId;
+  const userId = req.user?.userId!;
 
   const existingProduct = await productRepository.findById(productId);
-
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
 
@@ -54,15 +58,17 @@ export const editProduct = async (req: Request, res: Response) => {
     return res.status(403).json({ message: AUTH_MESSAGES.update });
 
   const productEntity = await productRepository.update(productId, data);
-  const product = new Product(productEntity);
+  const isFavorite = await favoriteRepository.findIsFavorite(productId, userId);
+  const product = new Product({ ...productEntity, isFavorite });
 
   return res.status(200).json(product.toJSON());
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
+  const userId = req.user?.userId!;
+
   const existingProduct = await productRepository.findById(productId);
-  const userId = req.user?.userId;
 
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
@@ -75,16 +81,16 @@ export const deleteProduct = async (req: Request, res: Response) => {
 };
 
 export const getProductList = async (req: Request, res: Response) => {
-  const {
-    page = 1,
-    pageSize = 10,
-    orderBy = 'recent',
-    keyword,
-  } = create(req.query, GetProductListRequestStruct);
-
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetProductListRequestStruct);
+  const userId = req.user?.userId!;
   const result = await productRepository.getProductList({ page, pageSize, orderBy, keyword });
-
-  const products = result.list.map((product) => new Product(product).toJSON());
+  const products = await Promise.all(
+    result.list.map(async (product) => {
+      if (!userId) return new Product({ ...product, isFavorite: false });
+      const isFavorite = await favoriteRepository.findIsFavorite(product.id, userId);
+      return new Product({ ...product, isFavorite }).toJSON();
+    }),
+  );
 
   return res.status(201).json({
     ...result,
@@ -96,7 +102,6 @@ export const postProductComment = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
   const { content } = create(req.body, CreateCommentStruct);
   const userId = req.user?.userId;
-
   const existingProduct = await productRepository.findById(productId);
 
   if (!existingProduct)
@@ -105,13 +110,10 @@ export const postProductComment = async (req: Request, res: Response) => {
   if (!userId || existingProduct.userId !== userId)
     return res.status(403).json({ message: AUTH_MESSAGES.create });
 
-  const commentEntity = await prismaClient.comment.create({
-    data: {
-      productId,
-      content,
-      userId,
-    },
-    include: INCLUDE_USER_CLAUSE,
+  const commentEntity = await commentRepository.createProductComment({
+    productId,
+    content,
+    userId,
   });
   const comment = new Comment(commentEntity);
 
@@ -121,23 +123,15 @@ export const postProductComment = async (req: Request, res: Response) => {
 export const getProductComments = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
   const { cursor, take } = create(req.query, GetCommentListStruct);
-
   const existingProduct = await productRepository.findById(productId);
 
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
 
-  const commentEntities = await prismaClient.comment.findMany({
-    cursor: cursor
-      ? {
-          id: parseInt(cursor),
-        }
-      : undefined,
-    take: take + 1,
-    where: {
-      productId,
-    },
-    include: INCLUDE_USER_CLAUSE,
+  const commentEntities = await commentRepository.findComments({
+    cursor,
+    productId,
+    take,
   });
   const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
   const hasNext = comments.length === take + 1;
@@ -147,4 +141,50 @@ export const getProductComments = async (req: Request, res: Response) => {
     hasNext,
     nextCursor: comments[comments.length - 1].getId(),
   });
+};
+
+export const setFavorite = async (req: Request, res: Response) => {
+  const productId = parseId(req.params.productId);
+  const userId = req.user?.userId!;
+
+  const existingProduct = productRepository.findById(productId);
+
+  if (!existingProduct)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  if (await favoriteRepository.findIsFavorite(productId, userId))
+    res.status(409).json({ message: '이미 좋아요를 누른 상품입니다.' });
+
+  const productEntity = await prismaClient.$transaction(async (t) => {
+    await favoriteRepository.setFavorite(productId, userId);
+    const product = await productRepository.incrementFavoriteCount(productId);
+    return product;
+  });
+
+  const product = new Product({ ...productEntity, isFavorite: true });
+
+  return res.status(200).json(product);
+};
+
+export const deleteFavorite = async (req: Request, res: Response) => {
+  const productId = parseId(req.params.productId);
+  const userId = req.user?.userId!;
+
+  const existingProduct = productRepository.findById(productId);
+
+  if (!existingProduct)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  if (!(await favoriteRepository.findIsFavorite(productId, userId)))
+    res.status(409).json({ message: '이미 좋아요가 취소된 상품입니다.' });
+
+  const productEntity = await prismaClient.$transaction(async (t) => {
+    await favoriteRepository.deleteFavorite(productId, userId);
+    const product = await productRepository.decrementFavoriteCount(productId);
+    return product;
+  });
+
+  const product = new Product({ ...productEntity, isFavorite: false });
+
+  return res.status(200).json(product);
 };
