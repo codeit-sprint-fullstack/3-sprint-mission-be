@@ -1,3 +1,4 @@
+import { ArticleResponseDto } from '../types/dtos/articleDto';
 import { ArticleModel } from '../types/models';
 
 export class Article {
@@ -19,7 +20,7 @@ export class Article {
 
   #images;
 
-  constructor(param: ArticleModel) {
+  constructor(param: ArticleResponseDto) {
     this.#id = param.id;
     this.#title = param.title;
     this.#content = param.content;
