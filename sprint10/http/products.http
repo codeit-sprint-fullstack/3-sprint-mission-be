@@ -1,0 +1,38 @@
+###
+
+GET http://localhost:8000/products
+
+###
+
+GET http://localhost:8000/products?order=best&limit=3
+
+###
+
+GET http://localhost:8000/products/7120aa7d-133e-45f0-9a0e-bfcb5f5bc53e
+
+###
+POST http://localhost:8000/products
+Content-Type: application/json
+
+{
+  "name": "독서 필사의 중요성",
+  "description": "독서라는 매우 힘든 과정일 수 있습니다. 그렇기 때문에 그 내용이 한번에 이해되기는 쉽지 않기 때문에 노트북 필사를 통해 그 글을 쓰게 된 회로를 이해하는 것이 중요합니다.",
+  "price": 10055400,
+  "tags": ["필사", "독서", "노트북", "꾸준히"]
+}
+
+
+###
+PATCH  http://localhost:8000/products/d118116a-a9c7-47a3-96da-752e3105bfb8
+Content-Type: application/json
+
+{
+    "name": "굽네치킨",
+    "description": "굽네 치킨은 튀기지 않아서 좋고 매우 맛있습니다. 특별히 남해마늘바사삭 치킨을 저는 좋아합니다.",
+    "price": 8000,
+    "tags": ["치킨", "굽네", "남해 마늘 바사삭"]
+}
+
+###
+
+DELETE  http://localhost:8000/products/7120aa7d-133e-45f0-9a0e-bfcb5f5bc53e
