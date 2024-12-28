@@ -8,19 +8,19 @@ datasource db {
 }
 
 model Product {
-  id            Int       @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String
   description   String
   price         Int
   tags          String[]
   images        String[]
-  favoriteCount Int       @default(0)
-  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime  @updatedAt @db.Timestamptz(6)
+  favoriteCount Int        @default(0)
+  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime   @updatedAt @db.Timestamptz(6)
   comments      Comment[]
-  isFavorite    Boolean   @default(false)
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
+  favorites     Favorite[]
 }
 
 model Article {
@@ -32,9 +32,9 @@ model Article {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   comments  Comment[]
-  isLiked   Boolean   @default(false)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+  likes     Like[]
 }
 
 model Comment {
@@ -51,14 +51,36 @@ model Comment {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  email             String    @unique
-  nickname          String    @unique
+  id                Int        @id @default(autoincrement())
+  email             String     @unique
+  nickname          String     @unique
   image             String?
   encryptedPassword String
-  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime  @updatedAt @db.Timestamptz(6)
+  createdAt         DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
   product           Product[]
   article           Article[]
   comments          Comment[]
+  Likes             Like[]
+  Favorites         Favorite[]
+}
+
+model Like {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId Int
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+}
+
+model Favorite {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
 }
