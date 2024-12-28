@@ -12,179 +12,167 @@ import { Article } from '../../models/article';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
 import { INCLUDE_USER_CLAUSE, getOrderByClause, getWhereByWord } from '../../constants/prisma';
-import { handlePrismaError } from '../../utils/handlePrismaError';
+import { parseId } from '../../utils/parseId';
+import ArticleRepository from '../../repositories/articleRepository';
+import LikeRepository from '../../repositories/likeRepository';
+import { AUTH_MESSAGES } from '../../constants/authMessages';
+import CommentRepository from '../../repositories/commentRepository';
+
+const articleRepository = new ArticleRepository();
+const likeRepository = new LikeRepository();
+const commentRepository = new CommentRepository();
 
 export const postArticle = async (req: Request, res: Response) => {
   const data = create(req.body, CreateArticleRequestStruct);
+  const userId = req.user?.userId!;
 
-  const newArticle = await prismaClient.article.create({
-    data: {
-      ...data,
-      userId: req.user!.userId,
-    },
-    include: INCLUDE_USER_CLAUSE,
-  });
+  const newArticle = await articleRepository.create(userId, data);
 
   return res.status(201).json(newArticle);
 };
 
 export const getArticle = async (req: Request, res: Response) => {
-  const { articleId } = req.params;
+  const articleId = parseId(req.params.articleId);
+  const userId = req.user?.userId!;
+  const articleEntity = await articleRepository.findById(articleId);
 
-  try {
-    const articleEntity = await prismaClient.article.findUniqueOrThrow({
-      where: { id: parseInt(articleId) },
-      include: INCLUDE_USER_CLAUSE,
-    });
-    const article = new Article(articleEntity);
+  if (!articleEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
+  const isLiked = await likeRepository.findIsLiked(articleId, userId);
 
-    return res.status(200).json(article.toJSON());
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-      return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
-    }
-    throw e;
-  }
+  const article = new Article({ ...articleEntity, isLiked });
+
+  return res.status(200).json(article.toJSON());
 };
 
 export const editArticle = async (req: Request, res: Response) => {
-  const { articleId } = req.params;
+  const articleId = parseId(req.params.articleId);
   const data = create(req.body, EditArticleRequestStruct);
 
-  try {
-    const article = await prismaClient.article.update({
-      where: { id: parseInt(articleId) },
-      data,
-    });
-    return res.status(200).json(article);
-  } catch (e) {
-    handlePrismaError(e, res);
-  }
+  const article = await articleRepository.update(articleId, data);
+  return res.status(200).json(article);
 };
 
 export const deleteArticle = async (req: Request, res: Response) => {
-  try {
-    const { articleId } = req.params;
-    await prismaClient.article.delete({ where: { id: parseInt(articleId) } });
-    res.sendStatus(204);
-  } catch (e) {
-    handlePrismaError(e, res);
-  }
+  const articleId = parseId(req.params.articleId);
+  await articleRepository.delete(articleId);
+  res.sendStatus(204);
 };
 
 export const getArticleList = async (req: Request, res: Response) => {
-  const { skip, take, orderBy, word } = create(req.query, GetArticleListRequestStruct);
+  const userId = req.user?.userId!;
 
-  const whereClause = word
-    ? {
-        OR: [
-          {
-            title: {
-              contains: word,
-            },
-          },
-          {
-            content: {
-              contains: word,
-            },
-          },
-        ],
-      }
-    : undefined;
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListRequestStruct);
 
-  const total = await prismaClient.article.count({ where: whereClause });
-
-  const articleEntities = await prismaClient.article.findMany({
-    skip,
-    take,
-    orderBy: getOrderByClause(orderBy || 'recent'),
-    where: getWhereByWord(word),
-    include: INCLUDE_USER_CLAUSE,
+  const articleEntities = await articleRepository.getArticleList({
+    page,
+    pageSize,
+    orderBy,
+    keyword,
   });
 
-  const articles = articleEntities.map((articleEntity) => new Article(articleEntity));
+  const articles = await Promise.all(
+    articleEntities.list.map(async (articleEntity) => {
+      if (!userId) return new Article({ ...articleEntity, isLiked: false });
+      const isLiked = await likeRepository.findIsLiked(articleEntity.id, userId);
+      return new Article({ ...articleEntity, isLiked });
+    }),
+  );
 
   return res.status(200).json({
-    count: total,
-    data: articles.slice(0, take).map((article) => article.toJSON()),
+    count: articleEntities.totalCount,
+    list: articles,
   });
 };
 
 export const postArticleComment = async (req: Request, res: Response) => {
-  const { articleId } = req.params;
+  const articleId = parseId(req.params.articleId);
   const { content } = create(req.body, CreateCommentStruct);
   const { userId } = req.user!;
 
-  const commentEntity = await prismaClient.$transaction(async (t) => {
-    const targetArticleEntity = await t.article.findUnique({
-      where: {
-        id: parseInt(articleId),
-      },
-    });
+  const existingArticle = await articleRepository.findById(articleId);
 
-    if (!targetArticleEntity) {
-      return null;
-    }
+  if (!existingArticle)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
 
-    return await t.comment.create({
-      data: {
-        articleId: parseInt(articleId),
-        content,
-        userId,
-      },
-      include: INCLUDE_USER_CLAUSE,
-    });
+  if (!userId || existingArticle.userId !== userId)
+    return res.status(403).json({ message: AUTH_MESSAGES.create });
+
+  const commentEntity = await commentRepository.createArticleComment({
+    articleId,
+    content,
+    userId,
   });
-
-  if (!commentEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
-
   const comment = new Comment(commentEntity);
 
   return res.status(201).json(comment.toJSON());
 };
 
 export const getArticleComments = async (req: Request, res: Response) => {
-  const { articleId } = req.params;
+  const articleId = parseId(req.params.articleId);
   const { cursor, take } = create(req.query, GetCommentListStruct);
 
-  const commentEntities = await prismaClient.$transaction(async (t) => {
-    const targetArticleEntity = await t.article.findUnique({
-      where: {
-        id: parseInt(articleId),
-      },
-    });
-
-    if (!targetArticleEntity) return null;
-
-    return await t.comment.findMany({
-      cursor: cursor
-        ? {
-            id: parseInt(cursor),
-          }
-        : undefined,
-      take: take + 1,
-      where: {
-        articleId: parseInt(articleId),
-      },
-      orderBy: [
-        {
-          createdAt: 'asc',
-        },
-      ],
-      include: INCLUDE_USER_CLAUSE,
-    });
-  });
-
-  if (!commentEntities)
+  const existingArticle = articleRepository.findById(articleId);
+  if (!existingArticle)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
 
-  const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
+  const commentEntities = await commentRepository.findComments({
+    articleId,
+    cursor,
+    take,
+  });
 
+  const comments = commentEntities.map((commentEntity) => new Comment(commentEntity));
   const hasNext = comments.length === take + 1;
 
   return res.status(200).json({
     data: comments.map((comment) => comment.toJSON()),
     hasNext,
-    nextCursor: hasNext ? comments[comments.length - 1].getId() : null,
+    nextCursor: comments[comments.length - 1].getId(),
   });
+};
+
+export const setLike = async (req: Request, res: Response) => {
+  const articleId = parseId(req.params.articleId);
+  const userId = req.user?.userId!;
+
+  const existingArticle = articleRepository.findById(articleId);
+
+  if (!existingArticle)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  if (await likeRepository.findIsLiked(articleId, userId))
+    res.status(409).json({ message: '이미 좋아요가 눌린 게시글입니다.' });
+
+  const articleEntity = await prismaClient.$transaction(async (t) => {
+    await likeRepository.setLike(articleId, userId);
+    const product = await articleRepository.incrementLikeCount(articleId);
+    return product;
+  });
+
+  const article = new Article({ ...articleEntity, isLiked: true });
+
+  return res.status(200).json(article);
+};
+
+export const deleteLike = async (req: Request, res: Response) => {
+  const articleId = parseId(req.params.articleId);
+  const userId = req.user?.userId!;
+
+  const existingArticle = articleRepository.findById(articleId);
+
+  if (!existingArticle)
+    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
+
+  if (!(await likeRepository.findIsLiked(articleId, userId)))
+    res.status(409).json({ message: '이미 좋아요가 취소된 게시글입니다.' });
+
+  const articleEntity = await prismaClient.$transaction(async (t) => {
+    await likeRepository.deleteLike(articleId, userId);
+    const product = await articleRepository.decrementLikeCount(articleId);
+    return product;
+  });
+
+  const article = new Article({ ...articleEntity, isLiked: false });
+
+  return res.status(200).json(article);
 };
