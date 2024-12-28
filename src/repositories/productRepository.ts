@@ -1,4 +1,8 @@
-import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../constants/prisma';
+import {
+  getIncludeFavoriteClause,
+  getOrderByClause,
+  INCLUDE_USER_CLAUSE,
+} from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
 import { GetProductListParams, ProductRequestDto } from '../types/dtos/productDto';
 
@@ -79,6 +83,34 @@ export default class ProductRepository {
       where: {
         id: productId,
       },
+    });
+  }
+
+  async incrementFavoriteCount(productId: number) {
+    return await prismaClient.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        favoriteCount: {
+          increment: 1,
+        },
+      },
+      include: INCLUDE_USER_CLAUSE,
+    });
+  }
+
+  async decrementFavoriteCount(productId: number) {
+    return await prismaClient.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        favoriteCount: {
+          decrement: 1,
+        },
+      },
+      include: INCLUDE_USER_CLAUSE,
     });
   }
 }
