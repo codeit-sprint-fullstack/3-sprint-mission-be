@@ -4,6 +4,7 @@ import { productMocks } from './mocks/productMocks';
 import { productCommentMocks } from './mocks/commentMocks';
 import { articleCommentMocks } from './mocks/commentMocks';
 import { userMocks } from './mocks/userMocks';
+import { favoriteMocks } from './mocks/favoriteMocks';
 
 const prisma = new PrismaClient();
 
@@ -29,6 +30,9 @@ async function main() {
   await prisma.comment.createMany({
     data: [...productCommentMocks, ...articleCommentMocks],
     skipDuplicates: true,
+  });
+  await prisma.favorite.createMany({
+    data: favoriteMocks,
   });
 }
 
