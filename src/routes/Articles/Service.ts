@@ -7,11 +7,9 @@ import {
   GetArticleListRequestStruct,
 } from '../../structs/ArticleStruct';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
-import { Prisma } from '@prisma/client';
 import { Article } from '../../models/article';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
-import { INCLUDE_USER_CLAUSE, getOrderByClause, getWhereByWord } from '../../constants/prisma';
 import { parseId } from '../../utils/parseId';
 import ArticleRepository from '../../repositories/articleRepository';
 import LikeRepository from '../../repositories/likeRepository';
