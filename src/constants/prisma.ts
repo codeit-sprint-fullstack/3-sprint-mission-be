@@ -1,13 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 export const INCLUDE_USER_CLAUSE = {
-  user: {
-    select: {
-      id: true,
-      nickname: true,
-      image: true,
-    },
-  },
+  user: true,
 } as const;
 
 export const getIncludeFavoriteClause = (userId: number) => {

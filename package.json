@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec \"tsc && node dist/app.js\"",
     "start": "node ./dist/app.js",
-    "build": "npm install && tsc"
+    "build": "npm install && tsc --noEmit",
+    "postinstall": "prisma generate"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "generate": "prisma generate"
   },
   "license": "ISC",
   "dependencies": {

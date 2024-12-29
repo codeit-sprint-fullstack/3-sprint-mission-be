@@ -8,7 +8,6 @@ export default class ArticleRepository {
       data: {
         ...data,
         userId,
-        likeCount: 0,
       },
       include: INCLUDE_USER_CLAUSE,
     });

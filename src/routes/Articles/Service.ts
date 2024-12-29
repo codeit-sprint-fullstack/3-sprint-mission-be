@@ -7,7 +7,7 @@ import {
   GetArticleListRequestStruct,
 } from '../../structs/ArticleStruct';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
-import { Article } from '../../models/article';
+import Article from '../../models/article';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
 import { parseId } from '../../utils/parseId';
@@ -24,9 +24,11 @@ export const postArticle = async (req: Request, res: Response) => {
   const data = create(req.body, CreateArticleRequestStruct);
   const userId = req.user?.userId!;
 
-  const newArticle = await articleRepository.create(userId, data);
+  const articleEntity = await articleRepository.create(userId, data);
 
-  return res.status(201).json(newArticle);
+  const article = new Article({ ...articleEntity, isLiked: false });
+
+  return res.status(201).json(article);
 };
 
 export const getArticle = async (req: Request, res: Response) => {

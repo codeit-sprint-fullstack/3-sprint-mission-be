@@ -12,10 +12,6 @@ export default class CommentRepository {
       throw new Error('articleId와 productId 중 하나를 입력해주세요.');
     }
 
-    if (!params.articleId && !params.productId) {
-      throw new Error('articleId와 productId 중 하나를 입력해주세요.');
-    }
-
     return await prismaClient.comment.findMany({
       cursor: params.cursor
         ? {
@@ -26,21 +22,6 @@ export default class CommentRepository {
       where: {
         ...(params.articleId && { articleId: params.articleId }),
         ...(params.productId && { productId: params.productId }),
-      },
-      include: INCLUDE_USER_CLAUSE,
-    });
-  }
-
-  async findCommentsByProductId(params: { productId: number; cursor?: string; take: number }) {
-    return await prismaClient.comment.findMany({
-      cursor: params.cursor
-        ? {
-            id: parseInt(params.cursor),
-          }
-        : undefined,
-      take: params.take,
-      where: {
-        productId: params.productId,
       },
       include: INCLUDE_USER_CLAUSE,
     });
