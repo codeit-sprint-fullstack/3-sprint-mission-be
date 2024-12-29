@@ -1,7 +1,6 @@
 import { ArticleResponseDto } from '../types/dtos/articleDto';
-import { ArticleModel } from '../types/models';
 
-export class Article {
+export default class Article {
   #id;
 
   #title;

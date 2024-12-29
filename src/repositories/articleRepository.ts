@@ -7,11 +7,8 @@ export default class ArticleRepository {
     return await prismaClient.article.create({
       data: {
         ...data,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
+        userId,
+        likeCount: 0,
       },
       include: INCLUDE_USER_CLAUSE,
     });
