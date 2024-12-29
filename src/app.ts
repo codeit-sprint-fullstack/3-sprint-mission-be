@@ -5,6 +5,7 @@ import productRouter from './routes/Products/Controller';
 import articleRouter from './routes/Articles/Controller';
 import commentRouter from './routes/Comments/Controller';
 import authRouter from './routes/auth/controller';
+import userRouter from './routes/user/Controller';
 import imageRouter from './routes/Upload/Controller';
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.use('/articles', articleRouter);
 app.use('/comments', commentRouter);
 app.use('/auth', authRouter);
 app.use('/upload', imageRouter);
+app.use('/users', userRouter);
 
 const startServer = () => {
   try {
