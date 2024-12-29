@@ -9,6 +9,7 @@ import userRouter from './routes/user/Controller';
 import imageRouter from './routes/Upload/Controller';
 import swaggerUi from 'swagger-ui-express';
 import { specs } from './utils/swagger';
+import path from 'path';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -29,6 +30,7 @@ app.use('/auth', authRouter);
 app.use('/upload', imageRouter);
 app.use('/users', userRouter);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const startServer = () => {
   try {

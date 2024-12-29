@@ -36,21 +36,9 @@ export const CreateProductRequestStruct = object({
     (value) => value.every((tag) => tag.length <= 5),
   ),
   images: refine(
-    refine(
-      array(nonempty(string())),
-      '이미지는 하나 이상 입력해주세요.',
-      (value) => value.length > 0,
-    ),
-    '',
-    (value) =>
-      value.every((image) => {
-        try {
-          const url = new URL(image);
-          return url.protocol === 'https:';
-        } catch {
-          return false;
-        }
-      }),
+    array(nonempty(string())),
+    '이미지는 하나 이상 입력해주세요.',
+    (value) => value.length > 0,
   ),
 });
 
