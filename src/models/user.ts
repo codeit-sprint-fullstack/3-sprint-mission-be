@@ -4,7 +4,6 @@ export default class User {
   #id: number;
   #email: string;
   #nickname: string;
-  #encryptedPassword: string;
   #image: string | null;
   #createdAt: Date;
   #updatedAt: Date;
@@ -13,7 +12,6 @@ export default class User {
     this.#id = param.id;
     this.#email = param.email;
     this.#nickname = param.nickname;
-    this.#encryptedPassword = param.encryptedPassword;
     this.#image = param.image;
     this.#createdAt = param.createdAt;
     this.#updatedAt = param.updatedAt;
@@ -47,7 +45,7 @@ export default class User {
     return {
       id: this.getId(),
       email: this.getEmail(),
-      nickname: this.getEmail(),
+      nickname: this.getNickname(),
       image: this.getImage(),
       createdAt: this.getCreatedAt(),
       updatedAt: this.getUpdatedAt(),
