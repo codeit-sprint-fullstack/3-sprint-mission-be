@@ -8,6 +8,7 @@ import {
   integer,
   min,
   max,
+  optional,
 } from 'superstruct';
 
 export const CreateCommentStruct = object({
@@ -17,9 +18,9 @@ export const CreateCommentStruct = object({
 export const EditCommentStruct = partial(CreateCommentStruct);
 
 export const GetCommentListStruct = object({
-  cursor: defaulted(string(), ''),
+  cursor: optional(integer()),
   take: defaulted(
-    coerce(max(min(integer(), 1), 10), string(), (value) => Number.parseInt(value, 10)),
-    10,
+    coerce(max(min(integer(), 1), 100), string(), (value) => Number.parseInt(value, 10)),
+    100,
   ),
 });

@@ -1,3 +1,4 @@
+import { CommentModel } from '../models';
 import { userInfo } from './userDto';
 
 export interface ProductRequestDto {

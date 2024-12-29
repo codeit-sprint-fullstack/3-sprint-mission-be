@@ -35,14 +35,24 @@ export const postProduct = async (req: Request, res: Response) => {
 export const getProduct = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
   const userId = req.user?.userId!;
-  const productEntity = await productRepository.findById(productId);
 
+  const productEntity = await productRepository.findById(productId);
   if (!productEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
 
-  const isFavorite = await favoriteRepository.findIsFavorite(productId, userId);
+  const [commentEntities, isFavorite] = await Promise.all([
+    commentRepository.findComments({
+      productId,
+      take: 100,
+    }),
+    favoriteRepository.findIsFavorite(productId, userId),
+  ]);
+
+  const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
   const product = new Product({ ...productEntity, isFavorite });
 
-  return res.status(200).json(product.toJSON());
+  return res
+    .status(200)
+    .json({ ...product.toJSON(), comments: comments.map((comment) => comment.toJSON()) });
 };
 
 export const editProduct = async (req: Request, res: Response) => {
@@ -131,13 +141,22 @@ export const getProductComments = async (req: Request, res: Response) => {
   const commentEntities = await commentRepository.findComments({
     cursor,
     productId,
-    take,
+    take: take ?? 10,
   });
+
+  if (!commentEntities || commentEntities.length === 0) {
+    return res.status(200).json({
+      list: [],
+      hasNext: false,
+      nextCursor: null,
+    });
+  }
+
   const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
-  const hasNext = comments.length === take + 1;
+  const hasNext = comments.length === take && take + 1;
 
   return res.status(200).json({
-    data: comments.slice(0, take).map((comment) => comment.toJSON()),
+    list: comments.map((comment) => comment.toJSON()),
     hasNext,
     nextCursor: comments[comments.length - 1].getId(),
   });
@@ -170,13 +189,14 @@ export const deleteFavorite = async (req: Request, res: Response) => {
   const productId = parseId(req.params.productId);
   const userId = req.user?.userId!;
 
-  const existingProduct = productRepository.findById(productId);
+  const existingProduct = await productRepository.findById(productId);
 
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
 
-  if (!(await favoriteRepository.findIsFavorite(productId, userId)))
-    res.status(409).json({ message: '이미 좋아요가 취소된 상품입니다.' });
+  const isFavorite = await favoriteRepository.findIsFavorite(productId, userId);
+
+  if (!isFavorite) return res.status(409).json({ message: '이미 좋아요가 취소된 상품입니다.' });
 
   const productEntity = await prismaClient.$transaction(async (t) => {
     await favoriteRepository.deleteFavorite(productId, userId);

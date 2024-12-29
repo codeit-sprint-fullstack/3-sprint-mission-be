@@ -1,8 +1,4 @@
-import {
-  getIncludeFavoriteClause,
-  getOrderByClause,
-  INCLUDE_USER_CLAUSE,
-} from '../constants/prisma';
+import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
 import { GetProductListParams, ProductRequestDto } from '../types/dtos/productDto';
 
@@ -32,7 +28,14 @@ export default class ProductRepository {
       where: {
         id: productId,
       },
-      include: INCLUDE_USER_CLAUSE,
+      include: {
+        ...INCLUDE_USER_CLAUSE,
+        comments: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
     });
   }
 

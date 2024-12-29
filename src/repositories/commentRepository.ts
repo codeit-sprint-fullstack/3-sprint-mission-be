@@ -5,7 +5,7 @@ export default class CommentRepository {
   async findComments(params: {
     articleId?: number;
     productId?: number;
-    cursor?: string;
+    cursor?: number;
     take: number;
   }) {
     if ((params.articleId && params.productId) || (!params.articleId && !params.productId)) {
@@ -15,7 +15,7 @@ export default class CommentRepository {
     return await prismaClient.comment.findMany({
       cursor: params.cursor
         ? {
-            id: parseInt(params.cursor),
+            id: params.cursor,
           }
         : undefined,
       take: params.take,
