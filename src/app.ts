@@ -7,6 +7,8 @@ import commentRouter from './routes/Comments/Controller';
 import authRouter from './routes/auth/controller';
 import userRouter from './routes/user/Controller';
 import imageRouter from './routes/Upload/Controller';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './utils/swagger';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -26,6 +28,7 @@ app.use('/comments', commentRouter);
 app.use('/auth', authRouter);
 app.use('/upload', imageRouter);
 app.use('/users', userRouter);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 const startServer = () => {
   try {
