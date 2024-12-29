@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /articles:
+ * /products:
  *   get:
  *     summary: 상품 목록 조회
  *     tags: [Products]
@@ -44,10 +44,10 @@
 
 /**
  * @swagger
- * /articles:
+ * /products:
  *   post:
- *     summary: 게시글 작성
- *     tags: [Articles]
+ *     summary: 상품 생성
+ *     tags: [Products]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -55,94 +55,94 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CreateArticleRequest'
+ *             $ref: '#/components/schemas/CreateProductRequest'
  *     responses:
  *       201:
- *         description: 게시글 작성 성공
+ *         description: 상품 작성 성공
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Article'
+ *               $ref: '#/components/schemas/Product'
  *       401:
  *         description: 인증되지 않은 사용자
  */
 
 /**
  * @swagger
- * /articles/{articleId}:
+ * /products/{productId}:
  *   get:
- *     summary: 게시글 조회
- *     tags: [Articles]
+ *     summary: 상품 조회
+ *     tags: [Products]
  *     parameters:
  *       - in: path
- *         name: articleId
+ *         name: productId
  *         required: true
  *         schema:
  *           type: integer
- *         description: 조회할 게시글의 ID
+ *         description: 조회할 상품의 ID
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       201:
- *         description: 게시글 조회 성공
+ *         description: 상품 조회 성공
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Article'
+ *               $ref: '#/components/schemas/Product'
  *       401:
  *         description: 인증되지 않은 사용자
  */
 
 /**
  * @swagger
- * /articles/{articleId}:
+ * /products/{productId}:
  *   patch:
- *     summary: 게시글 수정
- *     tags: [Articles]
+ *     summary: 상품 수정
+ *     tags: [Products]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PatchArticleRequest'
+ *             $ref: '#/components/schemas/PatchProductRequest'
  *     parameters:
  *       - in: path
- *         name: articleId
+ *         name: productId
  *         required: true
  *         schema:
  *           type: integer
- *         description: 수정할 게시글의 ID
+ *         description: 수정할 상품의 ID
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       201:
- *         description: 게시글 수정 성공
+ *         description: 상품 수정 성공
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Article'
+ *               $ref: '#/components/schemas/Product'
  *       401:
  *         description: 인증되지 않은 사용자
  */
 
 /**
  * @swagger
- * /articles/{articleId}:
+ * /products/{productId}:
  *   delete:
- *     summary: 게시글 삭제
- *     tags: [Articles]
+ *     summary: 상품 삭제
+ *     tags: [Products]
  *     parameters:
  *       - in: path
- *         name: articleId
+ *         name: productId
  *         required: true
  *         schema:
  *           type: integer
- *         description: 삭제할 게시글의 ID
+ *         description: 삭제할 상품의 ID
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       204:
- *         description: 게시글 삭제 성공
+ *         description: 상품 삭제 성공
  *       401:
  *         description: 인증되지 않은 사용자
  *         content:
@@ -159,28 +159,28 @@
 
 /**
  * @swagger
- * /articles/{articleId}/like:
+ * /products/{productId}/favorite:
  *   post:
- *     summary: 게시글 좋아요
- *     tags: [Articles]
+ *     summary: 상품 좋아요
+ *     tags: [Products]
  *     parameters:
  *       - in: path
- *         name: articleId
+ *         name: productId
  *         required: true
  *         schema:
  *           type: integer
- *         description: 좋아요 할 게시글의 ID
+ *         description: 좋아요 할 상품의 ID
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: 게시글 좋아요 성공
+ *         description: 상품 좋아요 성공
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Article'
+ *               $ref: '#/components/schemas/Product'
  *       404:
- *         description: 게시글을 찾을 수 없음
+ *         description: 상품을 찾을 수 없음
  *         content:
  *           application/json:
  *             schema:
@@ -192,7 +192,7 @@
  *             schema:
  *               $ref: '#/components/schemas/FailMessage'
  *       409:
- *         description: 이미 좋아요가 눌린 게시글
+ *         description: 이미 좋아요가 눌린 상품
  *         content:
  *           application/json:
  *             schema:
@@ -201,28 +201,28 @@
 
 /**
  * @swagger
- * /articles/{articleId}/like:
+ * /products/{productId}/like:
  *   delete:
- *     summary: 게시글 좋아요 취소
- *     tags: [Articles]
+ *     summary: 상품 좋아요 취소
+ *     tags: [Products]
  *     parameters:
  *       - in: path
- *         name: articleId
+ *         name: productId
  *         required: true
  *         schema:
  *           type: integer
- *         description: 좋아요 취소할 게시글의 ID
+ *         description: 좋아요 취소할 상품의 ID
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: 게시글 좋아요 취소 성공
+ *         description: 상품 좋아요 취소 성공
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Article'
+ *               $ref: '#/components/schemas/Product'
  *       404:
- *         description: 게시글을 찾을 수 없음
+ *         description: 상품을 찾을 수 없음
  *         content:
  *           application/json:
  *             schema:
@@ -234,7 +234,7 @@
  *             schema:
  *               $ref: '#/components/schemas/FailMessage'
  *       409:
- *         description: 이미 좋아요가 취소된 게시글
+ *         description: 이미 좋아요가 취소된 상품
  *         content:
  *           application/json:
  *             schema:

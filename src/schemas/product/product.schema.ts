@@ -14,11 +14,13 @@
  *         tags:
  *           type: array
  *           items:
- *           type: string
+ *             type: string
  *         images:
  *           type: array
  *           items:
  *             type: string
+ *         price:
+ *           type: integer
  *         favoriteCount:
  *           type: integer
  *         isFavorite:
@@ -70,7 +72,7 @@
  * @swagger
  * components:
  *   schemas:
- *     CreateProductRequest:
+ *     UpdateProductRequest:
  *       type: object
  *       properties:
  *         name:
