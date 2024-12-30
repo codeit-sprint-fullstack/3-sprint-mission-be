@@ -16,47 +16,25 @@ import { AUTH_MESSAGES } from '../../constants/authMessages';
 
 const router = express.Router();
 
-router.get('/', asyncRequestHandler(getProductList));
+router
+  .route('/')
+  .get(asyncRequestHandler(getProductList))
+  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProduct));
 
-router.get(
-  '/:productId/comments',
-  createAuthMiddleware(AUTH_MESSAGES.read),
-  asyncRequestHandler(getProductComments),
-);
+router
+  .route('/:productId')
+  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getProduct))
+  .patch(createAuthMiddleware(AUTH_MESSAGES.update), asyncRequestHandler(editProduct))
+  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteProduct));
 
-router.get(
-  '/:productId',
-  createAuthMiddleware(AUTH_MESSAGES.read),
-  asyncRequestHandler(getProduct),
-);
-router.post('/', createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProduct));
-router.patch(
-  '/:productId',
-  createAuthMiddleware(AUTH_MESSAGES.update),
-  asyncRequestHandler(editProduct),
-);
-router.delete(
-  '/:productId',
-  createAuthMiddleware(AUTH_MESSAGES.delete),
-  asyncRequestHandler(deleteProduct),
-);
+router
+  .route('/:productId/comments')
+  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getProductComments))
+  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProductComment));
 
-router.post(
-  '/:productId/comments',
-  createAuthMiddleware(AUTH_MESSAGES.create),
-  asyncRequestHandler(postProductComment),
-);
-
-router.post(
-  '/:productId/favorite',
-  createAuthMiddleware(AUTH_MESSAGES.update),
-  asyncRequestHandler(setFavorite),
-);
-
-router.delete(
-  '/:productId/favorite',
-  createAuthMiddleware(AUTH_MESSAGES.update),
-  asyncRequestHandler(deleteFavorite),
-);
+router
+  .route('/:productId/favorite')
+  .post(createAuthMiddleware(AUTH_MESSAGES.update), asyncRequestHandler(setFavorite))
+  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteFavorite));
 
 export default router;

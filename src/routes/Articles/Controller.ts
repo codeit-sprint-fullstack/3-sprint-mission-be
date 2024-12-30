@@ -16,51 +16,25 @@ import { AUTH_MESSAGES } from '../../constants/authMessages';
 
 const router = express.Router();
 
-router.get('/', asyncRequestHandler(getArticleList));
+router
+  .route('/')
+  .get(asyncRequestHandler(getArticleList))
+  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postArticle));
 
-router.get(
-  '/:articleId',
-  createAuthMiddleware(AUTH_MESSAGES.read),
-  asyncRequestHandler(getArticle),
-);
-router.get(
-  '/:articleId/comments',
-  createAuthMiddleware(AUTH_MESSAGES.read),
-  asyncRequestHandler(getArticleComments),
-);
-router.post('/', createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postArticle));
-router.patch(
-  '/:articleId',
-  createAuthMiddleware(AUTH_MESSAGES.update),
-  asyncRequestHandler(editArticle),
-);
-router.delete(
-  '/:articleId',
-  createAuthMiddleware(AUTH_MESSAGES.delete),
-  asyncRequestHandler(deleteArticle),
-);
-router.post(
-  '/:articleId/comments',
-  createAuthMiddleware(AUTH_MESSAGES.create),
-  asyncRequestHandler(postArticleComment),
-);
+router
+  .route('/:articleId')
+  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getArticle))
+  .patch(createAuthMiddleware(AUTH_MESSAGES.update), asyncRequestHandler(editArticle))
+  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteArticle));
 
-router.post(
-  '/:articleId/comments',
-  createAuthMiddleware(AUTH_MESSAGES.create),
-  asyncRequestHandler(postArticleComment),
-);
+router
+  .route('/:articleId/comments')
+  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getArticleComments))
+  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postArticleComment));
 
-router.post(
-  '/:articleId/like',
-  createAuthMiddleware(AUTH_MESSAGES.create),
-  asyncRequestHandler(setLike),
-);
-
-router.delete(
-  '/:articleId/like',
-  createAuthMiddleware(AUTH_MESSAGES.delete),
-  asyncRequestHandler(deleteLike),
-);
+router
+  .route('/:articleId/like')
+  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(setLike))
+  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteLike));
 
 export default router;
