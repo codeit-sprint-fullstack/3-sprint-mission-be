@@ -14,16 +14,17 @@ datasource db {
 }
 
 model Article {
-  id        String           @id @default(uuid())
+  id        Int              @id @default(autoincrement())
   title     String
   content   String
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
   comments  ArticleComment[]
+  IsLiked   IsLiked[]
 }
 
 model Product {
-  id          String           @id @default(uuid())
+  id          Int              @id @default(autoincrement())
   name        String
   description String
   price       Int
@@ -31,22 +32,47 @@ model Product {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   comments    ProductComment[]
+  IsLiked     IsLiked[]
+}
+
+model User {
+  id                Int              @id @default(autoincrement())
+  email             String           @unique
+  nickname          String
+  image             String
+  encryptedPassword String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  ProductComment    ProductComment[]
+  IsLiked           IsLiked[]
 }
 
 model ArticleComment {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String
+  articleId Int
 }
 
 model ProductComment {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String
+  productId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+}
+
+model IsLiked {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  articleId Int?
+  productId Int?
+  article   Article? @relation(fields: [articleId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
 }
