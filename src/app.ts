@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import productRouter from './routes/Products/Controller';
@@ -23,6 +23,9 @@ app.use(
   cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'] }),
 );
 app.use(express.json());
+app.get('/', (req: Request, res: Response) => {
+  res.send('<h1>hello world!</h1>');
+});
 app.use('/products', productRouter);
 app.use('/articles', articleRouter);
 app.use('/comments', commentRouter);
