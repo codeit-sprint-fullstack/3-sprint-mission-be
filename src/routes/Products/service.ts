@@ -117,8 +117,7 @@ export const postProductComment = async (req: Request, res: Response) => {
   if (!existingProduct)
     return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
 
-  if (!userId || existingProduct.userId !== userId)
-    return res.status(403).json({ message: AUTH_MESSAGES.create });
+  if (!userId) return res.status(401).json({ message: AUTH_MESSAGES.create });
 
   const commentEntity = await commentRepository.createProductComment({
     productId,
