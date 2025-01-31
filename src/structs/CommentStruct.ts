@@ -9,6 +9,7 @@ import {
   min,
   max,
   optional,
+  Infer,
 } from 'superstruct';
 
 export const CreateCommentStruct = object({
@@ -24,3 +25,7 @@ export const GetCommentListStruct = object({
     100,
   ),
 });
+
+export type CreateCommentRequest = Infer<typeof CreateCommentStruct>;
+export type EditCommentRequest = Infer<typeof EditCommentStruct>;
+export type GetCommentListRequest = Infer<typeof GetCommentListStruct>;

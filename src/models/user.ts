@@ -1,4 +1,4 @@
-import { UserModel } from '../types/models';
+import { UserModel } from '../types/models.types';
 
 export default class User {
   #id: number;

@@ -1,5 +1,6 @@
 import { INCLUDE_USER_CLAUSE } from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
+import { CreateCommentRequest } from '../structs/CommentStruct';
 
 export default class CommentRepository {
   async findComments(params: {
@@ -27,23 +28,23 @@ export default class CommentRepository {
     });
   }
 
-  async createArticleComment(params: { articleId: number; content: string; userId: number }) {
+  async createArticleComment(articleId: number, userId: number, params: CreateCommentRequest) {
     return await prismaClient.comment.create({
       data: {
-        articleId: params.articleId,
+        articleId: articleId,
         content: params.content,
-        userId: params.userId,
+        userId: userId,
       },
       include: INCLUDE_USER_CLAUSE,
     });
   }
 
-  async createProductComment(params: { productId: number; content: string; userId: number }) {
+  async createProductComment(productId: number, userId: number, params: CreateCommentRequest) {
     return await prismaClient.comment.create({
       data: {
-        productId: params.productId,
+        productId: productId,
         content: params.content,
-        userId: params.userId,
+        userId: userId,
       },
       include: INCLUDE_USER_CLAUSE,
     });

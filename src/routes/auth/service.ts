@@ -12,7 +12,7 @@ import { AUTH_MESSAGES } from '../../constants/authMessages';
 const userRepository = new UserRepository();
 
 export const signUp = async (req: Request, res: Response) => {
-  const { email, nickname, password } = create(req.body, signUpValidator);
+  const { email, nickname, encryptedPassword: password } = create(req.body, signUpValidator);
 
   const existingUserByEmail = await userRepository.findByEmail(email);
 

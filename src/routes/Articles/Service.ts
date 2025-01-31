@@ -97,10 +97,8 @@ export const postArticleComment = async (req: Request, res: Response) => {
   if (!userId || existingArticle.userId !== userId)
     return res.status(403).json({ message: AUTH_MESSAGES.create });
 
-  const commentEntity = await commentRepository.createArticleComment({
-    articleId,
+  const commentEntity = await commentRepository.createArticleComment(articleId, userId, {
     content,
-    userId,
   });
   const comment = new Comment(commentEntity);
 

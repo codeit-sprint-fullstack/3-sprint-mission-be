@@ -1,4 +1,4 @@
-import { object, refine, string } from 'superstruct';
+import { Infer, object, refine, string } from 'superstruct';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -10,17 +10,20 @@ const passwordValidator = () =>
 export const SignUpRequestStruct = object({
   email: emailValidator(),
   nickname: string(),
-  password: passwordValidator(),
+  encryptedPassword: passwordValidator(),
   passwordConfirmation: string(),
 });
 
 export const signUpValidator = refine(
   SignUpRequestStruct,
   '비밀번호 확인이 일치하지 않습니다.',
-  (value) => value.password === value.passwordConfirmation,
+  (value) => value.encryptedPassword === value.passwordConfirmation,
 );
 
 export const signInRequestStruct = object({
   email: emailValidator(),
   password: passwordValidator(),
 });
+
+export type SignUpRequest = Omit<Infer<typeof SignUpRequestStruct>, 'passwordConfirmation'>;
+export type SignInRequest = Infer<typeof signInRequestStruct>;

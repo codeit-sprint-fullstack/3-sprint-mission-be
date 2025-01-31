@@ -1,9 +1,13 @@
 import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
-import { GetProductListParams, ProductRequestDto } from '../types/dtos/productDto';
+import {
+  CreateProductRequest,
+  EditProductRequest,
+  GetProductListRequest,
+} from '../structs/ProductStruct';
 
 export default class ProductRepository {
-  async create(userId: number, data: ProductRequestDto) {
+  async create(userId: number, data: CreateProductRequest) {
     return await prismaClient.product.create({
       data: {
         ...data,
@@ -13,7 +17,7 @@ export default class ProductRepository {
     });
   }
 
-  async update(productId: number, data: Partial<ProductRequestDto>) {
+  async update(productId: number, data: EditProductRequest) {
     return await prismaClient.product.update({
       where: {
         id: productId,
@@ -39,7 +43,7 @@ export default class ProductRepository {
     });
   }
 
-  async getProductList({ page, pageSize, orderBy, keyword }: GetProductListParams) {
+  async getProductList({ page, pageSize, orderBy, keyword }: GetProductListRequest) {
     const skip = (page - 1) * pageSize;
 
     const whereClause = keyword

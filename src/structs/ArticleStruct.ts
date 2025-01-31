@@ -12,6 +12,7 @@ import {
   optional,
   array,
   refine,
+  Infer,
 } from 'superstruct';
 
 export const CreateArticleRequestStruct = object({
@@ -42,3 +43,7 @@ export const GetArticleListRequestStruct = object({
   orderBy: defaulted(enums(['recent', 'like']), 'recent'),
   keyword: optional(nonempty(string())),
 });
+
+export type CreateArticleRequest = Infer<typeof CreateArticleRequestStruct>;
+export type EditArticleRequest = Infer<typeof EditArticleRequestStruct>;
+export type GetArticleListRequest = Infer<typeof GetArticleListRequestStruct>;

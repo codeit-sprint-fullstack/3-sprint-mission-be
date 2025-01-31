@@ -12,6 +12,7 @@ import {
   partial,
   nonempty,
   refine,
+  Infer,
 } from 'superstruct';
 
 export const CreateProductRequestStruct = object({
@@ -56,3 +57,7 @@ export const GetProductListRequestStruct = object({
   orderBy: defaulted(enums(['recent', 'favorite']), 'recent'),
   keyword: optional(nonempty(string())),
 });
+
+export type CreateProductRequest = Infer<typeof CreateProductRequestStruct>;
+export type EditProductRequest = Infer<typeof EditProductStruct>;
+export type GetProductListRequest = Infer<typeof GetProductListRequestStruct>;

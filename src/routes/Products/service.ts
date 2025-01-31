@@ -119,10 +119,8 @@ export const postProductComment = async (req: Request, res: Response) => {
 
   if (!userId) return res.status(401).json({ message: AUTH_MESSAGES.create });
 
-  const commentEntity = await commentRepository.createProductComment({
-    productId,
+  const commentEntity = await commentRepository.createProductComment(productId, userId, {
     content,
-    userId,
   });
   const comment = new Comment(commentEntity);
 
