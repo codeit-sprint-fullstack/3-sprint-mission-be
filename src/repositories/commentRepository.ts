@@ -13,19 +13,31 @@ export default class CommentRepository {
       throw new Error('articleId와 productId 중 하나를 입력해주세요.');
     }
 
-    return await prismaClient.comment.findMany({
+    const comments = await prismaClient.comment.findMany({
       cursor: params.cursor
         ? {
             id: params.cursor,
           }
         : undefined,
-      take: params.take,
+      take: params.take + 1,
       where: {
         ...(params.articleId && { articleId: params.articleId }),
         ...(params.productId && { productId: params.productId }),
       },
       include: INCLUDE_USER_CLAUSE,
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
+
+    const hasNextPage = comments.length > params.take;
+    const commentList = hasNextPage ? comments.slice(0, params.take) : comments;
+
+    return {
+      comments: commentList,
+      hasNextPage,
+      nextCursor: hasNextPage ? comments[comments.length - 1].id : null,
+    };
   }
 
   async createArticleComment(articleId: number, userId: number, params: CreateCommentRequest) {
