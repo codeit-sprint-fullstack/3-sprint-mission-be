@@ -47,7 +47,7 @@ export const getProduct = async (req: Request, res: Response) => {
     favoriteRepository.findIsFavorite(productId, userId),
   ]);
 
-  const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
+  const comments = commentEntities?.comments.map((commentEntity) => new Comment(commentEntity));
   const product = new Product({ ...productEntity, isFavorite });
 
   return res
@@ -141,7 +141,7 @@ export const getProductComments = async (req: Request, res: Response) => {
     take: take ?? 10,
   });
 
-  if (!commentEntities || commentEntities.length === 0) {
+  if (!commentEntities || commentEntities.comments.length === 0) {
     return res.status(200).json({
       list: [],
       hasNext: false,
@@ -149,7 +149,7 @@ export const getProductComments = async (req: Request, res: Response) => {
     });
   }
 
-  const comments = commentEntities?.map((commentEntity) => new Comment(commentEntity));
+  const comments = commentEntities?.comments.map((commentEntity) => new Comment(commentEntity));
   const hasNext = comments.length === take && take + 1;
 
   return res.status(200).json({
