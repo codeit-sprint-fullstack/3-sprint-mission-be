@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AsyncRequestHandler } from '../types/asyncRequestHandler';
+import { AsyncRequestHandler } from '../types/asyncRequestHandler.types';
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
