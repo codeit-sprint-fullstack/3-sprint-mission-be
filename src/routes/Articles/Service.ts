@@ -2,175 +2,149 @@ import { Request, Response } from 'express';
 import { prismaClient } from '../../prismaClient';
 import { create } from 'superstruct';
 import {
+  CreateArticleRequest,
   CreateArticleRequestStruct,
+  EditArticleRequest,
   EditArticleRequestStruct,
+  GetArticleListRequest,
   GetArticleListRequestStruct,
 } from '../../structs/ArticleStruct';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 import Article from '../../models/article';
-import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
+import {
+  CreateCommentRequest,
+  CreateCommentStruct,
+  GetCommentListRequest,
+  GetCommentListStruct,
+} from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
 import { parseId } from '../../utils/parseId';
 import ArticleRepository from '../../repositories/articleRepository';
 import LikeRepository from '../../repositories/likeRepository';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import CommentRepository from '../../repositories/commentRepository';
+import { ConflictException, ForbiddenException, NotFoundException } from '../../errors';
+import { PrismaClient } from '@prisma/client';
 
 const articleRepository = new ArticleRepository();
 const likeRepository = new LikeRepository();
 const commentRepository = new CommentRepository();
 
-export const postArticle = async (req: Request, res: Response) => {
-  const data = create(req.body, CreateArticleRequestStruct);
-  const userId = req.user?.userId!;
+export class ArticleService {
+  constructor(
+    private articleRepository: ArticleRepository,
+    private likeRepository: LikeRepository,
+    private commentRepository: CommentRepository,
+    private prisma: PrismaClient,
+  ) {}
 
-  const articleEntity = await articleRepository.create(userId, data);
+  async postArticle(userId: number, createArticleDto: CreateArticleRequest) {
+    const articleEntity = await this.articleRepository.create(userId, createArticleDto);
+    return new Article({ ...articleEntity, isLiked: false });
+  }
 
-  const article = new Article({ ...articleEntity, isLiked: false });
+  async getArticleById(articleId: number, userId: number) {
+    const articleEntity = await this.articleRepository.findById(articleId);
 
-  return res.status(201).json(article);
-};
+    if (!articleEntity) {
+      throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+    }
 
-export const getArticle = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  const userId = req.user?.userId!;
-  const articleEntity = await articleRepository.findById(articleId);
+    const isLiked = await this.likeRepository.findIsLiked(articleId, userId);
+    return new Article({ ...articleEntity, isLiked });
+  }
 
-  if (!articleEntity) return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
-  const isLiked = await likeRepository.findIsLiked(articleId, userId);
+  async editArticle(articleId: number, userId: number, editArticleRequestDto: EditArticleRequest) {
+    const articleEntity = await this.articleRepository.update(articleId, editArticleRequestDto);
+    const isLiked = await this.likeRepository.findIsLiked(articleId, userId);
+    return new Article({ ...articleEntity, isLiked });
+  }
 
-  const article = new Article({ ...articleEntity, isLiked });
+  async deleteArticle(articleId: number, userId: number) {
+    const existingArticle = await this.articleRepository.findById(articleId);
+    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+    if (existingArticle.userId !== userId) throw new ForbiddenException(AUTH_MESSAGES.delete);
+    await this.articleRepository.delete(articleId);
+  }
 
-  return res.status(200).json(article.toJSON());
-};
+  async getArticleList(userId: number, getArticleListDto: GetArticleListRequest) {
+    const articleListResult = await this.articleRepository.getArticleList(getArticleListDto);
 
-export const editArticle = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  const data = create(req.body, EditArticleRequestStruct);
+    const articles = await Promise.all(
+      articleListResult.list.map(async (articleEntity) => {
+        if (!userId) return new Article({ ...articleEntity, isLiked: false });
+        const isLiked = await likeRepository.findIsLiked(articleEntity.id, userId);
+        return new Article({ ...articleEntity, isLiked });
+      }),
+    );
 
-  const article = await articleRepository.update(articleId, data);
-  return res.status(200).json(article);
-};
+    return {
+      ...articleListResult,
+      list: articles,
+    };
+  }
 
-export const deleteArticle = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  await articleRepository.delete(articleId);
-  res.sendStatus(204);
-};
+  async postArticleComment(articleId: number, userId: number, content: CreateCommentRequest) {
+    const existingArticle = await this.articleRepository.findById(articleId);
+    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
 
-export const getArticleList = async (req: Request, res: Response) => {
-  const userId = req.user?.userId!;
+    if (!userId || existingArticle.userId !== userId)
+      throw new ForbiddenException(AUTH_MESSAGES.create);
 
-  const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListRequestStruct);
+    const commentEntity = await this.commentRepository.createArticleComment(
+      articleId,
+      userId,
+      content,
+    );
 
-  const articleEntities = await articleRepository.getArticleList({
-    page,
-    pageSize,
-    orderBy,
-    keyword,
-  });
+    return new Comment(commentEntity);
+  }
 
-  const articles = await Promise.all(
-    articleEntities.list.map(async (articleEntity) => {
-      if (!userId) return new Article({ ...articleEntity, isLiked: false });
-      const isLiked = await likeRepository.findIsLiked(articleEntity.id, userId);
-      return new Article({ ...articleEntity, isLiked });
-    }),
-  );
+  async getArticleComments(articleId: number, getCommentListDto: GetCommentListRequest) {
+    const existingArticle = articleRepository.findById(articleId);
+    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
 
-  return res.status(200).json({
-    count: articleEntities.totalCount,
-    list: articles,
-  });
-};
+    const getCommentListResult = await this.commentRepository.findComments(getCommentListDto);
 
-export const postArticleComment = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  const { content } = create(req.body, CreateCommentStruct);
-  const { userId } = req.user!;
+    const comments = getCommentListResult.comments.map((comment) => new Comment(comment));
 
-  const existingArticle = await articleRepository.findById(articleId);
+    return {
+      ...getCommentListResult,
+      comments,
+    };
+  }
 
-  if (!existingArticle)
-    return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
+  async setLike(articleId: number, userId: number) {
+    const existingArticle = this.articleRepository.findById(articleId);
 
-  if (!userId || existingArticle.userId !== userId)
-    return res.status(403).json({ message: AUTH_MESSAGES.create });
+    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
 
-  const commentEntity = await commentRepository.createArticleComment(articleId, userId, {
-    content,
-  });
-  const comment = new Comment(commentEntity);
+    if (await this.likeRepository.findIsLiked(articleId, userId))
+      throw new ConflictException('이미 좋아요가 눌린 게시글입니다.');
 
-  return res.status(201).json(comment.toJSON());
-};
+    const articleEntity = await this.prisma.$transaction(async (t) => {
+      await this.likeRepository.setLike(articleId, userId);
+      const article = await articleRepository.incrementLikeCount(articleId);
+      return article;
+    });
 
-export const getArticleComments = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  const { cursor, take } = create(req.query, GetCommentListStruct);
+    return new Article({ ...articleEntity, isLiked: true });
+  }
 
-  const existingArticle = articleRepository.findById(articleId);
-  if (!existingArticle)
-    return res.status(404).json({ message: EXCEPTION_MESSAGES.articleNotFound });
+  async deleteLike(articleId: number, userId: number) {
+    const existingArticle = this.articleRepository.findById(articleId);
 
-  const commentEntities = await commentRepository.findComments({
-    articleId,
-    cursor,
-    take,
-  });
+    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
 
-  const comments = commentEntities.map((commentEntity) => new Comment(commentEntity));
-  const hasNext = comments.length === take + 1;
+    if (!(await this.likeRepository.findIsLiked(articleId, userId)))
+      throw new ConflictException('이미 좋아요가 취소된 게시글입니다.');
 
-  return res.status(200).json({
-    data: comments.map((comment) => comment.toJSON()),
-    hasNext,
-    nextCursor: comments[comments.length - 1].getId(),
-  });
-};
+    const articleEntity = await this.prisma.$transaction(async (t) => {
+      await this.likeRepository.deleteLike(articleId, userId);
+      const article = await articleRepository.decrementLikeCount(articleId);
+      return article;
+    });
 
-export const setLike = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  const userId = req.user?.userId!;
-
-  const existingArticle = articleRepository.findById(articleId);
-
-  if (!existingArticle)
-    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
-
-  if (await likeRepository.findIsLiked(articleId, userId))
-    res.status(409).json({ message: '이미 좋아요가 눌린 게시글입니다.' });
-
-  const articleEntity = await prismaClient.$transaction(async (t) => {
-    await likeRepository.setLike(articleId, userId);
-    const product = await articleRepository.incrementLikeCount(articleId);
-    return product;
-  });
-
-  const article = new Article({ ...articleEntity, isLiked: true });
-
-  return res.status(200).json(article);
-};
-
-export const deleteLike = async (req: Request, res: Response) => {
-  const articleId = parseId(req.params.articleId);
-  const userId = req.user?.userId!;
-
-  const existingArticle = articleRepository.findById(articleId);
-
-  if (!existingArticle)
-    return res.status(404).json({ message: EXCEPTION_MESSAGES.productNotFound });
-
-  if (!(await likeRepository.findIsLiked(articleId, userId)))
-    res.status(409).json({ message: '이미 좋아요가 취소된 게시글입니다.' });
-
-  const articleEntity = await prismaClient.$transaction(async (t) => {
-    await likeRepository.deleteLike(articleId, userId);
-    const product = await articleRepository.decrementLikeCount(articleId);
-    return product;
-  });
-
-  const article = new Article({ ...articleEntity, isLiked: false });
-
-  return res.status(200).json(article);
-};
+    return new Article({ ...articleEntity, isLiked: false });
+  }
+}

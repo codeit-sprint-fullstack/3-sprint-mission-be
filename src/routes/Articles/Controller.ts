@@ -1,40 +1,103 @@
-import express from 'express';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import {
-  editArticle,
-  postArticle,
-  getArticle,
-  getArticleList,
-  deleteArticle,
-  getArticleComments,
-  postArticleComment,
-  setLike,
-  deleteLike,
-} from './Service';
-import { createAuthMiddleware } from '../../middleware/auth';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
+import { Request, Response } from 'express';
+import { ArticleService } from './Service';
+import { parseId } from '../../utils/parseId';
 
-const router = express.Router();
+export class ArticleController {
+  constructor(private articleService: ArticleService) {}
 
-router
-  .route('/')
-  .get(asyncRequestHandler(getArticleList))
-  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postArticle));
+  postArticle = async (req: Request, res: Response) => {
+    const createArticleDto = req.body;
+    const userId = req.user?.userId!;
 
-router
-  .route('/:articleId')
-  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getArticle))
-  .patch(createAuthMiddleware(AUTH_MESSAGES.update), asyncRequestHandler(editArticle))
-  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteArticle));
+    const article = await this.articleService.postArticle(userId, createArticleDto);
+    return res.status(201).json(article);
+  };
 
-router
-  .route('/:articleId/comments')
-  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getArticleComments))
-  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postArticleComment));
+  getArticle = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
+    const articleEntity = await this.articleService.getArticleById(articleId, userId);
 
-router
-  .route('/:articleId/like')
-  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(setLike))
-  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteLike));
+    return res.status(200).json(articleEntity.toJSON());
+  };
 
-export default router;
+  editArticle = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
+    const editArticleRequestDto = req.body;
+
+    const articleEntity = await this.articleService.editArticle(
+      articleId,
+      userId,
+      editArticleRequestDto,
+    );
+
+    return res.status(201).json(articleEntity.toJSON());
+  };
+
+  deleteArticle = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
+
+    await this.articleService.deleteArticle(articleId, userId);
+
+    res.status(204);
+  };
+
+  getArticles = async (req: Request, res: Response) => {
+    const userId = req.user?.userId!;
+    const getArticlesDto = req.validatedQuery;
+
+    const result = await this.articleService.getArticleList(userId, getArticlesDto);
+
+    return res.status(200).json({
+      ...result,
+      list: result.list.map((article) => article.toJSON()),
+    });
+  };
+
+  postArticleComment = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
+    const postArticleCommentDto = req.body;
+
+    const commentEntity = await this.articleService.postArticleComment(
+      articleId,
+      userId,
+      postArticleCommentDto,
+    );
+
+    return res.status(201).json(commentEntity.toJSON());
+  };
+
+  getArticleComments = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const getArticleCommentsDto = req.validatedQuery;
+
+    const result = await this.articleService.getArticleComments(articleId, getArticleCommentsDto);
+    const comments = result.comments.map((comment) => comment.toJSON());
+
+    return res.status(200).json({
+      ...result,
+      comments,
+    });
+  };
+
+  setLike = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
+
+    const articleEntity = await this.articleService.setLike(articleId, userId);
+
+    return res.status(201).json(articleEntity.toJSON());
+  };
+
+  deleteLike = async (req: Request, res: Response) => {
+    const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
+
+    const articleEntity = await this.articleService.deleteLike(articleId, userId);
+
+    return res.status(201).json(articleEntity.toJSON());
+  };
+}
