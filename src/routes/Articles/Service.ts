@@ -1,35 +1,18 @@
-import { Request, Response } from 'express';
-import { prismaClient } from '../../prismaClient';
-import { create } from 'superstruct';
 import {
   CreateArticleRequest,
-  CreateArticleRequestStruct,
   EditArticleRequest,
-  EditArticleRequestStruct,
   GetArticleListRequest,
-  GetArticleListRequestStruct,
 } from '../../structs/ArticleStruct';
 import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
 import Article from '../../models/article';
-import {
-  CreateCommentRequest,
-  CreateCommentStruct,
-  GetCommentListRequest,
-  GetCommentListStruct,
-} from '../../structs/CommentStruct';
+import { CreateCommentRequest, GetCommentListRequest } from '../../structs/CommentStruct';
 import { Comment } from '../../models/comment';
-import { parseId } from '../../utils/parseId';
 import ArticleRepository from '../../repositories/articleRepository';
 import LikeRepository from '../../repositories/likeRepository';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import CommentRepository from '../../repositories/commentRepository';
 import { ConflictException, ForbiddenException, NotFoundException } from '../../errors';
 import { PrismaClient } from '@prisma/client';
-
-const articleRepository = new ArticleRepository();
-const likeRepository = new LikeRepository();
-const commentRepository = new CommentRepository();
-
 export class ArticleService {
   constructor(
     private articleRepository: ArticleRepository,
@@ -73,7 +56,7 @@ export class ArticleService {
     const articles = await Promise.all(
       articleListResult.list.map(async (articleEntity) => {
         if (!userId) return new Article({ ...articleEntity, isLiked: false });
-        const isLiked = await likeRepository.findIsLiked(articleEntity.id, userId);
+        const isLiked = await this.likeRepository.findIsLiked(articleEntity.id, userId);
         return new Article({ ...articleEntity, isLiked });
       }),
     );
@@ -101,7 +84,7 @@ export class ArticleService {
   }
 
   async getArticleComments(articleId: number, getCommentListDto: GetCommentListRequest) {
-    const existingArticle = articleRepository.findById(articleId);
+    const existingArticle = this.articleRepository.findById(articleId);
     if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
 
     const getCommentListResult = await this.commentRepository.findComments(getCommentListDto);
@@ -124,7 +107,7 @@ export class ArticleService {
 
     const articleEntity = await this.prisma.$transaction(async (t) => {
       await this.likeRepository.setLike(articleId, userId);
-      const article = await articleRepository.incrementLikeCount(articleId);
+      const article = await this.articleRepository.incrementLikeCount(articleId);
       return article;
     });
 
@@ -141,7 +124,7 @@ export class ArticleService {
 
     const articleEntity = await this.prisma.$transaction(async (t) => {
       await this.likeRepository.deleteLike(articleId, userId);
-      const article = await articleRepository.decrementLikeCount(articleId);
+      const article = await this.articleRepository.decrementLikeCount(articleId);
       return article;
     });
 
