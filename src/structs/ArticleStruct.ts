@@ -16,7 +16,11 @@ import {
 } from 'superstruct';
 
 export const CreateArticleRequestStruct = object({
-  title: coerce(nonempty(string()), string(), (value) => value.trim()),
+  title: refine(
+    coerce(nonempty(string()), string(), (value) => value.trim()),
+    '제목을 입력해주세요.',
+    () => true,
+  ),
   content: refine(
     nonempty(string()),
     '내용은 10자 이상 100자 이하로 입력해주세요.',
@@ -33,14 +37,25 @@ export const EditArticleRequestStruct = partial(CreateArticleRequestStruct);
 
 export const GetArticleListRequestStruct = object({
   page: defaulted(
-    coerce(min(integer(), 1), string(), (value) => Number.parseInt(value, 10)),
+    refine(
+      coerce(min(integer(), 1), string(), (value) => Number.parseInt(value, 10)),
+      'page는 1이상의 정수로 입력해주세요.',
+      () => true,
+    ),
     1,
   ),
   pageSize: defaulted(
-    coerce(max(min(integer(), 1), 10), string(), (value) => Number.parseInt(value, 10)),
+    refine(
+      coerce(max(min(integer(), 1), 10), string(), (value) => Number.parseInt(value, 10)),
+      'pageSize는 1이상 10이하의 정수로 입력해주세요.',
+      () => true,
+    ),
     10,
   ),
-  orderBy: defaulted(enums(['recent', 'like']), 'recent'),
+  orderBy: defaulted(
+    refine(enums(['recent', 'like']), 'orderBy는 recent,like중 하나를 입력해주세요.', () => true),
+    'recent',
+  ),
   keyword: optional(nonempty(string())),
 });
 
