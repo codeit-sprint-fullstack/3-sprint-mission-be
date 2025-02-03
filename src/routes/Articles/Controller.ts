@@ -10,7 +10,7 @@ export class ArticleController {
     const userId = req.user?.userId!;
 
     const article = await this.articleService.postArticle(userId, createArticleDto);
-    return res.status(201).json(article);
+    return res.status(201).json(article.toJSON());
   };
 
   getArticle = async (req: Request, res: Response) => {
@@ -75,11 +75,11 @@ export class ArticleController {
     const getArticleCommentsDto = req.validatedQuery;
 
     const result = await this.articleService.getArticleComments(articleId, getArticleCommentsDto);
-    const comments = result.comments.map((comment) => comment.toJSON());
+    const comments = result.list.map((comment) => comment.toJSON());
 
     return res.status(200).json({
       ...result,
-      comments,
+      list: comments,
     });
   };
 

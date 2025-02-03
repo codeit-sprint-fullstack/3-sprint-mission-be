@@ -21,6 +21,16 @@ export class ArticleService {
     private prisma: PrismaClient,
   ) {}
 
+  private async getExistingArticle(articleId: number) {
+    const existingArticle = await this.articleRepository.findById(articleId);
+    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+    return existingArticle;
+  }
+
+  private async validateAuth(articleUserId: number, userId: number, message: string) {
+    if (articleUserId !== userId) throw new ForbiddenException(message);
+  }
+
   async postArticle(userId: number, createArticleDto: CreateArticleRequest) {
     const articleEntity = await this.articleRepository.create(userId, createArticleDto);
     return new Article({ ...articleEntity, isLiked: false });
@@ -38,15 +48,17 @@ export class ArticleService {
   }
 
   async editArticle(articleId: number, userId: number, editArticleRequestDto: EditArticleRequest) {
+    const existingArticle = await this.getExistingArticle(articleId);
+    await this.validateAuth(existingArticle.userId, articleId, AUTH_MESSAGES.update);
+
     const articleEntity = await this.articleRepository.update(articleId, editArticleRequestDto);
     const isLiked = await this.likeRepository.findIsLiked(articleId, userId);
     return new Article({ ...articleEntity, isLiked });
   }
 
   async deleteArticle(articleId: number, userId: number) {
-    const existingArticle = await this.articleRepository.findById(articleId);
-    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
-    if (existingArticle.userId !== userId) throw new ForbiddenException(AUTH_MESSAGES.delete);
+    const existingArticle = await this.getExistingArticle(articleId);
+    await this.validateAuth(existingArticle.userId, articleId, AUTH_MESSAGES.delete);
     await this.articleRepository.delete(articleId);
   }
 
@@ -68,11 +80,7 @@ export class ArticleService {
   }
 
   async postArticleComment(articleId: number, userId: number, content: CreateCommentRequest) {
-    const existingArticle = await this.articleRepository.findById(articleId);
-    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
-
-    if (!userId || existingArticle.userId !== userId)
-      throw new ForbiddenException(AUTH_MESSAGES.create);
+    await this.getExistingArticle(articleId);
 
     const commentEntity = await this.commentRepository.createArticleComment(
       articleId,
@@ -84,23 +92,22 @@ export class ArticleService {
   }
 
   async getArticleComments(articleId: number, getCommentListDto: GetCommentListRequest) {
-    const existingArticle = this.articleRepository.findById(articleId);
-    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+    await this.getExistingArticle(articleId);
 
-    const getCommentListResult = await this.commentRepository.findComments(getCommentListDto);
-
+    const getCommentListResult = await this.commentRepository.findComments({
+      ...getCommentListDto,
+      articleId,
+    });
     const comments = getCommentListResult.comments.map((comment) => new Comment(comment));
 
     return {
       ...getCommentListResult,
-      comments,
+      list: comments,
     };
   }
 
   async setLike(articleId: number, userId: number) {
-    const existingArticle = this.articleRepository.findById(articleId);
-
-    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+    await this.getExistingArticle(articleId);
 
     if (await this.likeRepository.findIsLiked(articleId, userId))
       throw new ConflictException('이미 좋아요가 눌린 게시글입니다.');
@@ -115,9 +122,7 @@ export class ArticleService {
   }
 
   async deleteLike(articleId: number, userId: number) {
-    const existingArticle = this.articleRepository.findById(articleId);
-
-    if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+    await this.getExistingArticle(articleId);
 
     if (!(await this.likeRepository.findIsLiked(articleId, userId)))
       throw new ConflictException('이미 좋아요가 취소된 게시글입니다.');
