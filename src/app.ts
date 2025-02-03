@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import productRouter from './routes/Products/Controller';
+import productRouter from './routes/Products/routes';
 import articleRouter from './routes/Articles/routes';
 import commentRouter from './routes/Comments/Controller';
 import authRouter from './routes/auth/controller';

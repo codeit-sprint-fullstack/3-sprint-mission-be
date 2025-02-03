@@ -1,40 +1,103 @@
-import express from 'express';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import {
-  deleteFavorite,
-  deleteProduct,
-  editProduct,
-  getProduct,
-  getProductComments,
-  getProductList,
-  postProduct,
-  postProductComment,
-  setFavorite,
-} from './service';
-import { createAuthMiddleware } from '../../middleware/auth';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
+import { Request, Response } from 'express';
+import { ProductService } from './service';
+import { parseId } from '../../utils/parseId';
 
-const router = express.Router();
+export class ProductController {
+  constructor(private productService: ProductService) {}
 
-router
-  .route('/')
-  .get(asyncRequestHandler(getProductList))
-  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProduct));
+  postProduct = async (req: Request, res: Response) => {
+    const createProductDto = req.body;
+    const userId = req.user?.userId!;
 
-router
-  .route('/:productId')
-  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getProduct))
-  .patch(createAuthMiddleware(AUTH_MESSAGES.update), asyncRequestHandler(editProduct))
-  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteProduct));
+    const product = await this.productService.postProduct(userId, createProductDto);
+    return res.status(201).json(product.toJSON());
+  };
 
-router
-  .route('/:productId/comments')
-  .get(createAuthMiddleware(AUTH_MESSAGES.read), asyncRequestHandler(getProductComments))
-  .post(createAuthMiddleware(AUTH_MESSAGES.create), asyncRequestHandler(postProductComment));
+  getProduct = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
+    const productEntity = await this.productService.getProductById(productId, userId);
 
-router
-  .route('/:productId/favorite')
-  .post(createAuthMiddleware(AUTH_MESSAGES.update), asyncRequestHandler(setFavorite))
-  .delete(createAuthMiddleware(AUTH_MESSAGES.delete), asyncRequestHandler(deleteFavorite));
+    return res.status(200).json(productEntity.toJSON());
+  };
 
-export default router;
+  editProduct = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
+    const editProductRequestDto = req.body;
+
+    const productEntity = await this.productService.editProduct(
+      productId,
+      userId,
+      editProductRequestDto,
+    );
+
+    return res.status(201).json(productEntity.toJSON());
+  };
+
+  deleteProduct = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
+
+    await this.productService.deleteProduct(productId, userId);
+
+    res.status(204);
+  };
+
+  getProducts = async (req: Request, res: Response) => {
+    const userId = req.user?.userId!;
+    const getProductsDto = req.validatedQuery;
+
+    const result = await this.productService.getProductList(userId, getProductsDto);
+
+    return res.status(200).json({
+      ...result,
+      list: result.list.map((product) => product.toJSON()),
+    });
+  };
+
+  postProductComment = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
+    const postProductCommentDto = req.body;
+
+    const commentEntity = await this.productService.postProductComment(
+      productId,
+      userId,
+      postProductCommentDto,
+    );
+
+    return res.status(201).json(commentEntity.toJSON());
+  };
+
+  getProductComments = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const getProductCommentsDto = req.validatedQuery!;
+
+    const result = await this.productService.getProductComments(productId, getProductCommentsDto);
+    const comments = result.comments.map((comment) => comment.toJSON());
+
+    return res.status(200).json({
+      ...result,
+      list: comments,
+    });
+  };
+
+  setFavorite = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
+
+    const productEntity = await this.productService.setFavorite(productId, userId);
+
+    return res.status(201).json(productEntity.toJSON());
+  };
+
+  deleteFavorite = async (req: Request, res: Response) => {
+    const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
+
+    const productEntity = await this.productService.deleteFavorite(productId, userId);
+
+    return res.status(201).json(productEntity.toJSON());
+  };
+}
