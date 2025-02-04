@@ -1,11 +1,35 @@
-import express from 'express';
-import { refreshToken, signIn, signUp } from './service';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
+import { Request, Response } from 'express';
+import { AuthService } from './service';
 
-const router = express.Router();
+export class AuthController {
+  constructor(private authService: AuthService) {}
 
-router.post('/sign-up', asyncRequestHandler(signUp));
-router.post('/sign-in', asyncRequestHandler(signIn));
-router.post('/refresh-token', asyncRequestHandler(refreshToken));
+  signUp = async (req: Request, res: Response) => {
+    const signUpDto = req.body;
+    const userEntity = await this.authService.signUp(signUpDto);
+    const user = userEntity.user.toJSON();
 
-export default router;
+    return res.status(201).json({
+      ...userEntity,
+      user,
+    });
+  };
+
+  signIn = async (req: Request, res: Response) => {
+    const signInDto = req.body;
+    const userEntity = await this.authService.signIn(signInDto);
+    const user = userEntity.user.toJSON();
+
+    return res.status(201).json({
+      ...userEntity,
+      user,
+    });
+  };
+
+  refreshUserToken = async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+    const tokens = this.authService.refreshUserToken(refreshToken);
+
+    return res.status(201).json(tokens);
+  };
+}
