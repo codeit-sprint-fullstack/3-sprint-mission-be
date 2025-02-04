@@ -4,7 +4,7 @@ import ProductRepository from '../../repositories/productRepository';
 import FavoriteRepository from '../../repositories/favoriteRepository';
 import CommentRepository from '../../repositories/commentRepository';
 import { prismaClient } from '../../prismaClient';
-import { ProductController } from './Controller';
+import { ProductController } from './controller';
 import { validateBody, validateQuery } from '../../middleware/validateMiddleware';
 import {
   CreateProductRequestStruct,
