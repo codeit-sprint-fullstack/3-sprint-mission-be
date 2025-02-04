@@ -1,5 +1,5 @@
 import { prismaClient } from '../prismaClient';
-import { SignUpRequest } from '../structs/AuthStruct';
+import { EncryptedSignUpRequest, SignUpRequest } from '../structs/AuthStruct';
 
 export default class UserRepository {
   async findByEmail(email: string) {
@@ -33,7 +33,7 @@ export default class UserRepository {
     });
   }
 
-  async create(data: SignUpRequest) {
+  async create(data: EncryptedSignUpRequest) {
     return await prismaClient.user.create({
       data,
     });
