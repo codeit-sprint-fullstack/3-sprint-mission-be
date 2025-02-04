@@ -1,6 +1,6 @@
 import { INCLUDE_USER_CLAUSE } from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
-import { CreateCommentRequest } from '../structs/CommentStruct';
+import { CreateCommentRequest, EditCommentRequest } from '../structs/CommentStruct';
 
 export default class CommentRepository {
   async findComments(params: {
@@ -59,6 +59,33 @@ export default class CommentRepository {
         userId: userId,
       },
       include: INCLUDE_USER_CLAUSE,
+    });
+  }
+
+  async findCommentById(commentId: number) {
+    return await prismaClient.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+      include: INCLUDE_USER_CLAUSE,
+    });
+  }
+
+  async editComment(commentId: number, content: EditCommentRequest) {
+    return await prismaClient.comment.update({
+      where: {
+        id: commentId,
+      },
+      data: content,
+      include: INCLUDE_USER_CLAUSE,
+    });
+  }
+
+  async deleteComment(commentId: number) {
+    return await prismaClient.comment.delete({
+      where: {
+        id: commentId,
+      },
     });
   }
 }
