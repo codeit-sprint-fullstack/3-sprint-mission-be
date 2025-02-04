@@ -11,14 +11,14 @@ const passwordValidator = () =>
 export const SignUpRequestStruct = object({
   email: emailValidator(),
   nickname: string(),
-  encryptedPassword: passwordValidator(),
+  password: passwordValidator(),
   passwordConfirmation: string(),
 });
 
 export const signUpValidator = refine(
   SignUpRequestStruct,
   '비밀번호 확인이 일치하지 않습니다.',
-  (value) => value.encryptedPassword === value.passwordConfirmation,
+  (value) => value.password === value.passwordConfirmation,
 );
 
 export const signInRequestStruct = object({
@@ -28,3 +28,6 @@ export const signInRequestStruct = object({
 
 export type SignUpRequest = Omit<Infer<typeof SignUpRequestStruct>, 'passwordConfirmation'>;
 export type SignInRequest = Infer<typeof signInRequestStruct>;
+export type EncryptedSignUpRequest = Omit<SignUpRequest, 'password'> & {
+  encryptedPassword: string;
+};
