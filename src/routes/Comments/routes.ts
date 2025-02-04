@@ -6,7 +6,7 @@ import { CommentController } from './controller';
 import { CommentService } from './service';
 import CommentRepository from '../../repositories/commentRepository';
 import { validateBody } from '../../middleware/validateMiddleware';
-import { EditCommentStruct } from '../../structs/CommentStruct';
+import { EditCommentStruct } from '../../structs/commentStruct';
 
 const commentRepository = new CommentRepository();
 const commentService = new CommentService(commentRepository);

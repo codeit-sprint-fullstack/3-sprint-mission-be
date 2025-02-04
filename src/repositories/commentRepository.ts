@@ -1,6 +1,6 @@
 import { INCLUDE_USER_CLAUSE } from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
-import { CreateCommentRequest, EditCommentRequest } from '../structs/CommentStruct';
+import { CreateCommentRequest, EditCommentRequest } from '../structs/commentStruct';
 
 export default class CommentRepository {
   async findComments(params: {

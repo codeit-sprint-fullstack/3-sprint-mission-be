@@ -1,5 +1,5 @@
-import { EditCommentRequest } from '../../structs/CommentStruct';
-import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
+import { EditCommentRequest } from '../../structs/commentStruct';
+import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
 import { Comment } from '../../models/comment';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import CommentRepository from '../../repositories/commentRepository';

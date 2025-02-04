@@ -6,12 +6,12 @@ import {
   CreateProductRequest,
   EditProductRequest,
   GetProductListRequest,
-} from '../../structs/ProductStruct';
+} from '../../structs/productStruct';
 import { Product } from '../../models/product';
 import { ConflictException, ForbiddenException, NotFoundException } from '../../errors';
-import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
+import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { CreateCommentRequest, GetCommentListRequest } from '../../structs/CommentStruct';
+import { CreateCommentRequest, GetCommentListRequest } from '../../structs/commentStruct';
 import { Comment } from '../../models/comment';
 
 export class ProductService {

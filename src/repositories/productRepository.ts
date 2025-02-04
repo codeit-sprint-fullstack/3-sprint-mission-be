@@ -4,7 +4,7 @@ import {
   CreateProductRequest,
   EditProductRequest,
   GetProductListRequest,
-} from '../structs/ProductStruct';
+} from '../structs/productStruct';
 
 export default class ProductRepository {
   async create(userId: number, data: CreateProductRequest) {

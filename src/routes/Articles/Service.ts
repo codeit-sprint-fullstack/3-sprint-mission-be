@@ -2,10 +2,10 @@ import {
   CreateArticleRequest,
   EditArticleRequest,
   GetArticleListRequest,
-} from '../../structs/ArticleStruct';
-import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
+} from '../../structs/articleStruct';
+import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
 import Article from '../../models/article';
-import { CreateCommentRequest, GetCommentListRequest } from '../../structs/CommentStruct';
+import { CreateCommentRequest, GetCommentListRequest } from '../../structs/commentStruct';
 import { Comment } from '../../models/comment';
 import ArticleRepository from '../../repositories/articleRepository';
 import LikeRepository from '../../repositories/likeRepository';

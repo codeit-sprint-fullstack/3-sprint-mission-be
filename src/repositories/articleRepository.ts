@@ -4,7 +4,7 @@ import {
   type CreateArticleRequest,
   type EditArticleRequest,
   type GetArticleListRequest,
-} from '../structs/ArticleStruct';
+} from '../structs/articleStruct';
 
 export default class ArticleRepository {
   async create(userId: number, data: CreateArticleRequest) {

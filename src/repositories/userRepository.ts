@@ -1,5 +1,5 @@
 import { prismaClient } from '../prismaClient';
-import { EncryptedSignUpRequest, SignUpRequest } from '../structs/AuthStruct';
+import { EncryptedSignUpRequest, SignUpRequest } from '../structs/authStruct';
 
 export default class UserRepository {
   async findByEmail(email: string) {

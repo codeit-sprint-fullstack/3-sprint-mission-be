@@ -1,7 +1,7 @@
-import { EXCEPTION_MESSAGES } from '../../constants/ExceptionMessages';
+import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
 import { ConflictException } from '../../errors';
 import UserRepository from '../../repositories/userRepository';
-import { SignInRequest, SignUpRequest } from '../../structs/AuthStruct';
+import { SignInRequest, SignUpRequest } from '../../structs/authStruct';
 import bcrypt from 'bcrypt';
 import { generateTokens } from '../../utils/jwt';
 import User from '../../models/user';

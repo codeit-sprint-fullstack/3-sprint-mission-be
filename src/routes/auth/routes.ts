@@ -4,7 +4,7 @@ import { AuthService } from './service';
 import express from 'express';
 import asyncRequestHandler from '../../utils/asyncRequestHandler';
 import { validateBody } from '../../middleware/validateMiddleware';
-import { signInRequestStruct, SignUpRequestStruct } from '../../structs/AuthStruct';
+import { signInRequestStruct, SignUpRequestStruct } from '../../structs/authStruct';
 
 const router = express.Router();
 const userRepository = new UserRepository();

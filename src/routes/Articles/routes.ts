@@ -13,8 +13,8 @@ import {
   CreateArticleRequestStruct,
   EditArticleRequestStruct,
   GetArticleListRequestStruct,
-} from '../../structs/ArticleStruct';
-import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
+} from '../../structs/articleStruct';
+import { CreateCommentStruct, GetCommentListStruct } from '../../structs/commentStruct';
 
 const router = express.Router();
 

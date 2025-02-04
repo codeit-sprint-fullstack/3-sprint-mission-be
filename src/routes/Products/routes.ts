@@ -10,11 +10,11 @@ import {
   CreateProductRequestStruct,
   EditProductStruct,
   GetProductListRequestStruct,
-} from '../../structs/ProductStruct';
+} from '../../structs/productStruct';
 import asyncRequestHandler from '../../utils/asyncRequestHandler';
 import { createAuthMiddleware } from '../../middleware/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { CreateCommentStruct, GetCommentListStruct } from '../../structs/CommentStruct';
+import { CreateCommentStruct, GetCommentListStruct } from '../../structs/commentStruct';
 
 const router = express.Router();
 
