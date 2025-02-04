@@ -1,20 +1,23 @@
-import express from 'express';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import { editComment, deleteComment } from './Service';
-import { createAuthMiddleware } from '../../middleware/auth';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
+import { Request, Response } from 'express';
+import { CommentService } from './service';
 
-const router = express.Router();
+export class CommentController {
+  constructor(private commentService: CommentService) {}
 
-router.patch(
-  '/:commentId',
-  createAuthMiddleware(AUTH_MESSAGES.update),
-  asyncRequestHandler(editComment),
-);
-router.delete(
-  '/:commentId',
-  createAuthMiddleware(AUTH_MESSAGES.delete),
-  asyncRequestHandler(deleteComment),
-);
+  editComment = async (req: Request, res: Response) => {
+    const commentId = parseInt(req.params.commentId);
+    const { content } = req.body;
+    const { userId } = req.user!;
 
-export default router;
+    const comment = await this.commentService.editComment(commentId, userId, content);
+    return res.status(201).json(comment.toJSON());
+  };
+
+  deleteComment = async (req: Request, res: Response) => {
+    const commentId = parseInt(req.params.commentId);
+    const { userId } = req.user!;
+
+    this.commentService.deleteComment(commentId, userId);
+    res.sendStatus(204);
+  };
+}
