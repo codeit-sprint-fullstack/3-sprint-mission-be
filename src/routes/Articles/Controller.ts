@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ArticleService } from './Service';
+import { ArticleService } from './service';
 import { parseId } from '../../utils/parseId';
 
 export class ArticleController {

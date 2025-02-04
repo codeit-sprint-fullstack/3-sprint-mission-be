@@ -1,10 +1,10 @@
 import express from 'express';
-import { ArticleService } from './Service';
+import { ArticleService } from './service';
 import ArticleRepository from '../../repositories/articleRepository';
 import LikeRepository from '../../repositories/likeRepository';
 import CommentRepository from '../../repositories/commentRepository';
 import { prismaClient } from '../../prismaClient';
-import { ArticleController } from './Controller';
+import { ArticleController } from './controller';
 import asyncRequestHandler from '../../utils/asyncRequestHandler';
 import { createAuthMiddleware } from '../../middleware/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
