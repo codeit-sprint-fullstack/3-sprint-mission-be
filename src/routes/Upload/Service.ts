@@ -12,3 +12,24 @@ export const uploadFile = async (req: Request, res: Response) => {
     imageUrls,
   });
 };
+
+interface UploadResult {
+  imageUrls: string[];
+}
+
+export class UploadService {
+  private serverAddress: string;
+
+  constructor(serverAddress: string) {
+    this.serverAddress = serverAddress;
+  }
+
+  uploadFiles(files: Array<{ filename: string }>): UploadResult {
+    if (!files || files.length === 0) {
+      throw new Error('파일이 존재하지 않습니다.');
+    }
+
+    const imageUrls = files.map((file) => `${this.serverAddress}/uploads/${file.filename}`);
+    return { imageUrls };
+  }
+}
