@@ -5,14 +5,14 @@ import FavoriteRepository from '../../repositories/favoriteRepository';
 import CommentRepository from '../../repositories/commentRepository';
 import { prismaClient } from '../../prismaClient';
 import { ProductController } from './controller';
-import { validateBody, validateQuery } from '../../middleware/validateMiddleware';
+import { validateBody, validateQuery } from '../../core/middleware/validate';
 import {
   CreateProductRequestStruct,
   EditProductStruct,
   GetProductListRequestStruct,
 } from '../../structs/productStruct';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import { createAuthMiddleware } from '../../middleware/auth';
+import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
+import { createAuthMiddleware } from '../../core/middleware/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/commentStruct';
 

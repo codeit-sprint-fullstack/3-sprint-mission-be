@@ -1,11 +1,11 @@
 import express from 'express';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import { createAuthMiddleware } from '../../middleware/auth';
+import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
+import { createAuthMiddleware } from '../../core/middleware/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { CommentController } from './controller';
 import { CommentService } from './service';
 import CommentRepository from '../../repositories/commentRepository';
-import { validateBody } from '../../middleware/validateMiddleware';
+import { validateBody } from '../../core/middleware/validate';
 import { EditCommentStruct } from '../../structs/commentStruct';
 
 const commentRepository = new CommentRepository();

@@ -3,8 +3,8 @@ import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
 import { Comment } from '../../models/comment';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import CommentRepository from '../../repositories/commentRepository';
-import { NotFoundException } from '../../errors';
-import { UnauthorizedException } from '../../errors/unauthorizedException';
+import { NotFoundException } from '../../core/errors';
+import { UnauthorizedException } from '../../core/errors/unauthorizedException';
 
 export class CommentService {
   constructor(private commentRepository: CommentRepository) {}

@@ -2,8 +2,8 @@ import UserRepository from '../../repositories/userRepository';
 import { AuthController } from './controller';
 import { AuthService } from './service';
 import express from 'express';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import { validateBody } from '../../middleware/validateMiddleware';
+import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
+import { validateBody } from '../../core/middleware/validate';
 import { signInRequestStruct, SignUpRequestStruct } from '../../structs/authStruct';
 
 const router = express.Router();

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { createAuthMiddleware } from '../../middleware/auth';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
+import { createAuthMiddleware } from '../../core/middleware/auth';
+import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
 import { UserService } from './service';
 import { UserController } from './controller';
 import UserRepository from '../../repositories/userRepository';

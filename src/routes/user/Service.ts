@@ -1,7 +1,7 @@
 import UserRepository from '../../repositories/userRepository';
 import User from '../../models/user';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { UnauthorizedException } from '../../errors/unauthorizedException';
+import { UnauthorizedException } from '../../core/errors/unauthorizedException';
 
 export class UserService {
   constructor(private userRepository: UserRepository) {}

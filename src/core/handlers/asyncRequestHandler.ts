@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { AsyncRequestHandler } from '../types/asyncRequestHandler.types';
+import { AsyncRequestHandler } from '../../types/asyncRequestHandler.types';
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
-import { handlePrismaError } from './handlePrismaError';
+import { handlePrismaError } from '../../infrastructure/prisma/handler/handlePrismaError';
 
 const asyncRequestHandler = <T>(handler: AsyncRequestHandler<T>) => {
   return async (req: Request, res: Response, next: NextFunction) => {

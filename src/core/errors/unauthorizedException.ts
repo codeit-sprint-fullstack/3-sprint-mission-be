@@ -1,4 +1,4 @@
-import { AUTH_MESSAGES } from '../constants/authMessages';
+import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { HttpException } from './httpException';
 
 export class UnauthorizedException extends HttpException {

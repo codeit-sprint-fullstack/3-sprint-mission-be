@@ -5,10 +5,10 @@ import LikeRepository from '../../repositories/likeRepository';
 import CommentRepository from '../../repositories/commentRepository';
 import { prismaClient } from '../../prismaClient';
 import { ArticleController } from './controller';
-import asyncRequestHandler from '../../utils/asyncRequestHandler';
-import { createAuthMiddleware } from '../../middleware/auth';
+import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
+import { createAuthMiddleware } from '../../core/middleware/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { validateBody, validateQuery } from '../../middleware/validateMiddleware';
+import { validateBody, validateQuery } from '../../core/middleware/validate';
 import {
   CreateArticleRequestStruct,
   EditArticleRequestStruct,
