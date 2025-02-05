@@ -3,7 +3,7 @@ import { ConflictException } from '../../core/errors';
 import UserRepository from '../../repositories/userRepository';
 import { SignInRequest, SignUpRequest } from '../../structs/authStruct';
 import bcrypt from 'bcrypt';
-import { generateTokens } from '../../infrastructure/security/jwt';
+import { generateAccessToken, generateTokens } from '../../core/security/jwt';
 import User from '../../models/user';
 import { UnauthorizedException } from '../../core/errors/unauthorizedException';
 import { AUTH_MESSAGES } from '../../constants/authMessages';

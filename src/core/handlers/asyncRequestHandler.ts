@@ -4,7 +4,7 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
-import { handlePrismaError } from '../../infrastructure/prisma/handler/handlePrismaError';
+import { handlePrismaError } from './handlePrismaError';
 
 const asyncRequestHandler = <T>(handler: AsyncRequestHandler<T>) => {
   return async (req: Request, res: Response, next: NextFunction) => {

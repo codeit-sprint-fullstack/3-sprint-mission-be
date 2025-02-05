@@ -8,7 +8,7 @@ import authRouter from './routes/auth/routes';
 import userRouter from './routes/user/routes';
 import imageRouter from './routes/Upload/routes';
 import swaggerUi from 'swagger-ui-express';
-import { specs } from './utils/swagger';
+import { specs } from './core/docs/swagger';
 import path from 'path';
 
 dotenv.config();
