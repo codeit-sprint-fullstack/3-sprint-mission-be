@@ -7,16 +7,14 @@ interface JwtPayload {
 
 export const createAuthMiddleware = (message: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken) {
       res.status(401).json({ message });
       return;
     }
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+      const decoded = jwt.verify(accessToken, process.env.JWT_SECRET!) as JwtPayload;
       req.user = { userId: decoded.userId };
       next();
     } catch (err) {

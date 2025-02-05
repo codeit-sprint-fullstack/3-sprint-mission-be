@@ -10,6 +10,7 @@ import imageRouter from './routes/Upload/routes';
 import swaggerUi from 'swagger-ui-express';
 import { specs } from './core/docs/swagger';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -20,8 +21,13 @@ const allowedOrigins = [process.env.DEPLOYED_URL, process.env.LOCALHOST].filter(
 
 const app = express();
 app.use(
-  cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'] }),
+  cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    credentials: true,
+  }),
 );
+app.use(cookieParser());
 app.use(express.json());
 app.get('/', (req: Request, res: Response) => {
   res.send('<h1>hello world!</h1>');

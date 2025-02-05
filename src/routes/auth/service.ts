@@ -62,7 +62,7 @@ export class AuthService {
 
     try {
       const decoded = jwt.verify(refreshToken, this.refreshTokenSecret) as JwtPayload;
-      return generateTokens(decoded.userId);
+      return generateAccessToken(decoded.userId);
     } catch (e) {
       if (e instanceof jwt.TokenExpiredError)
         throw new UnauthorizedException(AUTH_MESSAGES.refreshTokenExpired);
