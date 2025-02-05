@@ -9,7 +9,7 @@ export class CommentController {
     const { content } = req.body;
     const { userId } = req.user!;
 
-    const comment = await this.commentService.editComment(commentId, userId, content);
+    const comment = await this.commentService.editComment(commentId, userId, { content });
     return res.status(201).json(comment.toJSON());
   };
 
