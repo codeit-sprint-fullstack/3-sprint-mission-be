@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createAuthMiddleware } from '../../core/middleware/auth';
+import { createAuthMiddleware } from '../../core/middleware/auth/auth';
 import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
 import { UserService } from './service';
 import { UserController } from './controller';
@@ -13,7 +13,7 @@ const userController = new UserController(userService);
 
 router.get(
   '/me',
-  createAuthMiddleware(AUTH_MESSAGES.needLogin),
+  // createAuthMiddleware(AUTH_MESSAGES.needLogin),
   asyncRequestHandler(userController.getMe),
 );
 

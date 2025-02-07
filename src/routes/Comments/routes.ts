@@ -1,6 +1,6 @@
 import express from 'express';
 import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
-import { createAuthMiddleware } from '../../core/middleware/auth';
+import { createAuthMiddleware } from '../../core/middleware/auth/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { CommentController } from './controller';
 import { CommentService } from './service';

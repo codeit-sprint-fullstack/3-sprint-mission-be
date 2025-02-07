@@ -11,6 +11,7 @@ import swaggerUi from 'swagger-ui-express';
 import { specs } from './core/docs/swagger';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import { extractUserMiddleware } from './core/middleware/auth/extractUser';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -29,6 +30,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+app.use(extractUserMiddleware);
 app.get('/', (req: Request, res: Response) => {
   res.send('<h1>hello world!</h1>');
 });

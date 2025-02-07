@@ -6,8 +6,10 @@ export class UserController {
 
   getMe = async (req: Request, res: Response) => {
     const userId = req.user?.userId!;
+    if (!userId) return res.status(200).json(null);
+
     const user = await this.userService.getMe(userId);
 
-    return res.status(200).json(user.toJSON());
+    return res.status(200).json(user?.toJSON());
   };
 }

@@ -12,7 +12,7 @@ import {
   GetProductListRequestStruct,
 } from '../../structs/productStruct';
 import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
-import { createAuthMiddleware } from '../../core/middleware/auth';
+import { createAuthMiddleware } from '../../core/middleware/auth/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { CreateCommentStruct, GetCommentListStruct } from '../../structs/commentStruct';
 

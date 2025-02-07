@@ -6,7 +6,7 @@ import CommentRepository from '../../repositories/commentRepository';
 import { prismaClient } from '../../prismaClient';
 import { ArticleController } from './controller';
 import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
-import { createAuthMiddleware } from '../../core/middleware/auth';
+import { createAuthMiddleware } from '../../core/middleware/auth/auth';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
 import { validateBody, validateQuery } from '../../core/middleware/validate';
 import {
