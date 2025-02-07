@@ -8,4 +8,4 @@ import { AuthGuard } from '../auth/auth.guard';
   controllers: [ProductsController],
   providers: [ProductsService, PrismaService, AuthGuard],
 })
-export class ProductModule {}
+export class ProductsModule {}

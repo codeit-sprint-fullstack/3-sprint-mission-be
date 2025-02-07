@@ -25,7 +25,7 @@ interface AuthRequest extends Request {
 }
 
 @Controller('products')
-export class ProductController {
+export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
 
   @Get(':id')
