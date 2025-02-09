@@ -1,0 +1,12 @@
+model ProductTag {
+  id        String   @id @default(cuid())
+  productId String
+  tagId     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tag       Tag      @relation(fields: [tagId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, tagId]) // 중복 방지
+  @@map("product_tags")
+}
