@@ -40,5 +40,7 @@ export class AuthController {
     const { refreshToken } = req.cookies;
     const accessToken = await this.authService.refreshUserToken(refreshToken);
     this.setAccessToken(res, accessToken);
+
+    return res.status(201).json({ message: 'refresh success' });
   };
 }
