@@ -17,7 +17,7 @@ export class CommentController {
     const commentId = parseInt(req.params.commentId);
     const { userId } = req.user!;
 
-    this.commentService.deleteComment(commentId, userId);
+    await this.commentService.deleteComment(commentId, userId);
     res.sendStatus(204);
   };
 }
