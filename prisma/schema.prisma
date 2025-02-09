@@ -7,42 +7,77 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id             String           @id @default(uuid())
-  name           String
-  description    String?
-  price          Int
-  favoriteCount  Int
-  tags           String[]
-  images         String[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique @db.VarChar(255)
+  password     String   @db.VarChar(255)
+  nickname     String   @unique @db.VarChar(50)
+  refreshToken String?
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
+
+  products       Product[]
+  Article        Article[]
   ProductComment ProductComment[]
+  ArticleComment ArticleComment[]
+
+  @@map("users")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Int
+  like        Int      @default(0)
+  userId      String
+  createdAt   DateTime @default(now())
+  imageUrl    String   @db.VarChar(2048)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tags           Json
+  ProductComment ProductComment[]
+
+  @@map("product")
 }
 
 model Article {
-  id             String           @id @default(uuid())
-  title          String
-  content        String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id        String   @id @default(uuid())
+  title     String   @db.VarChar(255)
+  content   String
+  like      Int      @default(0)
+  imageUrl  String?  @db.VarChar(2048)
+  userId    String
+  createdAt DateTime @default(now())
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   ArticleComment ArticleComment[]
+
+  @@map("article")
 }
 
 model ProductComment {
   id        String   @id @default(uuid())
-  content   String
-  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String?
+  content   String // 댓글 내용
+  userId    String // 댓글 작성자 ID
+  productId String // 댓글이 달린 상품 ID
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("productComment")
 }
 
 model ArticleComment {
   id        String   @id @default(uuid())
-  content   String
-  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String?
+  content   String // 댓글 내용
+  userId    String // 댓글 작성자 ID
+  articleId String // 댓글이 달린 게시글 ID
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("articleComment")
 }
