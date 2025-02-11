@@ -70,7 +70,7 @@ export const GetProductListRequestStruct = object({
     ),
     'recent',
   ),
-  keyword: optional(nonempty(string())),
+  word: optional(nonempty(string())),
 });
 
 export type CreateProductRequest = Infer<typeof CreateProductRequestStruct>;

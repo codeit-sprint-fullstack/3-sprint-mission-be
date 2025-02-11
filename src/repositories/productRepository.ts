@@ -43,20 +43,20 @@ export default class ProductRepository {
     });
   }
 
-  async getProductList({ page, pageSize, orderBy, keyword }: GetProductListRequest) {
+  async getProductList({ page, pageSize, orderBy, word }: GetProductListRequest) {
     const skip = (page - 1) * pageSize;
 
-    const whereClause = keyword
+    const whereClause = word
       ? {
           OR: [
             {
               name: {
-                contains: keyword,
+                contains: word,
               },
             },
             {
               description: {
-                contains: keyword,
+                contains: word,
               },
             },
           ],
