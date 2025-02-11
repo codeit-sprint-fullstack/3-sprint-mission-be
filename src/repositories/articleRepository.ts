@@ -36,20 +36,20 @@ export default class ArticleRepository {
     });
   }
 
-  async getArticleList({ page, pageSize, orderBy, keyword }: GetArticleListRequest) {
+  async getArticleList({ page, pageSize, orderBy, word }: GetArticleListRequest) {
     const skip = (page - 1) * pageSize;
 
-    const whereClause = keyword
+    const whereClause = word
       ? {
           OR: [
             {
-              name: {
-                contains: keyword,
+              title: {
+                contains: word,
               },
             },
             {
               content: {
-                contains: keyword,
+                contains: word,
               },
             },
           ],

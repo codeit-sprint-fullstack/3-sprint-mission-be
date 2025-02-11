@@ -56,7 +56,7 @@ export const GetArticleListRequestStruct = object({
     refine(enums(['recent', 'like']), 'orderBy는 recent,like중 하나를 입력해주세요.', () => true),
     'recent',
   ),
-  keyword: optional(nonempty(string())),
+  word: optional(nonempty(string())),
 });
 
 export type CreateArticleRequest = Infer<typeof CreateArticleRequestStruct>;
