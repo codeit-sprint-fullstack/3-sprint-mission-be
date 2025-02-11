@@ -5,7 +5,7 @@ export class AuthController {
   private COOKIE_OPTIONS = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none' as const,
+    sameSite: process.env.NODE_ENV === 'production' ? ('none' as const) : ('lax' as const),
     path: '/',
   };
   constructor(private authService: AuthService) {}
