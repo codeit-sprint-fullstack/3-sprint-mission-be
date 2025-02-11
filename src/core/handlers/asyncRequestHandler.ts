@@ -13,13 +13,14 @@ const asyncRequestHandler = <T>(handler: AsyncRequestHandler<T>) => {
     } catch (e: any) {
       if (!res.headersSent) {
         if (
-          e.name === 'StructError' ||
           e instanceof PrismaClientValidationError ||
           e instanceof PrismaClientKnownRequestError
         ) {
           handlePrismaError(e, res);
-        } else if (e.name === 'ValidationError') {
+        } else if (e.name === 'ValidationError' || e.name === 'StructError') {
           res.status(400).send({ message: e.message });
+        } else if (e.statusCode) {
+          res.status(e.statusCode).send({ message: e.message });
         } else {
           res.status(500).send({ message: e.message });
         }
