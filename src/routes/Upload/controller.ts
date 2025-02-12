@@ -4,17 +4,17 @@ import { UploadService } from './service';
 export class UploadController {
   constructor(private uploadService: UploadService) {}
 
-  uploadFiles = async (req: Request, res: Response): Promise<void> => {
+  generateUploadUrl = async (req: Request, res: Response) => {
     try {
-      const files = req.files as Express.Multer.File[];
-      const result = this.uploadService.uploadFiles(files);
-      res.status(200).json(result);
-    } catch (error) {
-      if (error instanceof Error && error.message === '파일이 존재하지 않습니다.') {
-        res.status(400).json({ message: error.message });
-        return;
+      const { filename } = req.query;
+      if (typeof filename !== 'string' || !filename) {
+        return res.status(400).json({ message: '파일 이름이 필요합니다.' });
       }
-      res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
+      const { uploadUrl, imageUrl } = await this.uploadService.generateUploadUrl(filename);
+
+      return res.json({ uploadUrl, imageUrl });
+    } catch (error) {
+      return res.status(500).json({ message: 'URL 생성 실패' });
     }
   };
 }

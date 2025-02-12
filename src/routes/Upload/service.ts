@@ -1,17 +1,5 @@
-import { Request, Response } from 'express';
-
-export const uploadFile = async (req: Request, res: Response) => {
-  const files = req.files as Express.Multer.File[];
-
-  if (!files || files.length === 0) {
-    return res.status(400).json({ message: '파일이 존재하지 않습니다.' });
-  }
-  const imageUrls = files.map((file) => `${process.env.SERVER_ADDRESS}/uploads/${file.filename}`);
-
-  res.status(200).json({
-    imageUrls,
-  });
-};
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 interface UploadResult {
   imageUrls: string[];
@@ -19,17 +7,29 @@ interface UploadResult {
 
 export class UploadService {
   private serverAddress: string;
+  private s3Client: S3Client;
 
   constructor(serverAddress: string) {
     this.serverAddress = serverAddress;
+    this.s3Client = new S3Client({
+      region: process.env.AWS_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
+    });
   }
 
-  uploadFiles(files: Array<{ filename: string }>): UploadResult {
-    if (!files || files.length === 0) {
-      throw new Error('파일이 존재하지 않습니다.');
-    }
+  async generateUploadUrl(filename: string) {
+    const key = `uploads/${Date.now()}-${filename}`;
+    const command = new PutObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: key,
+    });
 
-    const imageUrls = files.map((file) => `${this.serverAddress}/uploads/${file.filename}`);
-    return { imageUrls };
+    const uploadUrl = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
+    const imageUrl = `${process.env.CLOUDFRONT_URL}/${key}`;
+
+    return { uploadUrl, imageUrl };
   }
 }
