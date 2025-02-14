@@ -4,7 +4,6 @@ export const articleMocks = [
     title: '게시글 1',
     content: '게시글 1 입니다.',
     images: [],
-    likeCount: 5,
     userId: 1,
   },
   {
@@ -12,7 +11,6 @@ export const articleMocks = [
     title: '게시글 2',
     content: '게시글 2 입니다.',
     images: [],
-    likeCount: 4,
     userId: 2,
   },
   {
@@ -20,7 +18,6 @@ export const articleMocks = [
     title: '게시글 3',
     content: '게시글 3 입니다.',
     images: [],
-    likeCount: 3,
     userId: 3,
   },
   {
@@ -28,7 +25,6 @@ export const articleMocks = [
     title: '게시글 4',
     content: '게시글 4 입니다.',
     images: [],
-    likeCount: 2,
     userId: 4,
   },
   {
@@ -36,7 +32,6 @@ export const articleMocks = [
     title: '게시글 5',
     content: '게시글 5 입니다.',
     images: [],
-    likeCount: 1,
     userId: 5,
   },
 ];

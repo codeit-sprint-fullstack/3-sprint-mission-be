@@ -7,7 +7,6 @@ export const productMocks = [
     tags: ['1', '2'],
     images: [],
     userId: 1,
-    favoriteCount: 5,
   },
   {
     id: 2,
@@ -17,7 +16,6 @@ export const productMocks = [
     tags: ['1', '2'],
     images: [],
     userId: 2,
-    favoriteCount: 4,
   },
   {
     id: 3,
@@ -27,7 +25,6 @@ export const productMocks = [
     tags: ['1', '2'],
     images: [],
     userId: 3,
-    favoriteCount: 3,
   },
   {
     id: 4,
@@ -37,7 +34,6 @@ export const productMocks = [
     tags: ['1', '2'],
     images: [],
     userId: 4,
-    favoriteCount: 2,
   },
   {
     id: 5,
@@ -47,6 +43,5 @@ export const productMocks = [
     tags: ['1', '2'],
     images: [],
     userId: 5,
-    favoriteCount: 1,
   },
 ];

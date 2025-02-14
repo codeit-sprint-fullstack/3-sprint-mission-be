@@ -8,19 +8,18 @@ datasource db {
 }
 
 model Product {
-  id            Int        @id @default(autoincrement())
-  name          String
-  description   String
-  price         Int
-  tags          String[]
-  images        String[]
-  favoriteCount Int        @default(0)
-  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime   @updatedAt @db.Timestamptz(6)
-  comments      Comment[]
-  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        Int
-  favorites     Favorite[]
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  tags        String[]
+  images      String[]
+  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
+  comments    Comment[]
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  favorites   Favorite[]
 }
 
 model Article {
@@ -28,7 +27,6 @@ model Article {
   title     String
   content   String
   images    String[]
-  likeCount Int       @default(0)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   comments  Comment[]
