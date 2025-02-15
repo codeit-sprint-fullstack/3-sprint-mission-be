@@ -45,10 +45,9 @@ export class ArticleController {
   };
 
   getArticles = async (req: Request, res: Response) => {
-    const userId = req.user?.userId!;
     const getArticlesDto = req.validatedQuery;
 
-    const result = await this.articleService.getArticleList(userId, getArticlesDto);
+    const result = await this.articleService.getArticleList(getArticlesDto);
 
     return res.status(200).json({
       ...result,
@@ -72,9 +71,14 @@ export class ArticleController {
 
   getArticleComments = async (req: Request, res: Response) => {
     const articleId = parseId(req.params.articleId);
+    const userId = req.user?.userId!;
     const getArticleCommentsDto = req.validatedQuery;
 
-    const result = await this.articleService.getArticleComments(articleId, getArticleCommentsDto);
+    const result = await this.articleService.getArticleComments(
+      articleId,
+      userId,
+      getArticleCommentsDto,
+    );
     const comments = result.list.map((comment) => comment.toJSON());
 
     return res.status(200).json({

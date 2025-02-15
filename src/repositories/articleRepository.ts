@@ -1,5 +1,5 @@
+import { PrismaClient } from '@prisma/client';
 import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../constants/prisma';
-import { prismaClient } from '../prismaClient';
 import {
   type CreateArticleRequest,
   type EditArticleRequest,
@@ -7,32 +7,60 @@ import {
 } from '../structs/articleStruct';
 
 export default class ArticleRepository {
+  constructor(private prismaClient: PrismaClient) {}
+
+  private LIKE_COUNT_CLAUSE = {
+    _count: {
+      select: {
+        likes: true,
+      },
+    },
+  } as const;
+
+  private makeIncludeClause(userId?: number) {
+    return {
+      ...INCLUDE_USER_CLAUSE,
+      ...this.LIKE_COUNT_CLAUSE,
+      likes: userId
+        ? {
+            where: { userId },
+            select: { id: true },
+            take: 1,
+          }
+        : {
+            select: { id: true },
+            take: 0,
+          },
+    };
+  }
+
   async create(userId: number, data: CreateArticleRequest) {
-    return await prismaClient.article.create({
+    return await this.prismaClient.article.create({
       data: {
         ...data,
         userId,
       },
-      include: INCLUDE_USER_CLAUSE,
+      include: this.makeIncludeClause(userId),
     });
   }
 
-  async update(articleId: number, data: EditArticleRequest) {
-    return await prismaClient.article.update({
+  async update(articleId: number, userId: number, data: EditArticleRequest) {
+    return await this.prismaClient.article.update({
       where: {
         id: articleId,
       },
       data,
-      include: INCLUDE_USER_CLAUSE,
+      include: this.makeIncludeClause(userId),
     });
   }
 
-  async findById(articleId: number) {
+  async findById(articleId: number, userId: number, tx?: any) {
+    const prismaClient = tx || this.prismaClient;
     return await prismaClient.article.findUnique({
       where: {
         id: articleId,
       },
-      include: INCLUDE_USER_CLAUSE,
+      include: this.makeIncludeClause(userId),
     });
   }
 
@@ -57,14 +85,14 @@ export default class ArticleRepository {
       : undefined;
 
     const [list, totalCount] = await Promise.all([
-      prismaClient.article.findMany({
+      this.prismaClient.article.findMany({
         skip,
         take: pageSize,
         orderBy: getOrderByClause(orderBy),
         where: whereClause,
-        include: INCLUDE_USER_CLAUSE,
+        include: this.makeIncludeClause(),
       }),
-      prismaClient.article.count({
+      this.prismaClient.article.count({
         where: whereClause,
       }),
     ]);
@@ -79,38 +107,10 @@ export default class ArticleRepository {
   }
 
   async delete(articleId: number) {
-    await prismaClient.article.delete({
+    await this.prismaClient.article.delete({
       where: {
         id: articleId,
       },
-    });
-  }
-
-  async incrementLikeCount(articleId: number) {
-    return await prismaClient.article.update({
-      where: {
-        id: articleId,
-      },
-      data: {
-        likeCount: {
-          increment: 1,
-        },
-      },
-      include: INCLUDE_USER_CLAUSE,
-    });
-  }
-
-  async decrementLikeCount(articleId: number) {
-    return await prismaClient.article.update({
-      where: {
-        id: articleId,
-      },
-      data: {
-        likeCount: {
-          decrement: 1,
-        },
-      },
-      include: INCLUDE_USER_CLAUSE,
     });
   }
 }

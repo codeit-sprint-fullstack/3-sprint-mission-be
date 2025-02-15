@@ -13,6 +13,7 @@ import { AUTH_MESSAGES } from '../../constants/authMessages';
 import CommentRepository from '../../repositories/commentRepository';
 import { ConflictException, ForbiddenException, NotFoundException } from '../../core/errors';
 import { PrismaClient } from '@prisma/client';
+
 export class ArticleService {
   constructor(
     private articleRepository: ArticleRepository,
@@ -21,8 +22,8 @@ export class ArticleService {
     private prisma: PrismaClient,
   ) {}
 
-  private async getExistingArticle(articleId: number) {
-    const existingArticle = await this.articleRepository.findById(articleId);
+  private async getExistingArticle(articleId: number, userId: number) {
+    const existingArticle = await this.articleRepository.findById(articleId, userId);
     if (!existingArticle) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
     return existingArticle;
   }
@@ -32,46 +33,52 @@ export class ArticleService {
   }
 
   async postArticle(userId: number, createArticleDto: CreateArticleRequest) {
-    const articleEntity = await this.articleRepository.create(userId, createArticleDto);
-    return new Article({ ...articleEntity, isLiked: false });
+    const { _count, ...articleData } = await this.articleRepository.create(
+      userId,
+      createArticleDto,
+    );
+    return new Article({ ...articleData, likeCount: _count.likes, isLiked: false });
   }
 
   async getArticleById(articleId: number, userId: number) {
-    const articleEntity = await this.articleRepository.findById(articleId);
-
+    const articleEntity = await this.articleRepository.findById(articleId, userId);
     if (!articleEntity) {
       throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
     }
+    const { _count, likes, ...articleData } = articleEntity;
 
-    const isLiked = await this.likeRepository.findIsLiked(articleId, userId);
-    return new Article({ ...articleEntity, isLiked });
+    return new Article({ ...articleData, likeCount: _count.likes, isLiked: likes.length > 0 });
   }
 
   async editArticle(articleId: number, userId: number, editArticleRequestDto: EditArticleRequest) {
-    const existingArticle = await this.getExistingArticle(articleId);
+    const existingArticle = await this.getExistingArticle(articleId, userId);
     await this.validateAuth(existingArticle.userId, articleId, AUTH_MESSAGES.update);
 
-    const articleEntity = await this.articleRepository.update(articleId, editArticleRequestDto);
-    const isLiked = await this.likeRepository.findIsLiked(articleId, userId);
-    return new Article({ ...articleEntity, isLiked });
+    const { _count, likes, ...articleData } = await this.articleRepository.update(
+      articleId,
+      userId,
+      editArticleRequestDto,
+    );
+    return new Article({ ...articleData, likeCount: _count.likes, isLiked: likes.length > 0 });
   }
 
   async deleteArticle(articleId: number, userId: number) {
-    const existingArticle = await this.getExistingArticle(articleId);
+    const existingArticle = await this.getExistingArticle(articleId, userId);
     await this.validateAuth(existingArticle.userId, articleId, AUTH_MESSAGES.delete);
     await this.articleRepository.delete(articleId);
   }
 
-  async getArticleList(userId: number, getArticleListDto: GetArticleListRequest) {
+  async getArticleList(getArticleListDto: GetArticleListRequest) {
     const articleListResult = await this.articleRepository.getArticleList(getArticleListDto);
 
-    const articles = await Promise.all(
-      articleListResult.list.map(async (articleEntity) => {
-        if (!userId) return new Article({ ...articleEntity, isLiked: false });
-        const isLiked = await this.likeRepository.findIsLiked(articleEntity.id, userId);
-        return new Article({ ...articleEntity, isLiked });
-      }),
-    );
+    const articles = articleListResult.list.map((article) => {
+      const { _count, likes, ...articleData } = article;
+      return new Article({
+        ...articleData,
+        likeCount: _count.likes,
+        isLiked: false,
+      });
+    });
 
     return {
       ...articleListResult,
@@ -80,7 +87,7 @@ export class ArticleService {
   }
 
   async postArticleComment(articleId: number, userId: number, content: CreateCommentRequest) {
-    await this.getExistingArticle(articleId);
+    await this.getExistingArticle(articleId, userId);
 
     const commentEntity = await this.commentRepository.createArticleComment(
       articleId,
@@ -91,8 +98,12 @@ export class ArticleService {
     return new Comment(commentEntity);
   }
 
-  async getArticleComments(articleId: number, getCommentListDto: GetCommentListRequest) {
-    await this.getExistingArticle(articleId);
+  async getArticleComments(
+    articleId: number,
+    userId: number,
+    getCommentListDto: GetCommentListRequest,
+  ) {
+    await this.getExistingArticle(articleId, userId);
 
     const getCommentListResult = await this.commentRepository.findComments({
       ...getCommentListDto,
@@ -107,32 +118,35 @@ export class ArticleService {
   }
 
   async setLike(articleId: number, userId: number) {
-    await this.getExistingArticle(articleId);
+    return await this.prisma.$transaction(async (tx) => {
+      const article = await this.articleRepository.findById(articleId, userId, tx);
+      if (!article) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+      if (article.likes.length > 0) throw new ConflictException('이미 좋아요가 눌린 게시글입니다.');
 
-    if (await this.likeRepository.findIsLiked(articleId, userId))
-      throw new ConflictException('이미 좋아요가 눌린 게시글입니다.');
+      await this.likeRepository.setLike(articleId, userId, tx);
 
-    const articleEntity = await this.prisma.$transaction(async (t) => {
-      await this.likeRepository.setLike(articleId, userId);
-      const article = await this.articleRepository.incrementLikeCount(articleId);
-      return article;
+      return new Article({
+        ...article,
+        likeCount: article._count.likes + 1,
+        isLiked: true,
+      });
     });
-
-    return new Article({ ...articleEntity, isLiked: true });
   }
 
   async deleteLike(articleId: number, userId: number) {
-    await this.getExistingArticle(articleId);
+    return await this.prisma.$transaction(async (tx) => {
+      const article = await this.articleRepository.findById(articleId, userId, tx);
+      if (!article) throw new NotFoundException(EXCEPTION_MESSAGES.articleNotFound);
+      if (article.likes.length === 0)
+        throw new ConflictException('이미 좋아요가 취소된 게시글입니다.');
 
-    if (!(await this.likeRepository.findIsLiked(articleId, userId)))
-      throw new ConflictException('이미 좋아요가 취소된 게시글입니다.');
+      await this.likeRepository.deleteLike(articleId, userId, tx);
 
-    const articleEntity = await this.prisma.$transaction(async (t) => {
-      await this.likeRepository.deleteLike(articleId, userId);
-      const article = await this.articleRepository.decrementLikeCount(articleId);
-      return article;
+      return new Article({
+        ...article,
+        likeCount: article._count.likes - 1,
+        isLiked: false,
+      });
     });
-
-    return new Article({ ...articleEntity, isLiked: false });
   }
 }
