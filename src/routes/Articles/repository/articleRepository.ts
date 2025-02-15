@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../constants/prisma';
+import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../../constants/prisma';
 import {
   type CreateArticleRequest,
   type EditArticleRequest,
   type GetArticleListRequest,
-} from '../../structs/articleStruct';
+} from '../../../structs/articleStruct';
 
 export default class ArticleRepository {
   constructor(private prismaClient: PrismaClient) {}
