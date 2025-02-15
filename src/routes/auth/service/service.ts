@@ -4,7 +4,7 @@ import UserRepository from '../../user/repository/userRepository';
 import { SignInRequest, SignUpRequest } from '@/structs/authStruct';
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateTokens } from '@/core/security/jwt';
-import User from '@/models/user';
+import User from '@/routes/user/model/user';
 import { UnauthorizedException } from '@/core/errors/unauthorizedException';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import jwt, { JwtPayload } from 'jsonwebtoken';
