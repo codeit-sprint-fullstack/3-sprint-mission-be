@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../constants/prisma';
+import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../../constants/prisma';
 import {
   CreateProductRequest,
   EditProductRequest,
   GetProductListRequest,
-} from '../../structs/productStruct';
+} from '../../../structs/productStruct';
 
 export default class ProductRepository {
   constructor(private prismaClient: PrismaClient) {}

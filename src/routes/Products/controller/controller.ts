@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ProductService } from './service';
+import { ProductService } from '../service/service';
 import { parseId } from '@/utils/parseId';
 
 export class ProductController {
