@@ -1,4 +1,4 @@
-import UserRepository from '@/routes/user/userRepository';
+import UserRepository from '../repository/userRepository';
 import User from '@/models/user';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import { NotFoundException } from '@/core/errors';

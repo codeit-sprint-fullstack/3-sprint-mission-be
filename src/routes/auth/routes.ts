@@ -1,4 +1,4 @@
-import UserRepository from '@/routes/user/userRepository';
+import UserRepository from '../user/repository/userRepository';
 import { AuthController } from './controller';
 import { AuthService } from './service';
 import express from 'express';

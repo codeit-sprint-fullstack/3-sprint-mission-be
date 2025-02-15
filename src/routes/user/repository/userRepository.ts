@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { EncryptedSignUpRequest } from '../../structs/authStruct';
+import { EncryptedSignUpRequest } from '@/structs/authStruct';
 
 export default class UserRepository {
   constructor(private prismaClient: PrismaClient) {}
