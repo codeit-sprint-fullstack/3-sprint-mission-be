@@ -1,6 +1,6 @@
 import { EditCommentRequest } from '@/structs/commentStruct';
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
-import { Comment } from '@/models/comment';
+import { Comment } from '@/routes/Comments/model/comment';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import CommentRepository from '@/routes/Comments/commentRepository';
 import { NotFoundException } from '@/core/errors';

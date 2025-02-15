@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CommentService } from './service';
+import { CommentService } from '../service/service';
 
 export class CommentController {
   constructor(private commentService: CommentService) {}

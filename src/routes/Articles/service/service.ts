@@ -4,13 +4,13 @@ import {
   GetArticleListRequest,
 } from '@/structs/articleStruct';
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
-import Article from '@/models/article';
+import Article from '@/routes/Articles/model/article';
 import { CreateCommentRequest, GetCommentListRequest } from '@/structs/commentStruct';
-import { Comment } from '@/models/comment';
+import { Comment } from '@/routes/Comments/model/comment';
 import ArticleRepository from '@/routes/Articles/repository/articleRepository';
 import LikeRepository from '@/routes/Articles/repository/likeRepository';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
-import CommentRepository from '@/routes/Comments/commentRepository';
+import CommentRepository from '@/routes/Comments/repository/commentRepository';
 import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
 import { PrismaClient } from '@prisma/client';
 

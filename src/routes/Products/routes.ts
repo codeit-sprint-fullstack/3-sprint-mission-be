@@ -2,7 +2,7 @@ import express from 'express';
 import { ProductService } from './service/service';
 import ProductRepository from '@/routes/Products/repository/productRepository';
 import FavoriteRepository from '@/routes/Products/repository/favoriteRepository';
-import CommentRepository from '@/routes/Comments/commentRepository';
+import CommentRepository from '../Comments/repository/commentRepository';
 import { prismaClient } from '@/prismaClient';
 import { ProductController } from './controller/controller';
 import { validateBody, validateQuery } from '@/core/middleware/validate';

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import CommentRepository from '@/routes/Comments/commentRepository';
+import CommentRepository from '@/routes/Comments/repository/commentRepository';
 import FavoriteRepository from '@/routes/Products/repository/favoriteRepository';
 import ProductRepository from '@/routes/Products/repository/productRepository';
 import {
@@ -7,12 +7,12 @@ import {
   EditProductRequest,
   GetProductListRequest,
 } from '@/structs/productStruct';
-import { Product } from '@/models/product';
+import { Product } from '@/routes/Products/model/product';
 import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import { CreateCommentRequest, GetCommentListRequest } from '@/structs/commentStruct';
-import { Comment } from '@/models/comment';
+import { Comment } from '@/routes/Comments/model/comment';
 
 export class ProductService {
   constructor(
