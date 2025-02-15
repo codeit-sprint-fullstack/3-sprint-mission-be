@@ -4,7 +4,7 @@ import { createAuthMiddleware } from '@/core/middleware/auth/auth';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import { CommentController } from './controller';
 import { CommentService } from './service';
-import CommentRepository from '@/repositories/commentRepository';
+import CommentRepository from '@/routes/Comments/commentRepository';
 import { validateBody } from '@/core/middleware/validate';
 import { EditCommentStruct } from '@/structs/commentStruct';
 import { prismaClient } from '@/prismaClient';

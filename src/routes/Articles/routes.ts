@@ -1,8 +1,8 @@
 import express from 'express';
 import { ArticleService } from './service';
-import ArticleRepository from '@/repositories/articleRepository';
-import LikeRepository from '@/repositories/likeRepository';
-import CommentRepository from '@/repositories/commentRepository';
+import ArticleRepository from '@/routes/Articles/articleRepository';
+import LikeRepository from '@/routes/Articles/likeRepository';
+import CommentRepository from '@/routes/Comments/commentRepository';
 import { prismaClient } from '@/prismaClient';
 import { ArticleController } from './controller';
 import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';

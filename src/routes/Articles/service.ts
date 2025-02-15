@@ -7,10 +7,10 @@ import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
 import Article from '@/models/article';
 import { CreateCommentRequest, GetCommentListRequest } from '@/structs/commentStruct';
 import { Comment } from '@/models/comment';
-import ArticleRepository from '@/repositories/articleRepository';
-import LikeRepository from '@/repositories/likeRepository';
+import ArticleRepository from '@/routes/Articles/articleRepository';
+import LikeRepository from '@/routes/Articles/likeRepository';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
-import CommentRepository from '@/repositories/commentRepository';
+import CommentRepository from '@/routes/Comments/commentRepository';
 import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
 import { PrismaClient } from '@prisma/client';
 

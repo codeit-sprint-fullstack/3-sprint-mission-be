@@ -1,8 +1,8 @@
 import express from 'express';
 import { ProductService } from './service';
-import ProductRepository from '@/repositories/productRepository';
-import FavoriteRepository from '@/repositories/favoriteRepository';
-import CommentRepository from '@/repositories/commentRepository';
+import ProductRepository from '@/routes/Products/productRepository';
+import FavoriteRepository from '@/routes/Products/favoriteRepository';
+import CommentRepository from '@/routes/Comments/commentRepository';
 import { prismaClient } from '@/prismaClient';
 import { ProductController } from './controller';
 import { validateBody, validateQuery } from '@/core/middleware/validate';

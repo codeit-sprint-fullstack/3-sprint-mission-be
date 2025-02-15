@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import CommentRepository from '@/repositories/commentRepository';
-import FavoriteRepository from '@/repositories/favoriteRepository';
-import ProductRepository from '@/repositories/productRepository';
+import CommentRepository from '@/routes/Comments/commentRepository';
+import FavoriteRepository from '@/routes/Products/favoriteRepository';
+import ProductRepository from '@/routes/Products/productRepository';
 import {
   CreateProductRequest,
   EditProductRequest,

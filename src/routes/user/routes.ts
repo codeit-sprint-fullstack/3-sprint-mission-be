@@ -2,7 +2,7 @@ import { Router } from 'express';
 import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
 import { UserService } from './service';
 import { UserController } from './controller';
-import UserRepository from '@/repositories/userRepository';
+import UserRepository from '@/routes/user/userRepository';
 import { prismaClient } from '@/prismaClient';
 
 const router = Router();

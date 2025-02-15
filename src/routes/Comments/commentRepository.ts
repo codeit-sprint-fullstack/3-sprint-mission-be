@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { INCLUDE_USER_CLAUSE } from '../constants/prisma';
-import { CreateCommentRequest, EditCommentRequest } from '../structs/commentStruct';
+import { INCLUDE_USER_CLAUSE } from '../../constants/prisma';
+import { CreateCommentRequest, EditCommentRequest } from '../../structs/commentStruct';
 
 export default class CommentRepository {
   constructor(private prismaClient: PrismaClient) {}

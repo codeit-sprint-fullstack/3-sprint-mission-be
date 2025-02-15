@@ -1,6 +1,6 @@
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
 import { ConflictException } from '@/core/errors';
-import UserRepository from '@/repositories/userRepository';
+import UserRepository from '@/routes/user/userRepository';
 import { SignInRequest, SignUpRequest } from '@/structs/authStruct';
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateTokens } from '@/core/security/jwt';
