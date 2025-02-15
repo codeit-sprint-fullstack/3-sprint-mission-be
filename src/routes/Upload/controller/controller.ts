@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UploadService } from './service';
+import { UploadService } from '../service/service';
 
 export class UploadController {
   constructor(private uploadService: UploadService) {}

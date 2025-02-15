@@ -1,6 +1,6 @@
 import Express from 'express';
-import { UploadService } from './service';
-import { UploadController } from './controller';
+import { UploadService } from './service/service';
+import { UploadController } from './controller/controller';
 import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
 
 const uploadService = new UploadService(process.env.SERVER_ADDRESS!);
