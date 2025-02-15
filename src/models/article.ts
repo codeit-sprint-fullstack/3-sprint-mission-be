@@ -1,4 +1,4 @@
-import { ArticleModel } from '../types/models.types';
+import type { ArticleModel } from '@/types/models.types';
 
 export default class Article {
   #id;

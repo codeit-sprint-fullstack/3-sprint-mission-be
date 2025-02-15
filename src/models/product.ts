@@ -1,5 +1,5 @@
-import { ProductModel } from '../types/models.types';
-import { userInfo } from '../types/user.types';
+import type { ProductModel } from '@/types/models.types';
+import type { userInfo } from '@/types/user.types';
 
 export class Product {
   #id: number;

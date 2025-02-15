@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
+import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
 import { UserService } from './service';
 import { UserController } from './controller';
-import UserRepository from '../../repositories/userRepository';
-import { prismaClient } from '../../prismaClient';
+import UserRepository from '@/repositories/userRepository';
+import { prismaClient } from '@/prismaClient';
 
 const router = Router();
 const userRepository = new UserRepository(prismaClient);

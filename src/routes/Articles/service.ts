@@ -2,16 +2,16 @@ import {
   CreateArticleRequest,
   EditArticleRequest,
   GetArticleListRequest,
-} from '../../structs/articleStruct';
-import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
-import Article from '../../models/article';
-import { CreateCommentRequest, GetCommentListRequest } from '../../structs/commentStruct';
-import { Comment } from '../../models/comment';
-import ArticleRepository from '../../repositories/articleRepository';
-import LikeRepository from '../../repositories/likeRepository';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
-import CommentRepository from '../../repositories/commentRepository';
-import { ConflictException, ForbiddenException, NotFoundException } from '../../core/errors';
+} from '@/structs/articleStruct';
+import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
+import Article from '@/models/article';
+import { CreateCommentRequest, GetCommentListRequest } from '@/structs/commentStruct';
+import { Comment } from '@/models/comment';
+import ArticleRepository from '@/repositories/articleRepository';
+import LikeRepository from '@/repositories/likeRepository';
+import { AUTH_MESSAGES } from '@/constants/authMessages';
+import CommentRepository from '@/repositories/commentRepository';
+import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
 import { PrismaClient } from '@prisma/client';
 
 export class ArticleService {

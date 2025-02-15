@@ -1,18 +1,18 @@
 import { PrismaClient } from '@prisma/client';
-import CommentRepository from '../../repositories/commentRepository';
-import FavoriteRepository from '../../repositories/favoriteRepository';
-import ProductRepository from '../../repositories/productRepository';
+import CommentRepository from '@/repositories/commentRepository';
+import FavoriteRepository from '@/repositories/favoriteRepository';
+import ProductRepository from '@/repositories/productRepository';
 import {
   CreateProductRequest,
   EditProductRequest,
   GetProductListRequest,
-} from '../../structs/productStruct';
-import { Product } from '../../models/product';
-import { ConflictException, ForbiddenException, NotFoundException } from '../../core/errors';
-import { EXCEPTION_MESSAGES } from '../../constants/exceptionMessages';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { CreateCommentRequest, GetCommentListRequest } from '../../structs/commentStruct';
-import { Comment } from '../../models/comment';
+} from '@/structs/productStruct';
+import { Product } from '@/models/product';
+import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
+import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
+import { AUTH_MESSAGES } from '@/constants/authMessages';
+import { CreateCommentRequest, GetCommentListRequest } from '@/structs/commentStruct';
+import { Comment } from '@/models/comment';
 
 export class ProductService {
   constructor(

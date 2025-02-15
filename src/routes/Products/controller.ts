@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductService } from './service';
-import { parseId } from '../../utils/parseId';
+import { parseId } from '@/utils/parseId';
 
 export class ProductController {
   constructor(private productService: ProductService) {}

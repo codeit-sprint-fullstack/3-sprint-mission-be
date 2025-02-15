@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ArticleService } from './service';
-import { parseId } from '../../utils/parseId';
+import { parseId } from '@/utils/parseId';
 
 export class ArticleController {
   constructor(private articleService: ArticleService) {}

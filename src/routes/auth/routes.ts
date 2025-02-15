@@ -1,11 +1,11 @@
-import UserRepository from '../../repositories/userRepository';
+import UserRepository from '@/repositories/userRepository';
 import { AuthController } from './controller';
 import { AuthService } from './service';
 import express from 'express';
-import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
-import { validateBody } from '../../core/middleware/validate';
-import { signInRequestStruct, SignUpRequestStruct } from '../../structs/authStruct';
-import { prismaClient } from '../../prismaClient';
+import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
+import { validateBody } from '@/core/middleware/validate';
+import { signInRequestStruct, SignUpRequestStruct } from '@/structs/authStruct';
+import { prismaClient } from '@/prismaClient';
 
 const router = express.Router();
 const userRepository = new UserRepository(prismaClient);

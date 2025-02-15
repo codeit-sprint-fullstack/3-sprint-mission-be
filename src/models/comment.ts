@@ -1,5 +1,5 @@
-import { CommentModel } from '../types/models.types';
-import { userInfo } from '../types/user.types';
+import type { CommentModel } from '@/types/models.types';
+import type { userInfo } from '@/types/user.types';
 
 export class Comment {
   #id: number;
