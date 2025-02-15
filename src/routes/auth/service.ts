@@ -12,6 +12,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 export class AuthService {
   private refreshTokenSecret: string;
 
+  private SALT_ROUNDS = 10;
+
   constructor(
     private userRepository: UserRepository,
     refreshTokenSecret: string,
@@ -25,8 +27,7 @@ export class AuthService {
     const existingUserByNickname = await this.userRepository.findByNickname(nickname);
     if (existingUserByNickname) throw new ConflictException(EXCEPTION_MESSAGES.duplicatedNickname);
 
-    const SALT_ROUNDS = 10;
-    const encryptedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const encryptedPassword = await bcrypt.hash(password, this.SALT_ROUNDS);
     const userEntity = await this.userRepository.create({
       email,
       nickname,
