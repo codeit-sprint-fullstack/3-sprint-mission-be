@@ -1,6 +1,6 @@
 import UserRepository from '../user/repository/userRepository';
-import { AuthController } from './controller';
-import { AuthService } from './service';
+import { AuthController } from './controller/controller';
+import { AuthService } from './service/service';
 import express from 'express';
 import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
 import { validateBody } from '@/core/middleware/validate';

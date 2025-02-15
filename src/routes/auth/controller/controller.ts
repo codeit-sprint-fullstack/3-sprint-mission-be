@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthService } from './service';
+import { AuthService } from '../service/service';
 
 export class AuthController {
   private COOKIE_OPTIONS = {
