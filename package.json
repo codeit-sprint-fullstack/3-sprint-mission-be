@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "nodemon --watch src --ext ts --exec \"tsc && node dist/app.js\"",
+    "dev": "nodemon --watch src --ext ts --exec \"tsc && tsc-alias && node dist/app.js\"",
     "start": "node ./dist/app.js",
     "build": "npm install && tsc --noEmit",
     "postinstall": "prisma generate",
@@ -53,6 +53,7 @@
     "prisma": "^5.21.1",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.6.3"
   }
 }
