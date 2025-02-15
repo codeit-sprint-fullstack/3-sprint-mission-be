@@ -20,8 +20,8 @@ const router = express.Router();
 
 const articleService = new ArticleService(
   new ArticleRepository(prismaClient),
-  new LikeRepository(),
-  new CommentRepository(),
+  new LikeRepository(prismaClient),
+  new CommentRepository(prismaClient),
   prismaClient,
 );
 

@@ -1,8 +1,10 @@
+import { PrismaClient } from '@prisma/client';
 import { INCLUDE_USER_CLAUSE } from '../constants/prisma';
-import { prismaClient } from '../prismaClient';
 import { CreateCommentRequest, EditCommentRequest } from '../structs/commentStruct';
 
 export default class CommentRepository {
+  constructor(private prismaClient: PrismaClient) {}
+
   async findComments(params: {
     articleId?: number;
     productId?: number;
@@ -13,7 +15,7 @@ export default class CommentRepository {
       throw new Error('articleId와 productId 중 하나를 입력해주세요.');
     }
 
-    const comments = await prismaClient.comment.findMany({
+    const comments = await this.prismaClient.comment.findMany({
       cursor: params.cursor
         ? {
             id: params.cursor,
@@ -41,7 +43,7 @@ export default class CommentRepository {
   }
 
   async createArticleComment(articleId: number, userId: number, params: CreateCommentRequest) {
-    return await prismaClient.comment.create({
+    return await this.prismaClient.comment.create({
       data: {
         articleId: articleId,
         content: params.content,
@@ -52,7 +54,7 @@ export default class CommentRepository {
   }
 
   async createProductComment(productId: number, userId: number, params: CreateCommentRequest) {
-    return await prismaClient.comment.create({
+    return await this.prismaClient.comment.create({
       data: {
         productId: productId,
         content: params.content,
@@ -63,7 +65,7 @@ export default class CommentRepository {
   }
 
   async findCommentById(commentId: number) {
-    return await prismaClient.comment.findUnique({
+    return await this.prismaClient.comment.findUnique({
       where: {
         id: commentId,
       },
@@ -72,7 +74,7 @@ export default class CommentRepository {
   }
 
   async editComment(commentId: number, content: EditCommentRequest) {
-    return await prismaClient.comment.update({
+    return await this.prismaClient.comment.update({
       where: {
         id: commentId,
       },
@@ -82,7 +84,7 @@ export default class CommentRepository {
   }
 
   async deleteComment(commentId: number) {
-    return await prismaClient.comment.delete({
+    return await this.prismaClient.comment.delete({
       where: {
         id: commentId,
       },

@@ -1,15 +1,17 @@
-import { prismaClient } from '../prismaClient';
-import { EncryptedSignUpRequest, SignUpRequest } from '../structs/authStruct';
+import { PrismaClient } from '@prisma/client';
+import { EncryptedSignUpRequest } from '../structs/authStruct';
 
 export default class UserRepository {
+  constructor(private prismaClient: PrismaClient) {}
+
   async findByEmail(email: string) {
-    return await prismaClient.user.findUnique({
+    return await this.prismaClient.user.findUnique({
       where: { email },
     });
   }
 
   async findByNickname(nickname: string) {
-    return await prismaClient.user.findUnique({
+    return await this.prismaClient.user.findUnique({
       where: {
         nickname,
       },
@@ -17,7 +19,7 @@ export default class UserRepository {
   }
 
   async findById(userId: number) {
-    return await prismaClient.user.findUnique({
+    return await this.prismaClient.user.findUnique({
       where: {
         id: userId,
       },
@@ -34,7 +36,7 @@ export default class UserRepository {
   }
 
   async create(data: EncryptedSignUpRequest) {
-    return await prismaClient.user.create({
+    return await this.prismaClient.user.create({
       data,
     });
   }

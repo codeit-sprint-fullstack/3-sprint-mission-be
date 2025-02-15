@@ -5,9 +5,10 @@ import express from 'express';
 import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
 import { validateBody } from '../../core/middleware/validate';
 import { signInRequestStruct, SignUpRequestStruct } from '../../structs/authStruct';
+import { prismaClient } from '../../prismaClient';
 
 const router = express.Router();
-const userRepository = new UserRepository();
+const userRepository = new UserRepository(prismaClient);
 const authService = new AuthService(userRepository, process.env.REFRESH_TOKEN_SECRET!);
 const authController = new AuthController(authService);
 

@@ -19,9 +19,9 @@ import { CreateCommentStruct, GetCommentListStruct } from '../../structs/comment
 const router = express.Router();
 
 const productService = new ProductService(
-  new ProductRepository(),
-  new FavoriteRepository(),
-  new CommentRepository(),
+  new ProductRepository(prismaClient),
+  new FavoriteRepository(prismaClient),
+  new CommentRepository(prismaClient),
   prismaClient,
 );
 

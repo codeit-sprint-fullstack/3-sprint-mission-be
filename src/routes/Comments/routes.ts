@@ -7,8 +7,9 @@ import { CommentService } from './service';
 import CommentRepository from '../../repositories/commentRepository';
 import { validateBody } from '../../core/middleware/validate';
 import { EditCommentStruct } from '../../structs/commentStruct';
+import { prismaClient } from '../../prismaClient';
 
-const commentRepository = new CommentRepository();
+const commentRepository = new CommentRepository(prismaClient);
 const commentService = new CommentService(commentRepository);
 const commentController = new CommentController(commentService);
 const router = express.Router();

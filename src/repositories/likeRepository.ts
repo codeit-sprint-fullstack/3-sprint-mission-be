@@ -1,8 +1,10 @@
-import { prismaClient } from '../prismaClient';
+import { PrismaClient } from '@prisma/client';
 
 export default class LikeRepository {
+  constructor(private prismaClient: PrismaClient) {}
+
   async countLike(articleId: number) {
-    return await prismaClient.like.count({
+    return await this.prismaClient.like.count({
       where: {
         articleId,
       },
@@ -10,7 +12,7 @@ export default class LikeRepository {
   }
 
   async findIsLiked(articleId: number, userId: number) {
-    const count = await prismaClient.like.count({
+    const count = await this.prismaClient.like.count({
       where: {
         articleId,
         userId,
@@ -20,7 +22,7 @@ export default class LikeRepository {
   }
 
   async setLike(articleId: number, userId: number, tx?: any) {
-    const prisma = tx || prismaClient;
+    const prisma = tx || this.prismaClient;
     await prisma.like.create({
       data: {
         userId,
@@ -30,7 +32,7 @@ export default class LikeRepository {
   }
 
   async deleteLike(articleId: number, userId: number, tx?: any) {
-    const prisma = tx || prismaClient;
+    const prisma = tx || this.prismaClient;
     await prisma.like.delete({
       where: {
         userId_articleId: {
