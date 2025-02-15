@@ -1,7 +1,6 @@
 import UserRepository from '../../repositories/userRepository';
 import User from '../../models/user';
 import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { UnauthorizedException } from '../../core/errors/unauthorizedException';
 import { NotFoundException } from '../../core/errors';
 
 export class UserService {
