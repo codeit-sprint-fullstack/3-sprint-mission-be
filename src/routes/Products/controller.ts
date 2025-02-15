@@ -45,10 +45,9 @@ export class ProductController {
   };
 
   getProducts = async (req: Request, res: Response) => {
-    const userId = req.user?.userId!;
     const getProductsDto = req.validatedQuery;
 
-    const result = await this.productService.getProductList(userId, getProductsDto);
+    const result = await this.productService.getProductList(getProductsDto);
 
     return res.status(200).json({
       ...result,
@@ -72,9 +71,14 @@ export class ProductController {
 
   getProductComments = async (req: Request, res: Response) => {
     const productId = parseId(req.params.productId);
+    const userId = req.user?.userId!;
     const getProductCommentsDto = req.validatedQuery!;
 
-    const result = await this.productService.getProductComments(productId, getProductCommentsDto);
+    const result = await this.productService.getProductComments(
+      productId,
+      userId,
+      getProductCommentsDto,
+    );
     const comments = result.comments.map((comment) => comment.toJSON());
 
     return res.status(200).json({

@@ -22,8 +22,8 @@ export class ProductService {
     private prisma: PrismaClient,
   ) {}
 
-  private async getExistingProduct(productId: number) {
-    const existingProduct = await this.productRepository.findById(productId);
+  private async getExistingProduct(productId: number, userId: number) {
+    const existingProduct = await this.productRepository.findById(productId, userId);
     if (!existingProduct) throw new NotFoundException(EXCEPTION_MESSAGES.productNotFound);
     return existingProduct;
   }
@@ -33,43 +33,62 @@ export class ProductService {
   }
 
   async postProduct(userId: number, createProductDto: CreateProductRequest) {
-    const productEntity = await this.productRepository.create(userId, createProductDto);
-    return new Product({ ...productEntity, isFavorite: false });
+    const { _count, favorites, ...productEntity } = await this.productRepository.create(
+      userId,
+      createProductDto,
+    );
+    return new Product({
+      ...productEntity,
+      favoriteCount: _count.favorites,
+      isFavorite: favorites.length > 0,
+    });
   }
 
   async getProductById(productId: number, userId: number) {
-    const productEntity = await this.getExistingProduct(productId);
-    const isFavorite = await this.favoriteRepository.findIsFavorite(productId, userId);
+    const productEntity = await this.productRepository.findById(productId, userId);
+    if (!productEntity) throw new NotFoundException(EXCEPTION_MESSAGES.productNotFound);
+    const { _count, favorites, ...productData } = productEntity;
 
-    return new Product({ ...productEntity, isFavorite });
+    return new Product({
+      ...productData,
+      favoriteCount: _count.favorites,
+      isFavorite: favorites.length > 0,
+    });
   }
 
   async editProduct(productId: number, userId: number, editProductRequestDto: EditProductRequest) {
-    const existingProduct = await this.getExistingProduct(productId);
+    const existingProduct = await this.getExistingProduct(productId, userId);
     await this.validateAuth(existingProduct.userId, userId, AUTH_MESSAGES.update);
 
-    const productEntity = await this.productRepository.update(productId, editProductRequestDto);
-    const isFavorite = await this.favoriteRepository.findIsFavorite(productId, userId);
+    const { _count, favorites, ...productData } = await this.productRepository.update(
+      productId,
+      userId,
+      editProductRequestDto,
+    );
 
-    return new Product({ ...productEntity, isFavorite });
+    return new Product({
+      ...productData,
+      favoriteCount: _count.favorites,
+      isFavorite: favorites.length > 0,
+    });
   }
 
   async deleteProduct(productId: number, userId: number) {
-    const existingProduct = await this.getExistingProduct(productId);
+    const existingProduct = await this.getExistingProduct(productId, userId);
     await this.validateAuth(existingProduct.userId, userId, AUTH_MESSAGES.delete);
 
     await this.productRepository.delete(productId);
   }
 
-  async getProductList(userId: number, getProductListDto: GetProductListRequest) {
+  async getProductList(getProductListDto: GetProductListRequest) {
     const productListResult = await this.productRepository.getProductList(getProductListDto);
-
-    const products = await Promise.all(
-      productListResult.list.map(async (productEntity) => {
-        if (!userId) return new Product({ ...productEntity, isFavorite: false });
-        const isFavorite = await this.favoriteRepository.findIsFavorite(productEntity.id, userId);
-        return new Product({ ...productEntity, isFavorite });
-      }),
+    const products = productListResult.list.map(
+      ({ _count, favorites, ...productData }) =>
+        new Product({
+          ...productData,
+          favoriteCount: _count.favorites,
+          isFavorite: false,
+        }),
     );
 
     return {
@@ -79,7 +98,7 @@ export class ProductService {
   }
 
   async postProductComment(productId: number, userId: number, content: CreateCommentRequest) {
-    await this.getExistingProduct(productId);
+    await this.getExistingProduct(productId, userId);
     const commentEntity = await this.commentRepository.createProductComment(
       productId,
       userId,
@@ -89,8 +108,13 @@ export class ProductService {
     return new Comment(commentEntity);
   }
 
-  async getProductComments(productId: number, getCommentListDto: GetCommentListRequest) {
-    await this.getExistingProduct(productId);
+  async getProductComments(
+    productId: number,
+    userId: number,
+    getCommentListDto: GetCommentListRequest,
+  ) {
+    const product = await this.getExistingProduct(productId, userId);
+    if (!product) throw new NotFoundException(EXCEPTION_MESSAGES.productNotFound);
 
     const getCommentListResult = await this.commentRepository.findComments({
       ...getCommentListDto,
@@ -105,32 +129,35 @@ export class ProductService {
   }
 
   async setFavorite(productId: number, userId: number) {
-    await this.getExistingProduct(productId);
+    return await this.prisma.$transaction(async (tx) => {
+      const product = await this.productRepository.findById(productId, userId, tx);
+      if (!product) throw new NotFoundException(EXCEPTION_MESSAGES.productNotFound);
+      if (product.favorites.length > 0)
+        throw new ConflictException('이미 좋아요가 눌린 상품입니다.');
 
-    if (await this.favoriteRepository.findIsFavorite(productId, userId))
-      throw new ConflictException('이미 좋아요가 눌린 상품입니다.');
+      await this.favoriteRepository.setFavorite(productId, userId, tx);
 
-    const productEntity = await this.prisma.$transaction(async (t) => {
-      await this.favoriteRepository.setFavorite(productId, userId);
-      const product = await this.productRepository.incrementFavoriteCount(productId);
-      return product;
+      return new Product({
+        ...product,
+        favoriteCount: product._count.favorite + 1,
+        isFavorite: true,
+      });
     });
-
-    return new Product({ ...productEntity, isFavorite: true });
   }
 
   async deleteFavorite(productId: number, userId: number) {
-    await this.getExistingProduct(productId);
+    return await this.prisma.$transaction(async (tx) => {
+      const product = await this.productRepository.findById(productId, userId, tx);
+      if (!product) throw new NotFoundException(EXCEPTION_MESSAGES.productNotFound);
+      if (product.favorite.length === 0)
+        throw new ConflictException('이미 좋아요가 취소된 상품입니다.');
 
-    if (await this.favoriteRepository.findIsFavorite(productId, userId))
-      throw new ConflictException('이미 좋아요가 취소된 상품입니다.');
-
-    const productEntity = await this.prisma.$transaction(async (t) => {
-      await this.favoriteRepository.deleteFavorite(productId, userId);
-      const product = await this.productRepository.decrementFavoriteCount(productId);
-      return product;
+      await this.favoriteRepository.deleteFavorite(productId, userId, tx);
+      return new Product({
+        ...product,
+        favoriteCount: product._count.favorite - 1,
+        isFavorite: false,
+      });
     });
-
-    return new Product({ ...productEntity, isFavorite: false });
   }
 }
