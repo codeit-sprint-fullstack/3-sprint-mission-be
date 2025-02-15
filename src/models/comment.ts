@@ -1,5 +1,5 @@
 import type { CommentModel } from '@/types/models.types';
-import type { userInfo } from '@/types/user.types';
+import type { UserInfo } from '@/types/user.types';
 
 export class Comment {
   #id: number;
@@ -10,7 +10,7 @@ export class Comment {
 
   #updatedAt: Date;
 
-  #user: userInfo;
+  #user: UserInfo;
 
   constructor(param: CommentModel) {
     this.#id = param.id;

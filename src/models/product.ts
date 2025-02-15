@@ -1,5 +1,5 @@
 import type { ProductModel } from '@/types/models.types';
-import type { userInfo } from '@/types/user.types';
+import type { UserInfo } from '@/types/user.types';
 
 export class Product {
   #id: number;
@@ -18,7 +18,7 @@ export class Product {
 
   #isFavorite: boolean;
 
-  #user: userInfo;
+  #user: UserInfo;
 
   #createdAt: Date;
 

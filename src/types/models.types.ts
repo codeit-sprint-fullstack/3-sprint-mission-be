@@ -1,4 +1,4 @@
-import { userInfo } from './user.types';
+import { UserInfo } from './user.types';
 
 export interface CommentModel {
   id: number;
@@ -7,7 +7,7 @@ export interface CommentModel {
   content: string;
   createdAt: Date;
   updatedAt: Date;
-  user: userInfo;
+  user: UserInfo;
 }
 
 export interface UserModel {
@@ -28,7 +28,7 @@ export interface ProductModel {
   images: string[];
   favoriteCount: number;
   isFavorite: boolean;
-  user: userInfo;
+  user: UserInfo;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,7 +40,7 @@ export interface ArticleModel {
   createdAt: Date;
   updatedAt: Date;
   images: string[];
-  user: userInfo;
+  user: UserInfo;
   isLiked: boolean;
   likeCount: number;
 }
