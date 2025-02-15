@@ -24,6 +24,10 @@ export class Comment {
     };
   }
 
+  static fromList(params: CommentModel[]) {
+    return params.map((param) => new Comment(param));
+  }
+
   getId() {
     return this.#id;
   }

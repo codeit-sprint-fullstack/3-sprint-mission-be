@@ -120,7 +120,7 @@ export class ProductService {
       ...getCommentListDto,
       productId,
     });
-    const comments = getCommentListResult.comments.map((comment) => new Comment(comment));
+    const comments = Comment.fromList(getCommentListResult.comments);
 
     return {
       ...getCommentListResult,

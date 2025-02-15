@@ -109,7 +109,7 @@ export class ArticleService {
       ...getCommentListDto,
       articleId,
     });
-    const comments = getCommentListResult.comments.map((comment) => new Comment(comment));
+    const comments = Comment.fromList(getCommentListResult.comments);
 
     return {
       ...getCommentListResult,
