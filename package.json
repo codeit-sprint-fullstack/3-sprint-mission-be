@@ -7,7 +7,8 @@
     "start": "node ./dist/app.js",
     "build": "npm install && tsc --noEmit",
     "postinstall": "prisma generate",
-    "test": "jest"
+    "pretest": "dotenv -e .env.test -- npx prisma db push",
+    "test": "dotenv -e .env.test jest"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts",
