@@ -34,9 +34,11 @@ async function main(prisma: typeof PrismaClient) {
   });
   await prisma.favorite.createMany({
     data: favoriteMocks,
+    skipDuplicates: true,
   });
   await prisma.like.createMany({
     data: likeMocks,
+    skipDuplicates: true,
   });
 }
 if (require.main === module) {
