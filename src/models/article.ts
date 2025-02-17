@@ -1,4 +1,4 @@
-import { ArticleResponseDto } from '../types/dtos/articleDto';
+import { ArticleModel } from '../types/models.types';
 
 export default class Article {
   #id;
@@ -19,7 +19,7 @@ export default class Article {
 
   #images;
 
-  constructor(param: ArticleResponseDto) {
+  constructor(param: ArticleModel) {
     this.#id = param.id;
     this.#title = param.title;
     this.#content = param.content;

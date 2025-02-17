@@ -12,6 +12,7 @@ import {
   partial,
   nonempty,
   refine,
+  Infer,
 } from 'superstruct';
 
 export const CreateProductRequestStruct = object({
@@ -46,13 +47,32 @@ export const EditProductStruct = partial(CreateProductRequestStruct);
 
 export const GetProductListRequestStruct = object({
   page: defaulted(
-    coerce(min(integer(), 1), string(), (value) => Number.parseInt(value, 10)),
+    refine(
+      coerce(min(integer(), 1), string(), (value) => Number.parseInt(value, 10)),
+      'page는 1이상의 정수로 입력해주세요.',
+      () => true,
+    ),
     1,
   ),
   pageSize: defaulted(
-    coerce(max(min(integer(), 1), 10), string(), (value) => Number.parseInt(value, 10)),
+    refine(
+      coerce(max(min(integer(), 1), 10), string(), (value) => Number.parseInt(value, 10)),
+      'pageSize는 1에서 10 사이의 정수로 입력해주세요.',
+      () => true,
+    ),
     10,
   ),
-  orderBy: defaulted(enums(['recent', 'favorite']), 'recent'),
-  keyword: optional(nonempty(string())),
+  orderBy: defaulted(
+    refine(
+      enums(['recent', 'favorite']),
+      'orderBy는 recent,favorite중 하나를 입력해주세요.',
+      () => true,
+    ),
+    'recent',
+  ),
+  word: optional(nonempty(string())),
 });
+
+export type CreateProductRequest = Infer<typeof CreateProductRequestStruct>;
+export type EditProductRequest = Infer<typeof EditProductStruct>;
+export type GetProductListRequest = Infer<typeof GetProductListRequestStruct>;

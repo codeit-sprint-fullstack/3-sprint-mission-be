@@ -1,9 +1,13 @@
 import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../constants/prisma';
 import { prismaClient } from '../prismaClient';
-import { ArticleRequestDto, GetArticleListParams } from '../types/dtos/articleDto';
+import {
+  type CreateArticleRequest,
+  type EditArticleRequest,
+  type GetArticleListRequest,
+} from '../structs/articleStruct';
 
 export default class ArticleRepository {
-  async create(userId: number, data: ArticleRequestDto) {
+  async create(userId: number, data: CreateArticleRequest) {
     return await prismaClient.article.create({
       data: {
         ...data,
@@ -13,7 +17,7 @@ export default class ArticleRepository {
     });
   }
 
-  async update(articleId: number, data: Partial<ArticleRequestDto>) {
+  async update(articleId: number, data: EditArticleRequest) {
     return await prismaClient.article.update({
       where: {
         id: articleId,
@@ -32,20 +36,20 @@ export default class ArticleRepository {
     });
   }
 
-  async getArticleList({ page, pageSize, orderBy, keyword }: GetArticleListParams) {
+  async getArticleList({ page, pageSize, orderBy, word }: GetArticleListRequest) {
     const skip = (page - 1) * pageSize;
 
-    const whereClause = keyword
+    const whereClause = word
       ? {
           OR: [
             {
-              name: {
-                contains: keyword,
+              title: {
+                contains: word,
               },
             },
             {
               content: {
-                contains: keyword,
+                contains: word,
               },
             },
           ],
