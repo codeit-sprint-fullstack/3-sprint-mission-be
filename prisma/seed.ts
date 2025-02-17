@@ -5,13 +5,14 @@ import { productCommentMocks } from './mocks/commentMocks';
 import { articleCommentMocks } from './mocks/commentMocks';
 import { userMocks } from './mocks/userMocks';
 import { favoriteMocks } from './mocks/favoriteMocks';
+import { likeMocks } from './mocks/likeMocks';
 
-const prisma = new PrismaClient();
-
-async function main() {
+async function main(prisma: typeof PrismaClient) {
+  await prisma.favorite.deleteMany();
+  await prisma.like.deleteMany();
+  await prisma.comment.deleteMany();
   await prisma.article.deleteMany();
   await prisma.product.deleteMany();
-  await prisma.comment.deleteMany();
   await prisma.user.deleteMany();
 
   await prisma.user.createMany({
@@ -34,14 +35,21 @@ async function main() {
   await prisma.favorite.createMany({
     data: favoriteMocks,
   });
+  await prisma.like.createMany({
+    data: likeMocks,
+  });
+}
+if (require.main === module) {
+  const prisma = new PrismaClient();
+  main(prisma)
+    .then(async () => {
+      await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+      console.error(e);
+      await prisma.$disconnect();
+      process.exit(1);
+    });
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+export default main;

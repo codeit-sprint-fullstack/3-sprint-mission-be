@@ -1,47 +1,12 @@
-export const productMocks = [
-  {
-    id: 1,
-    name: '상품 1',
-    description: '상품 1',
+export const productMocks = Array.from({ length: 10 }, (_, index) => {
+  const value = index + 1;
+  return {
+    id: value,
+    name: `상품 ${value}`,
+    description: `상품 ${value} 입니다.`,
     price: 5000,
-    tags: ['1', '2'],
     images: [],
-    userId: 1,
-  },
-  {
-    id: 2,
-    name: '상품 2',
-    description: '상품 2',
-    price: 5000,
-    tags: ['1', '2'],
-    images: [],
-    userId: 2,
-  },
-  {
-    id: 3,
-    name: '상품 3',
-    description: '상품 3',
-    price: 5000,
-    tags: ['1', '2'],
-    images: [],
-    userId: 3,
-  },
-  {
-    id: 4,
-    name: '상품 4',
-    description: '상품 4',
-    price: 5000,
-    tags: ['1', '2'],
-    images: [],
-    userId: 4,
-  },
-  {
-    id: 5,
-    name: '상품 5',
-    description: '상품 5',
-    price: 5000,
-    tags: ['1', '2'],
-    images: [],
-    userId: 5,
-  },
-];
+    userId: value,
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 11 + value)),
+  };
+});
