@@ -57,5 +57,5 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
-.env
+.env*
 request.http
