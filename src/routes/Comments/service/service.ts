@@ -2,7 +2,7 @@ import { EditCommentRequest } from '@/structs/commentStruct';
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
 import { Comment } from '@/routes/Comments/model/comment';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
-import CommentRepository from '@/routes/Comments/commentRepository';
+import CommentRepository from '@/routes/Comments/repository/commentRepository';
 import { NotFoundException } from '@/core/errors';
 import { UnauthorizedException } from '@/core/errors/unauthorizedException';
 
