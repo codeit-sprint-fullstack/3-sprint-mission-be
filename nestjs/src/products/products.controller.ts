@@ -13,7 +13,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AllProductsResponse, ProductsService } from './products.service';
-import { ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PassportJwtAuthGuard } from 'src/auth/guards/passport-jwt.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { OptionalAuthGuard } from 'src/auth/guards/passport-optional-jwt.guard';
@@ -162,5 +162,23 @@ export class ProductsController {
     }
     const userId = request.user.userId;
     return this.productsService.removeFavorite(productId, userId);
+  }
+
+  // 상품 댓글 작성
+  @Post(':productId/comments')
+  @UseGuards(PassportJwtAuthGuard)
+  @ApiOperation({ summary: '상품 댓글 작성' })
+  @ApiParam({ name: 'productId', required: true, description: '상품 ID' })
+  @ApiTags('Comments')
+  createComment(
+    @Param('productId') productId: string,
+    @Request() request: { user?: { userId: string } },
+    @Body() { content }: { content: string },
+  ) {
+    if (!request.user) {
+      throw new UnauthorizedException('로그인이 필요합니다.');
+    }
+    const userId = request.user.userId;
+    return this.productsService.createComment(productId, userId, content);
   }
 }

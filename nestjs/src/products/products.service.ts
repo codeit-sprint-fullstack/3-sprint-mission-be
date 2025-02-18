@@ -382,4 +382,47 @@ export class ProductsService {
 
     return { message: '상품에 좋아요를 취소했습니다.' };
   }
+
+  // 상품 댓글 작성
+  async createComment(productId: string, userId: string, content: string) {
+    // 상품 조회
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    // 상품이 없을 경우 에러 발생
+    if (!product) {
+      throw new NotFoundException('상품을 찾을 수 없습니다.(상품 댓글 작성)');
+    }
+
+    // 댓글 작성
+    const comment = await this.prisma.comment.create({
+      data: {
+        userId,
+        productId,
+        content,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            profile_image: true,
+          },
+        },
+      },
+    });
+
+    return {
+      writer: {
+        image: comment.user.profile_image,
+        nickname: comment.user.nickname,
+        id: comment.user.id,
+      },
+      updatedAt: comment.updatedAt.toISOString(),
+      createdAt: comment.createdAt.toISOString(),
+      content: comment.content,
+      id: comment.id,
+    };
+  }
 }
