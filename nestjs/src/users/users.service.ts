@@ -1,29 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
-export interface User {
-  userId: number;
-  username: string;
-  password: string;
-}
-
-const users: User[] = [
-  {
-    userId: 1,
-    username: 'Alice',
-    password: 'topsecret', // use a hash instead
-  },
-  {
-    userId: 2,
-    username: 'Bob',
-    password: '123abc', // use a hash instead
-  },
-];
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  async findUserByName(username: string): Promise<User | undefined> {
-    return users.find((user) => user.username === username);
+  constructor(private prisma: PrismaService) {}
+
+  // 사용자 정보 조회
+  async getMe(userId: string) {
+    // 사용자 정보 조회
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // 사용자 정보가 없을 경우
+    if (!user) {
+      throw new NotFoundException('사용자 정보가 없습니다.');
+    }
+
+    return {
+      id: user.id,
+      nickname: user.nickname,
+      image: user.profile_image,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
+    };
   }
 }
