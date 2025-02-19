@@ -425,4 +425,58 @@ export class ProductsService {
       id: comment.id,
     };
   }
+
+  async getComments(productId: string, limit: string, cursor?: string) {
+    // 페이지당 가져올 개수 (cursor 기반 페이징을 위해 limit +1 개수 조회)
+    const fetchLimit = Number(limit);
+    // 해당 상품에 대한 모든 댓글을 최신순으로 조회(cursor로 페이징)
+    const comments = await this.prisma.comment.findMany({
+      where: {
+        productId,
+      },
+      orderBy: { createdAt: 'desc' },
+      take: fetchLimit + 1,
+      ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
+
+      include: {
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            profile_image: true,
+          },
+        },
+      },
+    });
+
+    let nextCursor: string | null = null;
+
+    // 가져온 댓글 수가 fetchLimit + 1개인 경우, 다음 페이지 커서를 설정
+    if (comments.length > fetchLimit) {
+      const nextComment = comments.pop()!;
+      nextCursor = nextComment.id;
+    }
+
+    const list = comments.map((comment) => ({
+      writer: {
+        image: comment.user.profile_image,
+        nickname: comment.user.nickname,
+        id: comment.user.id,
+      },
+      updatedAt: comment.updatedAt.toISOString(),
+      createdAt: comment.createdAt.toISOString(),
+      content: comment.content,
+      id: comment.id,
+    }));
+
+    // 댓글이 없을 경우 빈 배열을 반환
+    if (!comments) {
+      return [];
+    }
+
+    return {
+      nextCursor,
+      list,
+    };
+  }
 }

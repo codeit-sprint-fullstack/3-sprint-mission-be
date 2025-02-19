@@ -181,4 +181,17 @@ export class ProductsController {
     const userId = request.user.userId;
     return this.productsService.createComment(productId, userId, content);
   }
+
+  // 상품의 전체 댓글 조회
+  @Get(':productId/comments')
+  @ApiOperation({ summary: '상품 댓글 조회' })
+  @ApiParam({ name: 'productId', required: true, description: '상품 ID' })
+  @ApiTags('Comments')
+  getComments(
+    @Param('productId') productId: string,
+    @Query('limit') limit: string = '10',
+    @Query('cursor') cursor?: string,
+  ) {
+    return this.productsService.getComments(productId, limit, cursor);
+  }
 }
