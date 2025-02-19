@@ -27,4 +27,21 @@ export class UsersService {
       updatedAt: user.updated_at,
     };
   }
+
+  // 사용자 이미지 업데이트
+  async updateProfileImage(userId: string, image: string) {
+    // 사용자 정보 업데이트
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { profile_image: image },
+    });
+
+    return {
+      id: user.id,
+      nickname: user.nickname,
+      image: user.profile_image,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
+    };
+  }
 }

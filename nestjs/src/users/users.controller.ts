@@ -29,4 +29,20 @@ export class UsersController {
     }
     return this.usersService.getMe(request.user.userId);
   }
+
+  @Patch('me')
+  @ApiOperation({ summary: '내 이미지 업데이트' })
+  @UseGuards(PassportJwtAuthGuard)
+  updateProfileImage(
+    @Request() request: { user?: { userId: string } },
+    @Body() updateUserDto: { image: string },
+  ) {
+    if (!request.user) {
+      throw new UnauthorizedException('로그인이 필요합니다.');
+    }
+    return this.usersService.updateProfileImage(
+      request.user.userId,
+      updateUserDto.image,
+    );
+  }
 }
