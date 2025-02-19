@@ -9,8 +9,9 @@ import {
   Request,
   UseGuards,
   UnauthorizedException,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { PassportJwtAuthGuard } from 'src/auth/guards/passport-jwt.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
@@ -102,5 +103,36 @@ export class PostsController {
     if (!request.user) throw new UnauthorizedException('로그인이 필요합니다.');
     const userId = request.user.userId;
     return this.postsService.removeLike(postId, userId);
+  }
+
+  // 게시글 댓글 작성
+  @Post(':postId/comments')
+  @UseGuards(PassportJwtAuthGuard)
+  @ApiOperation({ summary: '게시글 댓글 작성' })
+  @ApiParam({ name: 'postId', required: true, description: '게시글 ID' })
+  @ApiTags('Comments')
+  createComment(
+    @Param('postId') postId: string,
+    @Request() request: { user?: { userId: string } },
+    @Body() { content }: { content: string },
+  ) {
+    if (!request.user) {
+      throw new UnauthorizedException('로그인이 필요합니다.');
+    }
+    const userId = request.user.userId;
+    return this.postsService.createComment(postId, userId, content);
+  }
+
+  // 게시글 전체 댓글 조회
+  @Get(':postId/comments')
+  @ApiOperation({ summary: '상품 댓글 조회' })
+  @ApiParam({ name: 'postId', required: true, description: '상품 ID' })
+  @ApiTags('Comments')
+  getComments(
+    @Param('postId') postId: string,
+    @Query('limit') limit: string = '10',
+    @Query('cursor') cursor?: string,
+  ) {
+    return this.postsService.getAllComments(postId, limit, cursor);
   }
 }

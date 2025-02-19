@@ -95,13 +95,13 @@ export class PostsService {
       id: post.id,
       title: post.title,
       content: post.content,
-      image: (post.image ?? null) as string | null,
+      image: post.image ?? null,
       favoriteCount: post.favoriteCount,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       writer: {
-        id: post.writer.id as string,
-        nickname: post.writer.nickname as string,
+        id: post.writer.id,
+        nickname: post.writer.nickname,
       },
       isFavorite: isLiked,
     };
@@ -211,5 +211,95 @@ export class PostsService {
     });
 
     return { message: '게시글 좋아요를 취소했습니다.' };
+  }
+
+  // 게시글 댓글 작성
+  async createComment(postId: string, userId: string, content: string) {
+    // 게시글 조회
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    // 게시글이 없는 경우 예외 처리
+    if (!post) throw new NotFoundException('게시글을 찾을 수 없습니다.');
+
+    // 댓글 작성
+    const comment = await this.prisma.comment.create({
+      data: {
+        content,
+        post: { connect: { id: postId } },
+        user: { connect: { id: userId } },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            profile_image: true,
+          },
+        },
+      },
+    });
+
+    return {
+      writer: {
+        image: comment.user.profile_image,
+        nickname: comment.user.nickname,
+        id: comment.user.id,
+      },
+      updatedAt: comment.updatedAt.toISOString(),
+      createdAt: comment.createdAt.toISOString(),
+      content: comment.content,
+      id: comment.id,
+    };
+  }
+
+  // 게시글 전체 댓글 조회
+  async getAllComments(postId: string, limit: string, cursor?: string) {
+    // 페이지당 가져올 개수 (cursor 기반 페이징을 위해 limit +1 개수 조회)
+    const fetchLimit = Number(limit);
+    // 해당 상품에 대한 모든 댓글을 최신순으로 조회(cursor로 페이징)
+    const comments = await this.prisma.comment.findMany({
+      where: {
+        postId,
+      },
+      orderBy: { createdAt: 'desc' },
+      take: fetchLimit + 1,
+      ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
+      include: {
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            profile_image: true,
+          },
+        },
+      },
+    });
+
+    let nextCursor: string | null = null;
+
+    // 가져온 댓글 수가 fetchLimit + 1개인 경우, 다음 페이지 커서를 설정
+    if (comments.length > fetchLimit) {
+      const nextComment = comments.pop()!;
+      nextCursor = nextComment.id;
+    }
+
+    const list = comments.map((comment) => ({
+      writer: {
+        image: comment.user.profile_image,
+        nickname: comment.user.nickname,
+        id: comment.user.id,
+      },
+      updatedAt: comment.updatedAt.toISOString(),
+      createdAt: comment.createdAt.toISOString(),
+      content: comment.content,
+      id: comment.id,
+    }));
+
+    return {
+      nextCursor,
+      list,
+    };
   }
 }
