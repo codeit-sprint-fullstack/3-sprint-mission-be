@@ -469,11 +469,6 @@ export class ProductsService {
       id: comment.id,
     }));
 
-    // 댓글이 없을 경우 빈 배열을 반환
-    if (!comments) {
-      return [];
-    }
-
     return {
       nextCursor,
       list,
