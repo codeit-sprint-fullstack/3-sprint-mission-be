@@ -1,14 +1,23 @@
 import { prismaTestClient } from '@/jest.setup';
-import LikeRepository from './likeRepository';
-import initDB from '@prismaDir/seed';
+import LikeRepository from '@/routes/Articles/repository/likeRepository';
+import { mockUser } from '@/mocks/service/mockUser';
+import { mockArticle } from '@/mocks/service/mockArticle';
+import { clearMocks } from '@/mocks/service/clearMocks';
 
 describe('LikeRepository', () => {
   let likeRepository = new LikeRepository(prismaTestClient);
 
-  beforeAll(async () => {
-    await initDB(prismaTestClient);
+  beforeEach(async () => {
+    await prismaTestClient.$transaction(async (tx) => {
+      await clearMocks(tx);
+      await mockUser(tx);
+      await mockArticle(tx);
+    });
   });
-  afterEach(async () => await initDB(prismaTestClient));
+
+  afterAll(async () => {
+    await prismaTestClient.$transaction(async (tx) => clearMocks(tx));
+  });
 
   test('좋아요 추가/수량/좋아요 여부 조회', async () => {
     const USER_ID = 2;
