@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { getOrderByClause, INCLUDE_USER_CLAUSE } from '../../../constants/prisma';
 import {
   type CreateArticleRequest,
@@ -34,8 +34,9 @@ export default class ArticleRepository {
     };
   }
 
-  async create(userId: number, data: CreateArticleRequest) {
-    return await this.prismaClient.article.create({
+  async create(userId: number, data: CreateArticleRequest, tx?: Prisma.TransactionClient) {
+    const prisma = tx || this.prismaClient;
+    return await prisma.article.create({
       data: {
         ...data,
         userId,

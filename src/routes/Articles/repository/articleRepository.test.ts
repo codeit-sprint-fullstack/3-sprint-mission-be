@@ -1,17 +1,23 @@
-import initDB from '@prismaDir/seed';
 import ArticleRepository from './articleRepository';
 import { prismaTestClient } from '@/jest.setup';
+import { mockUser } from '@/mocks/service/mockUser';
+import { clearMocks } from '@/mocks/service/clearMocks';
+import { mockArticle } from '@/mocks/service/mockArticle';
 
 describe('ArticleRepository', () => {
-  let articleRepository: ArticleRepository = new ArticleRepository(prismaTestClient);
-
-  beforeAll(async () => {
-    await initDB(prismaTestClient);
-  });
+  const articleRepository = new ArticleRepository(prismaTestClient);
 
   describe('게시물 생성,삭제,수정 테스트', () => {
-    afterEach(async () => {
-      await initDB(prismaTestClient);
+    beforeEach(async () => {
+      await prismaTestClient.$transaction(async (tx) => {
+        await clearMocks(tx);
+        await mockUser(tx);
+        await mockArticle(tx);
+      });
+    });
+
+    afterAll(async () => {
+      await prismaTestClient.$transaction(async (tx) => await clearMocks(tx));
     });
 
     test('정상적으로 게시물 생성', async () => {
@@ -61,6 +67,18 @@ describe('ArticleRepository', () => {
   });
 
   describe('게시물 조회 테스트', () => {
+    beforeAll(async () => {
+      await prismaTestClient.$transaction(async (tx) => {
+        await clearMocks(tx);
+        await mockUser(tx);
+        await mockArticle(tx);
+      });
+    });
+
+    afterAll(async () => {
+      await prismaTestClient.$transaction(async (tx) => await clearMocks(tx));
+    });
+
     test('게시물 조회', async () => {
       const response = await articleRepository.findById(1, 1);
       expect(response.id).toBe(1);
