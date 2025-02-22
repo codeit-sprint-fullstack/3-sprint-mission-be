@@ -1,57 +1,28 @@
-const { PrismaClient } = require('@prisma/client');
-import { articleMocks } from './mocks/articleMocks';
-import { productMocks } from './mocks/productMocks';
-import { productCommentMocks } from './mocks/commentMocks';
-import { articleCommentMocks } from './mocks/commentMocks';
-import { userMocks } from './mocks/userMocks';
-import { favoriteMocks } from './mocks/favoriteMocks';
-import { likeMocks } from './mocks/likeMocks';
+import { PrismaClient } from '@prisma/client';
+import { mockUser } from '../src/mocks/service/mockUser';
+import { mockProduct } from '../src/mocks/service/mockProduct';
+import { mockArticle } from '../src/mocks/service/mockArticle';
+import { clearMocks } from '../src/mocks/service/clearMocks';
 
-async function main(prisma: typeof PrismaClient) {
-  await prisma.favorite.deleteMany();
-  await prisma.like.deleteMany();
-  await prisma.comment.deleteMany();
-  await prisma.article.deleteMany();
-  await prisma.product.deleteMany();
-  await prisma.user.deleteMany();
+const prismaClient = new PrismaClient();
 
-  await prisma.user.createMany({
-    data: userMocks,
-    skipDuplicates: true,
-  });
-
-  await prisma.article.createMany({
-    data: articleMocks,
-    skipDuplicates: true,
-  });
-  await prisma.product.createMany({
-    data: productMocks,
-    skipDuplicates: true,
-  });
-  await prisma.comment.createMany({
-    data: [...productCommentMocks, ...articleCommentMocks],
-    skipDuplicates: true,
-  });
-  await prisma.favorite.createMany({
-    data: favoriteMocks,
-    skipDuplicates: true,
-  });
-  await prisma.like.createMany({
-    data: likeMocks,
-    skipDuplicates: true,
+async function main() {
+  prismaClient.$transaction(async (tx) => {
+    await clearMocks(tx);
+    await mockUser(tx);
+    await mockProduct(tx);
+    await mockArticle(tx);
   });
 }
-if (require.main === module) {
-  const prisma = new PrismaClient();
-  main(prisma)
-    .then(async () => {
-      await prisma.$disconnect();
-    })
-    .catch(async (e) => {
-      console.error(e);
-      await prisma.$disconnect();
-      process.exit(1);
-    });
-}
+
+main()
+  .then(async () => {
+    await prismaClient.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prismaClient.$disconnect();
+    process.exit(1);
+  });
 
 export default main;
