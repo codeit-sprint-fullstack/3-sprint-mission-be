@@ -1,10 +1,10 @@
 import { prismaTestClient } from '@/jest.setup';
 import UserRepository from '@/routes/user/repository/userRepository';
 import { AuthService } from './service';
-import { ConflictException } from '@/core/errors';
+import { ConflictException } from '@/core/errors/httpException';
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
 import bcrypt from 'bcrypt';
-import { UnauthorizedException } from '@/core/errors/unauthorizedException';
+import { UnauthorizedException } from '@/core/errors/httpException';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 
 jest.mock('@/routes/user/repository/userRepository');

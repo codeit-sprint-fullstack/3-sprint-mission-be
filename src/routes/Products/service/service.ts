@@ -8,7 +8,11 @@ import {
   GetProductListRequest,
 } from '@/structs/productStruct';
 import { Product } from '@/routes/Products/model/product';
-import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@/core/errors/httpException';
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import { CreateCommentRequest, GetCommentListRequest } from '@/structs/commentStruct';

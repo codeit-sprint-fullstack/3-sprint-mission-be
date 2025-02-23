@@ -3,7 +3,7 @@ import ArticleRepository from '../repository/articleRepository';
 import LikeRepository from '../repository/likeRepository';
 import { ArticleService } from './service';
 import { PrismaClient } from '@prisma/client';
-import { ConflictException, NotFoundException } from '@/core/errors';
+import { ConflictException, NotFoundException } from '@/core/errors/httpException';
 
 jest.mock('@/routes/Articles/repository/articleRepository');
 jest.mock('@/routes/Articles/repository/likeRepository');

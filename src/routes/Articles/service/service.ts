@@ -11,7 +11,11 @@ import ArticleRepository from '@/routes/Articles/repository/articleRepository';
 import LikeRepository from '@/routes/Articles/repository/likeRepository';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import CommentRepository from '@/routes/Comments/repository/commentRepository';
-import { ConflictException, ForbiddenException, NotFoundException } from '@/core/errors';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@/core/errors/httpException';
 import { PrismaClient } from '@prisma/client';
 
 export class ArticleService {

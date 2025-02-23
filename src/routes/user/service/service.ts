@@ -1,7 +1,7 @@
 import UserRepository from '../repository/userRepository';
 import User from '@/routes/user/model/user';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
-import { NotFoundException } from '@/core/errors';
+import { NotFoundException } from '@/core/errors/httpException';
 
 export class UserService {
   constructor(private userRepository: UserRepository) {}

@@ -1,11 +1,11 @@
 import { EXCEPTION_MESSAGES } from '@/constants/exceptionMessages';
-import { ConflictException } from '@/core/errors';
+import { ConflictException } from '@/core/errors/httpException';
 import UserRepository from '../../user/repository/userRepository';
 import { SignInRequest, SignUpRequest } from '@/structs/authStruct';
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateTokens } from '@/core/security/jwt';
 import User from '@/routes/user/model/user';
-import { UnauthorizedException } from '@/core/errors/unauthorizedException';
+import { UnauthorizedException } from '@/core/errors/httpException';
 import { AUTH_MESSAGES } from '@/constants/authMessages';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
