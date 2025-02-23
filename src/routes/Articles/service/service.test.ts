@@ -9,17 +9,12 @@ jest.mock('@/routes/Articles/repository/articleRepository');
 jest.mock('@/routes/Articles/repository/likeRepository');
 jest.mock('@/routes/Comments/repository/commentRepository');
 
-let articleService: ArticleService;
-let articleRepository: jest.Mocked<ArticleRepository>;
-let likeRepository: jest.Mocked<LikeRepository>;
-let commentRepository: jest.Mocked<CommentRepository>;
-
 describe('ArticleService', () => {
   const prismaClient = new PrismaClient();
-  articleRepository = new ArticleRepository(prismaClient) as jest.Mocked<ArticleRepository>;
-  likeRepository = new LikeRepository(prismaClient) as jest.Mocked<LikeRepository>;
-  commentRepository = new CommentRepository(prismaClient) as jest.Mocked<CommentRepository>;
-  articleService = new ArticleService(
+  const articleRepository = new ArticleRepository(prismaClient) as jest.Mocked<ArticleRepository>;
+  const likeRepository = new LikeRepository(prismaClient) as jest.Mocked<LikeRepository>;
+  const commentRepository = new CommentRepository(prismaClient) as jest.Mocked<CommentRepository>;
+  const articleService = new ArticleService(
     articleRepository,
     likeRepository,
     commentRepository,
