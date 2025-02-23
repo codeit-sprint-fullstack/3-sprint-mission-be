@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node"],
     "target": "ESNext",
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@prismaDir/*": ["./prisma/*"]
+    }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules"]
 }

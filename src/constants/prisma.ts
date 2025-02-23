@@ -20,8 +20,8 @@ export const getOrderByClause = (orderBy: string) =>
   ({
     recent: { createdAt: Prisma.SortOrder.desc },
     old: { createdAt: Prisma.SortOrder.asc },
-    favorite: { favoriteCount: Prisma.SortOrder.desc },
-    like: { likeCount: Prisma.SortOrder.desc },
+    favorite: { favorites: { _count: Prisma.SortOrder.desc } },
+    like: { likes: { _count: Prisma.SortOrder.desc } },
   })[orderBy];
 
 export const getWhereByWord = (word: string | undefined) => {

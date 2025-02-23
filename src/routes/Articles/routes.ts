@@ -1,27 +1,27 @@
 import express from 'express';
-import { ArticleService } from './service';
-import ArticleRepository from '../../repositories/articleRepository';
-import LikeRepository from '../../repositories/likeRepository';
-import CommentRepository from '../../repositories/commentRepository';
-import { prismaClient } from '../../prismaClient';
-import { ArticleController } from './controller';
-import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
-import { createAuthMiddleware } from '../../core/middleware/auth/auth';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { validateBody, validateQuery } from '../../core/middleware/validate';
+import { ArticleService } from './service/service';
+import ArticleRepository from '@/routes/Articles/repository/articleRepository';
+import LikeRepository from '@/routes/Articles/repository/likeRepository';
+import CommentRepository from '../Comments/repository/commentRepository';
+import { prismaClient } from '@/prismaClient';
+import { ArticleController } from './controller/controller';
+import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
+import { createAuthMiddleware } from '@/core/middleware/auth/auth';
+import { AUTH_MESSAGES } from '@/constants/authMessages';
+import { validateBody, validateQuery } from '@/core/middleware/validate';
 import {
   CreateArticleRequestStruct,
   EditArticleRequestStruct,
   GetArticleListRequestStruct,
-} from '../../structs/articleStruct';
-import { CreateCommentStruct, GetCommentListStruct } from '../../structs/commentStruct';
+} from '@/structs/articleStruct';
+import { CreateCommentStruct, GetCommentListStruct } from '@/structs/commentStruct';
 
 const router = express.Router();
 
 const articleService = new ArticleService(
-  new ArticleRepository(),
-  new LikeRepository(),
-  new CommentRepository(),
+  new ArticleRepository(prismaClient),
+  new LikeRepository(prismaClient),
+  new CommentRepository(prismaClient),
   prismaClient,
 );
 

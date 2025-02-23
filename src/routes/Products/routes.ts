@@ -1,27 +1,27 @@
 import express from 'express';
-import { ProductService } from './service';
-import ProductRepository from '../../repositories/productRepository';
-import FavoriteRepository from '../../repositories/favoriteRepository';
-import CommentRepository from '../../repositories/commentRepository';
-import { prismaClient } from '../../prismaClient';
-import { ProductController } from './controller';
-import { validateBody, validateQuery } from '../../core/middleware/validate';
+import { ProductService } from './service/service';
+import ProductRepository from '@/routes/Products/repository/productRepository';
+import FavoriteRepository from '@/routes/Products/repository/favoriteRepository';
+import CommentRepository from '../Comments/repository/commentRepository';
+import { prismaClient } from '@/prismaClient';
+import { ProductController } from './controller/controller';
+import { validateBody, validateQuery } from '@/core/middleware/validate';
 import {
   CreateProductRequestStruct,
   EditProductStruct,
   GetProductListRequestStruct,
-} from '../../structs/productStruct';
-import asyncRequestHandler from '../../core/handlers/asyncRequestHandler';
-import { createAuthMiddleware } from '../../core/middleware/auth/auth';
-import { AUTH_MESSAGES } from '../../constants/authMessages';
-import { CreateCommentStruct, GetCommentListStruct } from '../../structs/commentStruct';
+} from '@/structs/productStruct';
+import asyncRequestHandler from '@/core/handlers/asyncRequestHandler';
+import { createAuthMiddleware } from '@/core/middleware/auth/auth';
+import { AUTH_MESSAGES } from '@/constants/authMessages';
+import { CreateCommentStruct, GetCommentListStruct } from '@/structs/commentStruct';
 
 const router = express.Router();
 
 const productService = new ProductService(
-  new ProductRepository(),
-  new FavoriteRepository(),
-  new CommentRepository(),
+  new ProductRepository(prismaClient),
+  new FavoriteRepository(prismaClient),
+  new CommentRepository(prismaClient),
   prismaClient,
 );
 
