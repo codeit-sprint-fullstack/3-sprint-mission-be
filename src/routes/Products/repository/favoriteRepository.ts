@@ -21,8 +21,9 @@ export default class FavoriteRepository {
     return count > 0;
   }
 
-  async setFavorite(productId: number, userId: number, tx: any) {
-    await this.prismaClient.favorite.create({
+  async setFavorite(productId: number, userId: number, tx?: any) {
+    const prisma = tx || this.prismaClient;
+    await prisma.favorite.create({
       data: {
         userId,
         productId,
@@ -30,8 +31,9 @@ export default class FavoriteRepository {
     });
   }
 
-  async deleteFavorite(productId: number, userId: number, tx: any) {
-    await this.prismaClient.favorite.delete({
+  async deleteFavorite(productId: number, userId: number, tx?: any) {
+    const prisma = tx || this.prismaClient;
+    await prisma.favorite.delete({
       where: {
         userId_productId: {
           userId,
