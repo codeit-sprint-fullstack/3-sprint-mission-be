@@ -6,8 +6,6 @@ import {
   OpenAPIObject,
 } from '@nestjs/swagger';
 import docsOptions from './shared/swagger/swagger.options';
-import * as express from 'express';
-import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule); // Create a new Nest application
@@ -24,7 +22,6 @@ async function bootstrap() {
     preflightContinue: false,
     optionsSuccessStatus: 204,
   });
-  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
   await app.listen(process.env.PORT ?? 8080);
 }
