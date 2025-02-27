@@ -1,0 +1,15 @@
+model Post {
+  id        String   @id @default(cuid()) // PK
+  userId    String   // FK
+  title     String
+  content   String
+  image     String?  
+  favoriteCount Int  @default(0) // 좋아요 수
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  writer      User     @relation(fields: [userId], references: [id]) // 1:N, 하나의 유저는 여러개의 포스트를 가질 수 있다.
+  likes     Like[]   // 1:N, 하나의 포스트는 여러개의 좋아요를 가질 수 있다.
+  comments  Comment[] // 1:N, 하나의 포스트는 여러개의 댓글을 가질 수 있다.
+
+  @@map("posts")
+}

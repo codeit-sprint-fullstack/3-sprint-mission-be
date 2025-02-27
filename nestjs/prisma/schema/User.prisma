@@ -1,0 +1,19 @@
+model User {
+  id   String @id @default(cuid())
+  /// 이메일 중복 방지 및 길이 제한(5~255자)
+  email String @unique @db.VarChar(255)
+  /// 해시된 암호 저장 (최소 8자 이상)
+  password String @db.VarChar(255)
+  /// 닉네임 중복 방지 및 길이 제한(2~50자)
+  nickname String @unique @db.VarChar(50)
+  /// 유저 프로필 이미지 URL
+  profile_image String? @db.VarChar(2048)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt
+  posts Post[] // 1:N, 하나의 유저는 여러개의 포스트를 가질 수 있다.
+  products Product[] // 1:N, 하나의 유저는 여러개의 상품을 가질 수 있다.
+  likes Like[] 
+  comments Comment[]
+
+  @@map("users")
+}
